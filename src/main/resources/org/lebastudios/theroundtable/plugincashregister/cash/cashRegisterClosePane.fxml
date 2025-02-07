@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<VBox xmlns:fx="http://javafx.com/fxml"
+      xmlns="http://javafx.com/javafx"
+      alignment="CENTER">
+    <HBox VBox.vgrow="ALWAYS" spacing="15" HBox.hgrow="ALWAYS" alignment="CENTER">
+        <Button prefWidth="150" prefHeight="150" text="%phrase.opencashregister" wrapText="true"
+                textAlignment="CENTER" onAction="#openCashRegister"/>
+        <Button prefWidth="150" prefHeight="150" text="%phrase.opencashdrawer" wrapText="true"
+                textAlignment="CENTER" onAction="#openCashRegisterDrawer"/>
+    </HBox>
+</VBox>

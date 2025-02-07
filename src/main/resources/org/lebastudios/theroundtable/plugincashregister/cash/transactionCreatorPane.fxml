@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<VBox xmlns:fx="http://javafx.com/fxml"
+      xmlns="http://javafx.com/javafx" spacing="10">
+    <padding>
+        <Insets top="15" bottom="15" right="15" left="15"/>
+    </padding>
+
+    <HBox alignment="CENTER_LEFT">
+        <Label text="%word.qty" prefWidth="250"/>
+        <HBox HBox.hgrow="ALWAYS" alignment="CENTER_RIGHT">
+            <TextField fx:id="amountTextField" promptText="0.00"/>
+        </HBox>
+    </HBox>
+
+    <VBox spacing="5" alignment="CENTER_LEFT">
+        <Label text="%word.description"/>
+        <TextArea prefRowCount="2" prefColumnCount="30" fx:id="descriptionTextArea"/>
+    </VBox>
+
+    <HBox spacing="5" alignment="CENTER_RIGHT">
+        <Button onAction="#cancel" text="%word.cancel"/>
+        <Button onAction="#mainAction" text="%word.accept"/>
+    </HBox>
+</VBox>

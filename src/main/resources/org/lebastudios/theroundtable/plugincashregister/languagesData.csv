@@ -1,0 +1,42 @@
+textKey,en_EN,es_ES
+word.cashregister,Cash Register,Caja
+word.products,Products,Productos
+title.createnewproduct,Create new product,Crear un producto nuevo
+title.modifyproduct,Modify Product,Modificar producto
+word.save,Save,Guardar
+textblock.deleteproduct,Are you sure you want to delete this product?\nThis action cannot be undone. The product will be permanently disable or removed from the db. No data will be lost.\nConsider disabling the product instead.,¿Está seguro de que desea eliminar este producto?\nEsta acción no se puede deshacer. El producto será deshabilitado o eliminado permanentemente de la base de datos. No se perderán datos.\nConsidere deshabilitar el producto en su lugar.
+word.generic,Generic,Genérico
+title.imageselector,Image Selector,Selector de imagen
+textblock.resetorder,Are you sure you want to reset the order? This action can't be undone.,¿Estas seguro de que quieres reiniciar la orden actual? Esta acción no puede ser deshecha.
+word.hide,Hide,Ocultar
+word.show,Show,Mostrar
+word.put,Put,Ingresar
+word.get,Get,Retirar
+phrase.closeCashRegister,Close Cash Register,Cerrar Caja
+word.receipt,Receipt,Recibo
+word.receipts,Receipts,Recibos
+word.cash,Cash,Contado
+word.card,Card,Tarjeta
+word.from,From,Desde
+word.to,To,Hasta
+word.at,at,a las
+word.transactions,Transactions,Transacciones
+word.change,Change,Cambio
+phrase.receiptprinterconfig,Printing settings,Ajustes de impresión
+textblock.needtoclosethecashregister,You need to close the cash register before quit.,Necesitas cerrar caja antes de poder salir de la aplicación.
+phrase.taxestypes,Taxes types,Tipos de impuestos
+textblock.taxestypeisbeingused,This tax type is being used by some products. You can't delete it.,Este tipos impositivo esta actualemnte siendo usado por algún producto y no puede ser eliminado.
+ticket.footerbye,Thank you for visiting,Gracias por su visita 
+phrase.lastcollected,Last collected:,Último cobrado:
+word.payment,Payment:,Pagado:
+textblock.errorsavingreceipt,An error ocurred while trying to save the receipt in the database.,Ha ocurrido un error al intentar guardar el recibo en la base de datos.
+textblock.errorprinting,An error ocurred while trying to communicate with the printing device.,Ha ocurrido un error al intentarse comunicar con el dispositivo de impresión.
+word.tiny,Tiny,Enano
+word.small,Small,Pequeño
+word.medium,Medium,Mediano
+word.large,Large,Grande
+phrase.modifiesreceipt,Rectifies,Rectifica a
+phrase.modifiedbyreceipt,Rectified by,Rectificada por
+phrase.reason,Reason,Razon
+phrase.withdate,with date,con fecha
+phrase.rectificationreceipt,Rectification receipt,Factura rectificativa

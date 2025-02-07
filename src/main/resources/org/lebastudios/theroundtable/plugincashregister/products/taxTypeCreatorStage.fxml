@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<GridPane hgap="10" vgap="5" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1">
+    <padding>
+        <Insets bottom="10" left="10" right="10" top="10" />
+    </padding>
+    <columnConstraints>
+        <ColumnConstraints />
+        <ColumnConstraints />
+        <ColumnConstraints />
+        <ColumnConstraints hgrow="ALWAYS" />
+    </columnConstraints>
+    
+    <rowConstraints>
+        <RowConstraints />
+        <RowConstraints valignment="TOP" />
+        <RowConstraints />
+    </rowConstraints>
+    
+    <Label text="%word.name" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.rowIndex="0" />
+    <TextField fx:id="nameField" GridPane.columnIndex="2" GridPane.columnSpan="2" GridPane.rowIndex="0" />
+    
+    <Label text="%word.taxes" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+    <HBox spacing="5" GridPane.columnIndex="1" GridPane.rowIndex="1">
+        <TextField promptText="10" fx:id="taxField" alignment="CENTER_RIGHT" prefColumnCount="3" />
+        <Label maxWidth="Infinity" text="\%" />
+    </HBox>
+    <Label text="%word.description" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+    <TextArea fx:id="descriptionField" prefColumnCount="20" prefRowCount="3" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+    
+    <HBox alignment="CENTER_RIGHT" spacing="10" GridPane.columnIndex="0" GridPane.columnSpan="4" GridPane.rowIndex="2">
+        <Button onAction="#cancelButtonAction" text="%word.cancel" />
+        <Button defaultButton="true" onAction="#saveButtonAction" text="%word.accept" />
+    </HBox>
+</GridPane>

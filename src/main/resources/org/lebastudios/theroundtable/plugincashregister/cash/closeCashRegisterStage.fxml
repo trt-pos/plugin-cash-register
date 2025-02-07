@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<VBox xmlns:fx="http://javafx.com/fxml"
+      xmlns="http://javafx.com/javafx"
+      spacing="15">
+    <padding>
+        <Insets left="15" right="15" bottom="15" top="15"/>
+    </padding>
+
+    <VBox spacing="10">
+        <HBox>
+            <Label wrapText="true" prefWidth="350" text="%phrase.includeothertransactions"/>
+            <HBox>
+                <CheckBox fx:id="includeTransaction"/>
+            </HBox>
+        </HBox>
+
+        <HBox>
+            <Label wrapText="true" prefWidth="350" text="%phrase.includeproductssold"/>
+            <HBox>
+                <CheckBox fx:id="includeProducts"/>
+            </HBox>
+        </HBox>
+    </VBox>
+
+    <HBox alignment="CENTER_RIGHT" spacing="5">
+        <Button text="%word.cancel" onAction="#cancel"/>
+        <Button text="%phrase.acceptandprint" onAction="#acceptAndPrint"/>
+    </HBox>
+</VBox>

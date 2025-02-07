@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+
+<?import javafx.scene.control.ScrollPane?>
+<?import org.lebastudios.theroundtable.ui.IconButton?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<VBox fx:id="root" spacing="15" xmlns="http://javafx.com/javafx/17.0.12"
+      xmlns:fx="http://javafx.com/fxml/1">
+    <padding>
+        <Insets top="10" right="10" bottom="10" left="10"/>
+    </padding>
+    <Label text="%phrase.taxestypes" style="-fx-font-size: 20; -fx-font-weight: bold;"/>
+    <StackPane VBox.vgrow="ALWAYS" styleClass="border-round">
+        <ScrollPane fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" pannable="true">
+            <VBox fx:id="taxesTypesContainer" spacing="5">
+                <padding>
+                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+                </padding>
+            </VBox>
+        </ScrollPane>
+        <IconButton iconName="plus.png" StackPane.alignment="BOTTOM_RIGHT" onAction="#plusButtonAction">
+            <StackPane.margin>
+                <Insets bottom="5" right="5"/>
+            </StackPane.margin>
+        </IconButton>
+    </StackPane>
+</VBox>

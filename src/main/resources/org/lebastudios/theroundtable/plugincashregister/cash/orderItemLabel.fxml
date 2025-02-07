@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.*?>
+<?import org.lebastudios.theroundtable.ui.IconButton?>
+<HBox xmlns:fx="http://javafx.com/fxml" fx:id="root"
+      xmlns="http://javafx.com/javafx" spacing="15"
+      prefHeight="24.0" alignment="CENTER_LEFT" HBox.hgrow="ALWAYS">
+    <padding>
+        <Insets top="5" left="5" right="5" bottom="5"/>
+    </padding>
+    <Label minWidth="15" alignment="CENTER" fx:id="quantityLabel" text="1"/>
+    <Label HBox.hgrow="ALWAYS" maxWidth="Infinity" wrapText="true" fx:id="productNameLabel" text="%phrase.unknownproduct"/>
+    <HBox spacing="5" alignment="CENTER_RIGHT">
+        <Label alignment="CENTER" fx:id="unitPriceLabel" text="0.00"/>
+        <Label text="€"/>
+    </HBox>
+    <HBox spacing="5" alignment="CENTER_RIGHT">
+        <Label alignment="CENTER" fx:id="totalPriceLabel" text="0.00"/>
+        <Label text="€"/>
+    </HBox>
+    <IconButton iconSize="24" fx:id="removeOneButton" onAction="#removeOneButton" iconName="outline-less.png"/>
+</HBox>

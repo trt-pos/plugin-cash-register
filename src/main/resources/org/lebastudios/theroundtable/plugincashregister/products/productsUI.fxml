@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import org.lebastudios.theroundtable.ui.IconButton?>
+<?import org.lebastudios.theroundtable.ui.SearchBox?>
+<VBox xmlns:fx="http://javafx.com/fxml" HBox.hgrow="ALWAYS"
+      xmlns="http://javafx.com/javafx">
+    <padding>
+        <Insets top="10" left="10" right="10" bottom="10"/>
+    </padding>
+    <HBox spacing="5" alignment="CENTER_RIGHT">
+        <SearchBox prefWidth="150" fx:id="searchBox"/>
+    </HBox>
+    <TabPane VBox.vgrow="ALWAYS" tabClosingPolicy="UNAVAILABLE" fx:id="mainTabPane"/>
+
+    <HBox alignment="CENTER_RIGHT">
+        <padding>
+            <Insets bottom="5" right="5"/>
+        </padding>
+        <IconButton onAction="#createNewProductWindow" iconSize="32" iconName="plus.png"/>
+    </HBox>
+</VBox>

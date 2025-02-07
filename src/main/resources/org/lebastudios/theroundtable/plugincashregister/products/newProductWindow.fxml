@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import org.lebastudios.theroundtable.ui.IconButton?>
+<?import org.lebastudios.theroundtable.ui.IconTextButton?>
+<?import org.lebastudios.theroundtable.ui.IconView?>
+<?import javafx.scene.shape.Rectangle?>
+<?import org.lebastudios.theroundtable.ui.BigDecimalField?>
+<GridPane xmlns:fx="http://javafx.com/fxml/1" maxWidth="Infinity" maxHeight="Infinity"
+          hgap="15" vgap="15" xmlns="http://javafx.com/javafx/17.0.2-ea">
+    <padding>
+        <Insets bottom="15.0" left="15.0" right="15.0" top="15.0"/>
+    </padding>
+    
+    <columnConstraints>
+        <ColumnConstraints hgrow="NEVER" />
+        <ColumnConstraints hgrow="NEVER" prefWidth="50"/>
+        <ColumnConstraints hgrow="NEVER" prefWidth="125"/>
+        <ColumnConstraints hgrow="SOMETIMES"/>
+        <ColumnConstraints hgrow="ALWAYS" />
+    </columnConstraints>
+    <rowConstraints>
+        <RowConstraints vgrow="SOMETIMES"/>
+        <RowConstraints vgrow="SOMETIMES"/>
+        <RowConstraints vgrow="SOMETIMES"/>
+        <RowConstraints vgrow="NEVER"/>
+        <RowConstraints vgrow="NEVER"/>
+        <RowConstraints vgrow="ALWAYS"/>
+    </rowConstraints>
+
+    <StackPane minWidth="180" minHeight="180" maxWidth="180" maxHeight="180" 
+               GridPane.columnIndex="0" GridPane.rowIndex="0" GridPane.rowSpan="5">
+        <IconView fx:id="productIcon" fitHeight="180.0" fitWidth="180.0" preserveRatio="true">
+            <clip>
+                <Rectangle width="180" height="180" arcHeight="10" arcWidth="10" />
+            </clip>
+        </IconView>
+        <IconButton onAction="#openImageSelector" iconName="edit.png" StackPane.alignment="BOTTOM_RIGHT">
+            <StackPane.margin>
+                <Insets bottom="5.0" right="5.0"/>
+            </StackPane.margin>
+        </IconButton>
+    </StackPane>
+    <Label text="%phrase.productname" maxHeight="Infinity" maxWidth="Infinity" 
+           GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="0"/>
+    <TextField fx:id="productName" maxHeight="Infinity" maxWidth="Infinity"
+               GridPane.columnIndex="3" GridPane.columnSpan="2" GridPane.rowIndex="0"/>
+
+    <Label text="%phrase.maincategory" maxHeight="Infinity" maxWidth="Infinity" 
+           GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="1"/>
+    <TextField fx:id="mainCategory" maxHeight="Infinity" maxWidth="Infinity" 
+               GridPane.columnIndex="3" GridPane.columnSpan="2" GridPane.rowIndex="1"/>
+
+    <Label text="%phrase.subcategory" maxHeight="Infinity" maxWidth="Infinity"
+           GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="2"/>
+    <TextField fx:id="subCategory" maxHeight="Infinity" maxWidth="Infinity"
+               GridPane.columnIndex="3" GridPane.columnSpan="2" GridPane.rowIndex="2"/>
+
+    <Label text="%word.price" maxHeight="Infinity" maxWidth="Infinity"
+           GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+    <BigDecimalField maxHeight="Infinity" maxWidth="Infinity" fx:id="price" labelValue="€"
+                     GridPane.columnIndex="2" GridPane.rowIndex="3"/>
+    <CheckBox fx:id="enabledProduct" graphicTextGap="16.0" mnemonicParsing="false" selected="true"
+              text="%word.enabled" maxHeight="Infinity" maxWidth="Infinity"
+              GridPane.columnIndex="3" GridPane.columnSpan="2" GridPane.rowIndex="3"/>
+    
+    <Label text="%word.taxes" maxHeight="Infinity" maxWidth="Infinity"
+           GridPane.columnIndex="1" GridPane.rowIndex="4"/>
+    <ChoiceBox maxHeight="Infinity" maxWidth="Infinity" fx:id="taxes"
+               GridPane.columnIndex="2" GridPane.rowIndex="4"/>
+    <CheckBox fx:id="taxesIncluded" graphicTextGap="16.0" mnemonicParsing="false" selected="true"
+              text="%word.taxesincluded" maxHeight="Infinity" maxWidth="Infinity"
+              GridPane.columnIndex="3" GridPane.columnSpan="2" GridPane.rowIndex="4"/>
+
+    <HBox alignment="CENTER_RIGHT" spacing="15" maxHeight="Infinity" maxWidth="Infinity"
+          GridPane.columnIndex="2" GridPane.columnSpan="3" GridPane.rowIndex="5">
+        <IconButton visible="false" maxHeight="Infinity" maxWidth="Infinity" fx:id="deleteButton" iconName="delete.png"/>
+        <Button prefWidth="125" fx:id="mainButton" mnemonicParsing="false" onAction="#mainButtonAction"
+                maxHeight="Infinity" maxWidth="Infinity" defaultButton="true" text="%word.create"/>
+    </HBox>
+</GridPane>
