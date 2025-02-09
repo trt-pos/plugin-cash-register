@@ -1,5 +1,6 @@
 package org.lebastudios.theroundtable.plugincashregister.config;
 
+import com.github.anastaciocintra.escpos.EscPos;
 import javafx.fxml.FXML;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
@@ -8,10 +9,12 @@ import org.lebastudios.theroundtable.config.data.JSONFile;
 import org.lebastudios.theroundtable.locale.LangFileLoader;
 import org.lebastudios.theroundtable.plugincashregister.PluginCashRegister;
 import org.lebastudios.theroundtable.plugincashregister.config.data.ReceiptPrintingConfigData;
-import org.lebastudios.theroundtable.plugincashregister.printers.IReceiptPrinter;
+import org.lebastudios.theroundtable.plugincashregister.entities.*;
+import org.lebastudios.theroundtable.plugincashregister.printers.CashRegisterPrinters;
+import org.lebastudios.theroundtable.printers.PrinterManager;
 
-import java.util.Arrays;
-import java.util.List;
+import java.math.BigDecimal;
+import java.util.Set;
 
 public class ReceiptPrintingConfigPaneController extends SettingsPaneController
 {
@@ -30,10 +33,10 @@ public class ReceiptPrintingConfigPaneController extends SettingsPaneController
         {
             return LangFileLoader.getTranslation(switch (this)
             {
-                case TINY -> "Tiny";
-                case SMALL -> "Small";
-                case MEDIUM -> "Medium";
-                case LARGE -> "Large";
+                case TINY -> LangFileLoader.getTranslation("word.tiny");
+                case SMALL -> LangFileLoader.getTranslation("word.small");
+                case MEDIUM -> LangFileLoader.getTranslation("word.medium");
+                case LARGE -> LangFileLoader.getTranslation("word.large");
             });
         }
         
@@ -92,9 +95,41 @@ public class ReceiptPrintingConfigPaneController extends SettingsPaneController
     @FXML
     private void printTestReceipt()
     {
-        try
+        Product p1 = new Product();
+        Product p2 = new Product();
+
+        p1.setName("Product 1");
+        p1.setPrice(new BigDecimal("2.90"));
+        p1.setTaxType(new TaxType("", new BigDecimal("0.10"), ""));
+
+        p2.setName("Product 2");
+        p2.setPrice(new BigDecimal("100"));
+        p2.setTaxType(new TaxType("", new BigDecimal("0.21"), ""));
+
+        Receipt receipt = new Receipt();
+
+        receipt.setProducts(
+                Set.of(
+                        new Product_Receipt(p1, new BigDecimal(1)),
+                        new Product_Receipt(p2, new BigDecimal(10))
+                )
+        );
+        
+        receipt.setTableName("Table 1");
+        
+        Transaction transaction = new Transaction();
+        transaction.setAmount(new BigDecimal("1002.90"));
+        
+        receipt.setTransaction(transaction);
+        
+        receipt.setClient("Client", "ABCD123");
+        receipt.setPaymentAmount(new BigDecimal("1003"));
+        receipt.setPaymentMethod("CASH");
+        
+        try (EscPos escPos = CashRegisterPrinters.getInstance().printReceipt(receipt, PrinterManager.getInstance().getDefaultPrintService()))
         {
-            IReceiptPrinter.printTest();
+            escPos.feed(5);
+            escPos.cut(EscPos.CutMode.PART);
         }
         catch (Exception exception)
         {
