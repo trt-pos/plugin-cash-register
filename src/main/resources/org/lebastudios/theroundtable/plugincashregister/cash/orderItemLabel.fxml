@@ -20,6 +20,8 @@
         <Label alignment="CENTER" fx:id="totalPriceLabel" text="0.00"/>
         <Label text="€"/>
     </HBox>
-    <IconButton iconSize="24" onAction="#removeOneButton" iconName="outline-less.png"/>
-    <IconButton iconSize="24" onAction="#addOneButton" iconName="outline-plus.png"/>
+    <HBox alignment="CENTER" spacing="5">
+        <IconButton iconSize="24" onAction="#removeOneButton" iconName="outline-less.png"/>
+        <IconButton iconSize="24" onAction="#addOneButton" iconName="outline-plus.png"/>
+    </HBox>
 </HBox>
