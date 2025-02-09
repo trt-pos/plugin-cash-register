@@ -172,6 +172,14 @@ public class OrderItemLabelController extends PaneController<OrderItemLabelContr
         CashRegister.onActualOrderModified.invoke();
     }
 
+    @FXML
+    private void addOneButton()
+    {
+        orderItem.setQuantity(orderItem.getQuantity().add(BigDecimal.ONE));
+
+        CashRegister.onActualOrderModified.invoke();
+    }
+
     private void checkRemoveOrderItemCondition()
     {
         if (orderItem.getQuantity().compareTo(BigDecimal.ZERO) <= 0)
