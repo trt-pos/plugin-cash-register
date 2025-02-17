@@ -11,7 +11,7 @@
     </padding>
     <Separator orientation="VERTICAL"/>
 
-    <VBox minWidth="450" maxWidth="Infinity" HBox.hgrow="ALWAYS" fx:id="keyboardParent" spacing="5">
+    <VBox minWidth="475" maxWidth="475" HBox.hgrow="ALWAYS" fx:id="keyboardParent" spacing="5">
         <padding>
             <Insets bottom="5" left="5" right="5" top="5"/>
         </padding>

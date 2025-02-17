@@ -4,10 +4,15 @@ import com.github.anastaciocintra.escpos.EscPos;
 import com.github.anastaciocintra.output.PrinterOutputStream;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.control.*;
+import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.util.Callback;
 import org.lebastudios.theroundtable.MainStageController;
@@ -23,9 +28,11 @@ import org.lebastudios.theroundtable.plugincashregister.products.*;
 import org.lebastudios.theroundtable.printers.*;
 import org.lebastudios.theroundtable.ui.*;
 
+import java.awt.*;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.net.URL;
+import java.util.HashMap;
 
 public class CashRegisterPaneController extends PaneController<CashRegisterPaneController>
 {
@@ -97,7 +104,9 @@ public class CashRegisterPaneController extends PaneController<CashRegisterPaneC
         // Adding the products interface to the root
         HBox root = (HBox) getRoot();
 
-        root.getChildren().addFirst(new ProductsUIController(true).getRoot());
+        var loadingPane = new HBox(new LoadingPaneController().getRoot());
+        HBox.setHgrow(loadingPane, Priority.ALWAYS);
+        root.getChildren().addFirst(loadingPane);
         new Thread(() ->
         {
             final var node = new ProductsUIController(false).getRoot();
@@ -107,6 +116,8 @@ public class CashRegisterPaneController extends PaneController<CashRegisterPaneC
         // ListView row factory
         orderItemsListView.setCellFactory(new Callback<>()
         {
+            private final HashMap<ListCell<OrderItem>, OrderItemLabelController> itemLabelControllers = new HashMap<>();
+            
             @Override
             public ListCell<OrderItem> call(ListView<OrderItem> orderItemListView)
             {
@@ -121,15 +132,26 @@ public class CashRegisterPaneController extends PaneController<CashRegisterPaneC
                         {
                             setText(null);
                             setGraphic(null);
+                            return;
                         }
-                        else
+                        
+                        if (!itemLabelControllers.containsKey(this)) 
                         {
-                            final var orderItemLabelController = new OrderItemLabelController(orderItem);
-                            actualProduct = orderItemLabelController;
-                            final var node = orderItemLabelController.getRoot();
-                            node.setOnMouseClicked(_ -> actualProduct = orderItemLabelController);
-                            setGraphic(node);
+                            var controller = new OrderItemLabelController();
+                            itemLabelControllers.put(this, controller);
+                            final var node = controller.getRoot();
+                            node.setOnMouseClicked(_ -> actualProduct = controller);
+                            ((Pane) node).prefWidthProperty().bind(orderItemsListView.widthProperty().subtract(20));
                         }
+                        
+                        final var orderItemLabelController = itemLabelControllers.get(this);
+
+                        actualProduct = orderItemLabelController;
+                        
+                        orderItemLabelController.setOrderItem(orderItem);
+                        orderItemLabelController.initialize();
+
+                        setGraphic(orderItemLabelController.getRoot());
                     }
                 };
             }

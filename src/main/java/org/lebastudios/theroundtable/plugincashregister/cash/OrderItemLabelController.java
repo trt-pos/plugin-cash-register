@@ -3,6 +3,7 @@ package org.lebastudios.theroundtable.plugincashregister.cash;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import lombok.Getter;
+import lombok.Setter;
 import org.lebastudios.theroundtable.apparience.UIEffects;
 import org.lebastudios.theroundtable.controllers.PaneController;
 import org.lebastudios.theroundtable.plugincashregister.entities.Product;
@@ -15,8 +16,7 @@ import java.util.Map;
 
 public class OrderItemLabelController extends PaneController<OrderItemLabelController>
 {
-    public static boolean editMode = false;
-    private final OrderItem orderItem;
+    @Setter private OrderItem orderItem;
     private final Map<Label, Boolean> hasDefaultText = new HashMap<>();
     
     @FXML @Getter public Label unitPriceLabel;
@@ -25,13 +25,10 @@ public class OrderItemLabelController extends PaneController<OrderItemLabelContr
     @FXML @Getter private Label totalPriceLabel;
     @Getter private Label actualEditting;
 
-    public OrderItemLabelController(OrderItem orderItem)
-    {
-        this.orderItem = orderItem;
-    }
-
     @FXML @Override protected void initialize()
     {
+        if (orderItem == null) return;
+        
         hasDefaultText.put(quantityLabel, true);
         hasDefaultText.put(unitPriceLabel, true);
 
