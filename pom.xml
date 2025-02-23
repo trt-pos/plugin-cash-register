@@ -6,7 +6,7 @@
 
     <groupId>org.lebastudios.theroundtable</groupId>
     <artifactId>plugin-cash-register</artifactId>
-    <version>1.5.0</version>
+    <version>1.5.1</version>
     <name>plugin-cash-register</name>
     <packaging>jar</packaging>
 

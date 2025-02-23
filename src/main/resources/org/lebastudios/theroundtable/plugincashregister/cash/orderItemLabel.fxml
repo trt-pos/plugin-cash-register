@@ -8,12 +8,12 @@
           xmlns="http://javafx.com/javafx" hgap="15"
           prefHeight="24.0" alignment="CENTER_LEFT" HBox.hgrow="ALWAYS">
     <padding>
-        <Insets top="5" bottom="5" left="5" right="5"/>
+        <Insets left="5" right="5"/>
     </padding>
     
     <columnConstraints>
         <ColumnConstraints minWidth="20" />
-        <ColumnConstraints percentWidth="60" />
+        <ColumnConstraints prefWidth="225" />
         <ColumnConstraints hgrow="ALWAYS" />
         <ColumnConstraints hgrow="ALWAYS" />
         <ColumnConstraints halignment="RIGHT"/>
@@ -23,18 +23,9 @@
     </rowConstraints>
 
     <Label GridPane.columnIndex="0" GridPane.rowIndex="0" alignment="CENTER" fx:id="quantityLabel" text="1"/>
-
     <Label GridPane.columnIndex="1" GridPane.rowIndex="0" fx:id="productNameLabel"/>
-
-    <HBox GridPane.columnIndex="2" GridPane.rowIndex="0" spacing="5"  alignment="CENTER">
-        <Label textOverrun="CLIP" fx:id="unitPriceLabel" text="0.00"/>
-        <Label text="€"/>
-    </HBox>
-
-    <HBox GridPane.columnIndex="3" GridPane.rowIndex="0" spacing="5" alignment="CENTER">
-        <Label textOverrun="CLIP" fx:id="totalPriceLabel" text="0.00"/>
-        <Label text="€"/>
-    </HBox>
+    <Label GridPane.columnIndex="2" GridPane.rowIndex="0"  textOverrun="CLIP" fx:id="unitPriceLabel" text="0.00"/>
+    <Label GridPane.columnIndex="3" GridPane.rowIndex="0" textOverrun="CLIP" fx:id="totalPriceLabel" text="0.00"/>
 
     <HBox GridPane.columnIndex="4" GridPane.rowIndex="0" spacing="5"  alignment="CENTER_RIGHT">
         <IconButton iconSize="24" onAction="#removeOneButton" iconName="outline-less.png"/>

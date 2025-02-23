@@ -123,6 +123,10 @@ public class CashRegisterPaneController extends PaneController<CashRegisterPaneC
             {
                 return new ListCell<>()
                 {
+                    {
+                        this.setStyle("-fx-padding: 0;");
+                    }
+                    
                     @Override
                     protected void updateItem(OrderItem orderItem, boolean empty)
                     {

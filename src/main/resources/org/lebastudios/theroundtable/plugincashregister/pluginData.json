@@ -3,7 +3,7 @@
   "pluginId": "plugin-cash-register",
   "pluginIcon": "cash-register",
   "pluginDescription": "A simple cash register functionality for your store.",
-  "pluginVersion": "1.5.0",
+  "pluginVersion": "1.5.1",
   "pluginVendor": "Leba Studios - Software Solutions",
   "pluginVendorUrl": "https://lebastudios.org",
   "pluginRequiredCoreVersion": "2.5.0",
