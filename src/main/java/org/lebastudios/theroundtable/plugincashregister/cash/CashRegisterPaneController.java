@@ -199,6 +199,8 @@ public class CashRegisterPaneController extends PaneController<CashRegisterPaneC
         {
             if (event.isConsumed()) return;
 
+            boolean consumed = true;
+            
             switch (event.getCode())
             {
                 case DIGIT1, NUMPAD1 -> button1();
@@ -214,13 +216,12 @@ public class CashRegisterPaneController extends PaneController<CashRegisterPaneC
                 case BACK_SPACE -> buttonBackspace();
                 case DECIMAL, PERIOD -> buttonDot();
                 case MINUS, PLUS -> invertNumber();
-                default ->
-                {
-                    return;
-                }
+                case ENTER -> submitEditting();
+                
+                default -> consumed = false;
             }
 
-            event.consume();
+            if (consumed) event.consume();
         });
     }
 
