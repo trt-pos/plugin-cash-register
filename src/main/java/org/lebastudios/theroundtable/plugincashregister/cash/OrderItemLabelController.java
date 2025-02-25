@@ -162,6 +162,9 @@ public class OrderItemLabelController extends PaneController<OrderItemLabelContr
         this.orderItem.setQuantity(new BigDecimal(quantityLabel.getText()));
         this.orderItem.getBaseProduct().setTaxedPrice(new BigDecimal(unitPriceLabel.getText()));
 
+        unitPriceLabel.setText(BigDecimalOperations.toString(orderItem.intoProduct().getPrice()));
+        totalPriceLabel.setText(BigDecimalOperations.toString(orderItem.getTotalPrice()));
+        
         checkRemoveOrderItemCondition();
 
         CashRegister.getInstance().getActualOrder().collapseEqualItems();

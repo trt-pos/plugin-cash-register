@@ -7,7 +7,7 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.shape.Rectangle?>
 <GridPane xmlns:fx="http://javafx.com/fxml" fx:id="root"
-          xmlns="http://javafx.com/javafx" hgap="15"
+          xmlns="http://javafx.com/javafx" hgap="10"
           prefHeight="24.0" alignment="CENTER_LEFT" HBox.hgrow="ALWAYS">
     <padding>
         <Insets left="5" right="5"/>
@@ -16,8 +16,8 @@
     <columnConstraints>
         <ColumnConstraints  />
         <ColumnConstraints minWidth="20" />
-        <ColumnConstraints prefWidth="225" />
-        <ColumnConstraints hgrow="ALWAYS" />
+        <ColumnConstraints prefWidth="200" />
+        <ColumnConstraints minWidth="30" />
         <ColumnConstraints hgrow="ALWAYS" />
         <ColumnConstraints halignment="RIGHT"/>
     </columnConstraints>
@@ -32,7 +32,7 @@
         </clip>
     </ImageView>
     
-    <Label GridPane.columnIndex="1" GridPane.rowIndex="0" alignment="CENTER" fx:id="quantityLabel" text="1"/>
+    <Label GridPane.columnIndex="1" GridPane.rowIndex="0" textOverrun="CLIP" alignment="CENTER" fx:id="quantityLabel" text="1"/>
     <Label GridPane.columnIndex="2" GridPane.rowIndex="0" fx:id="productNameLabel"/>
     <Label GridPane.columnIndex="3" GridPane.rowIndex="0"  textOverrun="CLIP" fx:id="unitPriceLabel" text="0.00"/>
     <Label GridPane.columnIndex="4" GridPane.rowIndex="0" textOverrun="CLIP" fx:id="totalPriceLabel" text="0.00"/>
