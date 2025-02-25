@@ -9,6 +9,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.control.Label?>
 <?import org.lebastudios.theroundtable.ui.IconView?>
+<?import javafx.scene.shape.Rectangle?>
 <GridPane xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/17.0.2-ea"
           fx:id="root" vgap="5" hgap="5">
     <padding>

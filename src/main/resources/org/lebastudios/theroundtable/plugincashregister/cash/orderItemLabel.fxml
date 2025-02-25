@@ -4,6 +4,8 @@
 <?import javafx.scene.layout.*?>
 <?import org.lebastudios.theroundtable.ui.IconButton?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.shape.Rectangle?>
 <GridPane xmlns:fx="http://javafx.com/fxml" fx:id="root"
           xmlns="http://javafx.com/javafx" hgap="15"
           prefHeight="24.0" alignment="CENTER_LEFT" HBox.hgrow="ALWAYS">
@@ -12,6 +14,7 @@
     </padding>
     
     <columnConstraints>
+        <ColumnConstraints  />
         <ColumnConstraints minWidth="20" />
         <ColumnConstraints prefWidth="225" />
         <ColumnConstraints hgrow="ALWAYS" />
@@ -22,12 +25,19 @@
         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
     </rowConstraints>
 
-    <Label GridPane.columnIndex="0" GridPane.rowIndex="0" alignment="CENTER" fx:id="quantityLabel" text="1"/>
-    <Label GridPane.columnIndex="1" GridPane.rowIndex="0" fx:id="productNameLabel"/>
-    <Label GridPane.columnIndex="2" GridPane.rowIndex="0"  textOverrun="CLIP" fx:id="unitPriceLabel" text="0.00"/>
-    <Label GridPane.columnIndex="3" GridPane.rowIndex="0" textOverrun="CLIP" fx:id="totalPriceLabel" text="0.00"/>
+    <ImageView fx:id="productImg" GridPane.columnIndex="0" GridPane.rowIndex="0"
+               fitHeight="25" fitWidth="25" preserveRatio="true">
+        <clip>
+            <Rectangle width="25" height="25" arcHeight="5" arcWidth="5" />
+        </clip>
+    </ImageView>
+    
+    <Label GridPane.columnIndex="1" GridPane.rowIndex="0" alignment="CENTER" fx:id="quantityLabel" text="1"/>
+    <Label GridPane.columnIndex="2" GridPane.rowIndex="0" fx:id="productNameLabel"/>
+    <Label GridPane.columnIndex="3" GridPane.rowIndex="0"  textOverrun="CLIP" fx:id="unitPriceLabel" text="0.00"/>
+    <Label GridPane.columnIndex="4" GridPane.rowIndex="0" textOverrun="CLIP" fx:id="totalPriceLabel" text="0.00"/>
 
-    <HBox GridPane.columnIndex="4" GridPane.rowIndex="0" spacing="5"  alignment="CENTER_RIGHT">
+    <HBox GridPane.columnIndex="5" GridPane.rowIndex="0" spacing="5"  alignment="CENTER_RIGHT">
         <IconButton iconSize="24" onAction="#removeOneButton" iconName="outline-less.png"/>
         <IconButton iconSize="24" onAction="#addOneButton" iconName="outline-plus.png"/>
     </HBox>

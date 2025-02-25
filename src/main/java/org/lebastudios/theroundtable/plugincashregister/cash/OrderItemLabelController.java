@@ -2,8 +2,11 @@ package org.lebastudios.theroundtable.plugincashregister.cash;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import lombok.Getter;
 import lombok.Setter;
+import org.lebastudios.theroundtable.apparience.ImageLoader;
 import org.lebastudios.theroundtable.apparience.UIEffects;
 import org.lebastudios.theroundtable.controllers.PaneController;
 import org.lebastudios.theroundtable.plugincashregister.entities.Product;
@@ -23,6 +26,7 @@ public class OrderItemLabelController extends PaneController<OrderItemLabelContr
     @FXML @Getter private Label quantityLabel;
     @FXML @Getter private Label productNameLabel;
     @FXML @Getter private Label totalPriceLabel;
+    @FXML private ImageView productImg;
     @Getter private Label actualEditting;
 
     @FXML @Override protected void initialize()
@@ -39,6 +43,8 @@ public class OrderItemLabelController extends PaneController<OrderItemLabelContr
         
         quantityLabel.setOnMouseClicked(_ -> setActualEditting(quantityLabel));
         unitPriceLabel.setOnMouseClicked(_ -> setActualEditting(unitPriceLabel));
+        
+        productImg.setImage(ImageLoader.getSavedImage(orderItem.getBaseProduct().getImgPath()));
     }
 
     public Product getRepresentingProduct()

@@ -4,8 +4,6 @@ import com.github.anastaciocintra.escpos.EscPos;
 import com.github.anastaciocintra.output.PrinterOutputStream;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
-import javafx.scene.Node;
-import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
@@ -28,7 +26,6 @@ import org.lebastudios.theroundtable.plugincashregister.products.*;
 import org.lebastudios.theroundtable.printers.*;
 import org.lebastudios.theroundtable.ui.*;
 
-import java.awt.*;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.net.URL;
