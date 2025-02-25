@@ -2,16 +2,21 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ListView?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
-<?import org.controlsfx.control.ListSelectionView?>
-<VBox xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/17.0.2-ea" fx:id="root">
+<VBox xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/17.0.2-ea" fx:id="root" spacing="5">
     <padding>
         <Insets bottom="5" left="5" right="5" top="5"/>
     </padding>
-    <ListSelectionView fx:id="selectionView" prefHeight="300.0" prefWidth="600.0"/>
+
+    <HBox spacing="5">
+        <ListView fx:id="sourceList" prefWidth="300" prefHeight="300"/>
+        <ListView fx:id="targetList" prefWidth="300" prefHeight="300"/>
+    </HBox>
+
     <HBox alignment="CENTER_RIGHT" spacing="10">
-        <Button onAction="#cancel" text="%word.cancel"/>
+        <Button fx:id="cancelButton" onAction="#cancel" text="%word.cancel"/>
         <Button defaultButton="true" onAction="#accept" text="%word.accept"/>
     </HBox>
 </VBox>

@@ -1,10 +1,10 @@
 package org.lebastudios.theroundtable.plugincashregister.cash;
 
-import javafx.beans.binding.Bindings;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.stage.Modality;
@@ -17,7 +17,6 @@ import org.lebastudios.theroundtable.ui.StageBuilder;
 
 import java.math.BigDecimal;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.BiConsumer;
@@ -27,8 +26,11 @@ public class SeparateOrderController extends StageController<SeparateOrderContro
     private final Order originalOrder;
     private final HashMap<Product, BigDecimal> originalProducts;
     private final BiConsumer<Order, Order> acceptSeparation;
-    @FXML private ListSelectionView<Map.Entry<Product, BigDecimal>> selectionView;
 
+    @FXML private ListView<Map.Entry<Product, BigDecimal>> sourceList; 
+    @FXML private ListView<Map.Entry<Product, BigDecimal>> targetList; 
+    @FXML private Button cancelButton;
+    
     public SeparateOrderController(Order order, BiConsumer<Order, Order> acceptSeparation)
     {
         originalOrder = order;
@@ -46,8 +48,23 @@ public class SeparateOrderController extends StageController<SeparateOrderContro
     @Override
     protected void initialize()
     {
-        selectionView.setCellFactory(_ -> new ListCell<>()
+        class MoveableItemListCell extends ListCell<Map.Entry<Product, BigDecimal>>
         {
+            public MoveableItemListCell(
+                    ListView<Map.Entry<Product, BigDecimal>> from, 
+                    ListView<Map.Entry<Product, BigDecimal>> to
+            )
+            {
+                this.setOnMouseClicked(_ ->
+                {
+                    var item = this.getItem();
+
+                    if (item == null) return;
+
+                    moveProductQty(item.getKey(), BigDecimal.ONE, from, to);
+                });
+            }
+
             @Override
             public void updateItem(Map.Entry<Product, BigDecimal> item, boolean empty)
             {
@@ -64,12 +81,12 @@ public class SeparateOrderController extends StageController<SeparateOrderContro
                     setGraphic(null);
                 }
             }
-        });
+        }
+        
+        sourceList.setCellFactory(from -> new MoveableItemListCell(from, targetList));
+        targetList.setCellFactory(from -> new MoveableItemListCell(from, sourceList));
 
-        selectionView.setSourceItems(FXCollections.observableArrayList(originalProducts.entrySet()));
-
-        selectionView.getActions().clear();
-        selectionView.getActions().add(new ListViewExtractror());
+        sourceList.setItems(FXCollections.observableArrayList(originalProducts.entrySet()));
     }
 
     @FXML
@@ -78,7 +95,7 @@ public class SeparateOrderController extends StageController<SeparateOrderContro
         var generatedOrder = new Order();
         generatedOrder.setOrderName(originalOrder.getOrderName() + " (Separated)");
 
-        for (var variable : selectionView.getTargetItems())
+        for (var variable : targetList.getItems())
         {
             generatedOrder.getOrderItems().add(new OrderItem(variable.getKey(), variable.getValue()));
         }
@@ -158,207 +175,5 @@ public class SeparateOrderController extends StageController<SeparateOrderContro
         }
 
         return -1;
-    }
-
-    private static class ListViewExtractror
-            extends ListSelectionView.ListSelectionAction<Map.Entry<Product, BigDecimal>>
-    {
-        public ListViewExtractror()
-        {
-            super(null, null);
-        }
-
-        @Override
-        public void initialize(ListView<Map.Entry<Product, BigDecimal>> sourceListView,
-                ListView<Map.Entry<Product, BigDecimal>> targetListView)
-        {
-            sourceListView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<>()
-            {
-                private boolean disabled = false;
-
-                @Override
-                public void changed(ObservableValue<? extends Map.Entry<Product, BigDecimal>> observable,
-                        Map.Entry<Product, BigDecimal> oldValue, Map.Entry<Product, BigDecimal> newValue)
-                {
-                    if (newValue == null) return;
-
-                    if (disabled)
-                    {
-                        disabled = false;
-                        return;
-                    }
-                    
-                    disabled = true;
-                    
-                    System.out.println(123);
-                    moveProductQty(newValue.getKey(), BigDecimal.ONE, sourceListView, targetListView);
-                    sourceListView.getSelectionModel().select(null);
-                }
-            });
-
-            targetListView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<>()
-            {
-                private boolean disabled = false;
-                
-                @Override
-                public void changed(ObservableValue<? extends Map.Entry<Product, BigDecimal>> observable,
-                        Map.Entry<Product, BigDecimal> oldValue, Map.Entry<Product, BigDecimal> newValue)
-                {
-                    if (newValue == null) return;
-
-                    if (disabled)
-                    {
-                        disabled = false;
-                        return;
-                    }
-                    
-                    disabled = true;
-                    
-                    System.out.println(123);
-                    moveProductQty(newValue.getKey(), BigDecimal.ONE, targetListView, sourceListView);
-                    targetListView.getSelectionModel().select(null);
-                }
-            });
-        }
-    }
-
-    private static class MoveOneUnitToTarget
-            extends ListSelectionView.ListSelectionAction<Map.Entry<Product, BigDecimal>>
-    {
-        public MoveOneUnitToTarget()
-        {
-            super(null, ">");
-        }
-
-        @Override
-        public void initialize(ListView<Map.Entry<Product, BigDecimal>> sourceListView,
-                ListView<Map.Entry<Product, BigDecimal>> targetListView)
-        {
-            disabledProperty().bind(Bindings.isEmpty(sourceListView.getSelectionModel().getSelectedItems()));
-            setEventHandler(ae ->
-            {
-                var entry = sourceListView.getSelectionModel().getSelectedItem();
-                if (entry == null) return;
-
-                moveProductQty(entry.getKey(), BigDecimal.ONE, sourceListView, targetListView);
-            });
-        }
-    }
-
-    private static class MoveAllUnitToTarget
-            extends ListSelectionView.ListSelectionAction<Map.Entry<Product, BigDecimal>>
-    {
-        public MoveAllUnitToTarget()
-        {
-            super(null, ">>");
-        }
-
-        @Override
-        public void initialize(ListView<Map.Entry<Product, BigDecimal>> sourceListView,
-                ListView<Map.Entry<Product, BigDecimal>> targetListView)
-        {
-            disabledProperty().bind(Bindings.isEmpty(sourceListView.getSelectionModel().getSelectedItems()));
-            setEventHandler(ae ->
-            {
-                var entry = sourceListView.getSelectionModel().getSelectedItem();
-                if (entry == null) return;
-
-                moveProductQty(entry.getKey(), entry.getValue(), sourceListView, targetListView);
-            });
-        }
-    }
-
-    private static class MoveAllEntriesToTarget
-            extends ListSelectionView.ListSelectionAction<Map.Entry<Product, BigDecimal>>
-    {
-        public MoveAllEntriesToTarget()
-        {
-            super(null, ">>>");
-        }
-
-        @Override
-        public void initialize(ListView<Map.Entry<Product, BigDecimal>> sourceListView,
-                ListView<Map.Entry<Product, BigDecimal>> targetListView)
-        {
-            disabledProperty().bind(Bindings.isEmpty(sourceListView.getItems()));
-            setEventHandler(ae ->
-            {
-                var auxList = new ArrayList<>(sourceListView.getItems());
-
-                auxList.forEach(entry ->
-                        moveProductQty(entry.getKey(), entry.getValue(), sourceListView, targetListView)
-                );
-            });
-        }
-    }
-
-    private static class MoveOneUnitToSource
-            extends ListSelectionView.ListSelectionAction<Map.Entry<Product, BigDecimal>>
-    {
-        public MoveOneUnitToSource()
-        {
-            super(null, "<");
-        }
-
-        @Override
-        public void initialize(ListView<Map.Entry<Product, BigDecimal>> sourceListView,
-                ListView<Map.Entry<Product, BigDecimal>> targetListView)
-        {
-            disabledProperty().bind(Bindings.isEmpty(targetListView.getSelectionModel().getSelectedItems()));
-            setEventHandler(ae ->
-            {
-                var entry = targetListView.getSelectionModel().getSelectedItem();
-                if (entry == null) return;
-
-                moveProductQty(entry.getKey(), BigDecimal.ONE, targetListView, sourceListView);
-            });
-        }
-    }
-
-    private static class MoveAllUnitToSource
-            extends ListSelectionView.ListSelectionAction<Map.Entry<Product, BigDecimal>>
-    {
-        public MoveAllUnitToSource()
-        {
-            super(null, "<<");
-        }
-
-        @Override
-        public void initialize(ListView<Map.Entry<Product, BigDecimal>> sourceListView,
-                ListView<Map.Entry<Product, BigDecimal>> targetListView)
-        {
-            disabledProperty().bind(Bindings.isEmpty(targetListView.getSelectionModel().getSelectedItems()));
-            setEventHandler(ae ->
-            {
-                var entry = targetListView.getSelectionModel().getSelectedItem();
-                if (entry == null) return;
-
-                moveProductQty(entry.getKey(), entry.getValue(), targetListView, sourceListView);
-            });
-        }
-    }
-
-    private static class MoveAllEntriesToSource
-            extends ListSelectionView.ListSelectionAction<Map.Entry<Product, BigDecimal>>
-    {
-        public MoveAllEntriesToSource()
-        {
-            super(null, "<<<");
-        }
-
-        @Override
-        public void initialize(ListView<Map.Entry<Product, BigDecimal>> sourceListView,
-                ListView<Map.Entry<Product, BigDecimal>> targetListView)
-        {
-            disabledProperty().bind(Bindings.isEmpty(targetListView.getItems()));
-            setEventHandler(ae ->
-            {
-                var auxList = new ArrayList<>(targetListView.getItems());
-
-                auxList.forEach(entry ->
-                        moveProductQty(entry.getKey(), entry.getValue(), targetListView, sourceListView)
-                );
-            });
-        }
     }
 }
