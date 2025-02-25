@@ -25,7 +25,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.BiConsumer;
-import java.util.function.BinaryOperator;
 
 public class SeparateOrderController extends StageController<SeparateOrderController>
 {
@@ -91,7 +90,7 @@ public class SeparateOrderController extends StageController<SeparateOrderContro
 
     private BigDecimal getTotalOf(List<Map.Entry<Product, BigDecimal>> entries)
     {
-        
+
         BigDecimal total = new BigDecimal("0");
 
         for (var entry : entries)
@@ -151,6 +150,10 @@ public class SeparateOrderController extends StageController<SeparateOrderContro
 
     private static class MoveableItemListCell extends ListCell<Map.Entry<Product, BigDecimal>>
     {
+        private long pressTime = Long.MAX_VALUE;
+        private final long LONG_CLICK_THRESHOLD = 200;
+        private final String COLOR = "blue";
+
         public MoveableItemListCell(
                 ListView<Map.Entry<Product, BigDecimal>> from,
                 ListView<Map.Entry<Product, BigDecimal>> to
@@ -158,17 +161,77 @@ public class SeparateOrderController extends StageController<SeparateOrderContro
         {
             this.setGraphicTextGap(10);
 
-            this.setOnMouseClicked(_ ->
+            this.setOnMousePressed(_ ->
             {
+                pressTime = System.currentTimeMillis(); // Guarda el tiempo del clic
+
+                if (this.getItem() == null) return;
+
+                new Thread(() ->
+                {
+                    var startState = this.getItem();
+
+                    try
+                    {
+                        Thread.sleep(LONG_CLICK_THRESHOLD);
+                    }
+                    catch (InterruptedException e)
+                    {
+                        throw new RuntimeException(e);
+                    }
+
+                    if (startState == this.getItem())
+                    {
+                        this.setStyle("-fx-background-color: " + COLOR);
+                    }
+                }).start();
+            });
+
+            this.setOnMouseReleased(event ->
+            {
+                if (!this.contains(event.getX(), event.getY())) return;
+
+                event.consume();
+                this.setStyle("");
                 var item = this.getItem();
 
                 if (item == null) return;
 
-                moveProductQty(item.getKey(), BigDecimal.ONE, from, to);
+                long releaseTime = System.currentTimeMillis();
+                long duration = releaseTime - pressTime;
+                pressTime = Long.MAX_VALUE;
+
+                BigDecimal qty;
+
+                if (duration >= LONG_CLICK_THRESHOLD)
+                {
+                    qty = item.getValue();
+                }
+                else
+                {
+                    qty = BigDecimal.ONE;
+                }
+
+                moveProductQty(item.getKey(), qty, from, to);
                 from.getItems().sort(Comparator.comparing(o -> o.getKey().getName()));
                 to.getItems().sort(Comparator.comparing(o -> o.getKey().getName()));
 
                 from.getSelectionModel().clearSelection();
+            });
+
+            this.setOnMouseExited(_ ->
+            {
+                this.setStyle("");
+            });
+            this.setOnMouseEntered(_ ->
+            {
+                long releaseTime = System.currentTimeMillis();
+                long duration = releaseTime - pressTime;
+
+                if (duration >= LONG_CLICK_THRESHOLD)
+                {
+                    this.setStyle("-fx-background-color: " + COLOR);
+                }
             });
         }
 
