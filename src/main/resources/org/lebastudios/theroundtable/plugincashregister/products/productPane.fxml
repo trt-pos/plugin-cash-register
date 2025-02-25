@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Rectangle?>
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.layout.Pane?>
-<VBox xmlns:fx="http://javafx.com/fxml/1" alignment="TOP_CENTER" styleClass="button" prefWidth="110"
+<VBox xmlns:fx="http://javafx.com/fxml/1" alignment="TOP_CENTER" styleClass="button" maxWidth="110" minWidth="110"
       spacing="5" xmlns="http://javafx.com/javafx/17.0.2-ea" fx:id="root">
     <padding>
         <Insets top="5" right="5" bottom="5" left="5"/>
@@ -17,6 +17,6 @@
             <Rectangle width="100" height="100" arcHeight="10" arcWidth="10" />
         </clip>
     </ImageView>
-    <Pane maxHeight="Infinity" VBox.vgrow="ALWAYS" />
+    <Pane VBox.vgrow="ALWAYS" />
     <Label textAlignment="CENTER" wrapText="true" fx:id="label"/>
 </VBox>
