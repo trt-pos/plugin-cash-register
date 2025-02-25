@@ -152,7 +152,9 @@ public class SeparateOrderController extends StageController<SeparateOrderContro
     {
         private long pressTime = Long.MAX_VALUE;
         private final long LONG_CLICK_THRESHOLD = 200;
-        private final String COLOR = "blue";
+        private final String LONG_CLICK_STYLE = """
+                -fx-background-color: #429bfd;
+                -fx-text-fill: white;""";
 
         public MoveableItemListCell(
                 ListView<Map.Entry<Product, BigDecimal>> from,
@@ -163,7 +165,7 @@ public class SeparateOrderController extends StageController<SeparateOrderContro
 
             this.setOnMousePressed(_ ->
             {
-                pressTime = System.currentTimeMillis(); // Guarda el tiempo del clic
+                pressTime = System.currentTimeMillis();
 
                 if (this.getItem() == null) return;
 
@@ -182,14 +184,17 @@ public class SeparateOrderController extends StageController<SeparateOrderContro
 
                     if (startState == this.getItem())
                     {
-                        this.setStyle("-fx-background-color: " + COLOR);
+                        this.setStyle(LONG_CLICK_STYLE);
                     }
                 }).start();
             });
-
             this.setOnMouseReleased(event ->
             {
-                if (!this.contains(event.getX(), event.getY())) return;
+                if (!this.contains(event.getX(), event.getY()))
+                {
+                    pressTime = Long.MAX_VALUE;
+                    return;
+                }
 
                 event.consume();
                 this.setStyle("");
@@ -218,11 +223,7 @@ public class SeparateOrderController extends StageController<SeparateOrderContro
 
                 from.getSelectionModel().clearSelection();
             });
-
-            this.setOnMouseExited(_ ->
-            {
-                this.setStyle("");
-            });
+            this.setOnMouseExited(_ -> this.setStyle(""));
             this.setOnMouseEntered(_ ->
             {
                 long releaseTime = System.currentTimeMillis();
@@ -230,7 +231,7 @@ public class SeparateOrderController extends StageController<SeparateOrderContro
 
                 if (duration >= LONG_CLICK_THRESHOLD)
                 {
-                    this.setStyle("-fx-background-color: " + COLOR);
+                    this.setStyle(LONG_CLICK_STYLE);
                 }
             });
         }
