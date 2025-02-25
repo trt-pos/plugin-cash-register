@@ -1,6 +1,8 @@
 package org.lebastudios.theroundtable.plugincashregister.cash;
 
 import javafx.beans.binding.Bindings;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.ListCell;
@@ -31,69 +33,20 @@ public class SeparateOrderController extends StageController<SeparateOrderContro
     {
         originalOrder = order;
         originalProducts = new HashMap<>();
-        
+
         for (var item : order.getOrderItems())
         {
             originalProducts.put(item.getBaseProduct(), item.getQuantity());
         }
-        
+
         this.acceptSeparation = acceptSeparation;
     }
 
-    private static void moveProductQty(Product product, BigDecimal quantity,
-            ListView<Map.Entry<Product, BigDecimal>> origin,
-            ListView<Map.Entry<Product, BigDecimal>> output)
+    @FXML
+    @Override
+    protected void initialize()
     {
-        addProductToList(product, quantity.negate(), origin);
-        addProductToList(product, quantity, output);
-    }
-
-    private static void addProductToList(Product product, BigDecimal quantity,
-            ListView<Map.Entry<Product, BigDecimal>> listView)
-    {
-        var list = listView.getItems();
-        var index = indexOfProduct(product, listView);
-
-        if (index == -1)
-        {
-            list.add(Map.entry(product, quantity));
-            return;
-        }
-
-        var entry = list.get(index);
-        list.remove(index);
-
-        var newEntry = Map.entry(product, entry.getValue().add(quantity));
-        if (newEntry.getValue().compareTo(BigDecimal.ZERO) != 0)
-        {
-            list.add(index, newEntry);
-        }
-    }
-
-    private static int indexOfProduct(Product product,
-            ListView<Map.Entry<Product, BigDecimal>> listView)
-    {
-        var list = listView.getItems();
-        for (var i = 0; i < list.size(); i++)
-        {
-            if (list.get(i).getKey().equals(product)) return i;
-        }
-
-        return -1;
-    }
-
-    @FXML @Override protected void initialize()
-    {
-        setCustomListCell();
-
-        customAvailableButtons();
-
-        updateListViews();
-    }
-
-    private void setCustomListCell()
-    {
-        selectionView.setCellFactory(param -> new ListCell<>()
+        selectionView.setCellFactory(_ -> new ListCell<>()
         {
             @Override
             public void updateItem(Map.Entry<Product, BigDecimal> item, boolean empty)
@@ -102,37 +55,21 @@ public class SeparateOrderController extends StageController<SeparateOrderContro
 
                 if (item == null || empty)
                 {
-                    setText("");
+                    setText(null);
+                    setGraphic(null);
                 }
                 else
                 {
                     setText(item.getValue().intValueExact() + " - " + item.getKey().getName());
+                    setGraphic(null);
                 }
             }
         });
-    }
 
-    private void customAvailableButtons()
-    {
+        selectionView.setSourceItems(FXCollections.observableArrayList(originalProducts.entrySet()));
+
         selectionView.getActions().clear();
-
-        selectionView.getActions().add(new MoveOneUnitToTarget());
-
-        selectionView.getActions().add(new MoveAllUnitToTarget());
-
-        selectionView.getActions().add(new MoveAllEntriesToTarget());
-
-        selectionView.getActions().add(new MoveOneUnitToSource());
-
-        selectionView.getActions().add(new MoveAllUnitToSource());
-
-        selectionView.getActions().add(new MoveAllEntriesToSource());
-    }
-
-    private void updateListViews()
-    {
-        var list = new ArrayList<>(originalProducts.entrySet());
-        selectionView.setSourceItems(FXCollections.observableArrayList(list));
+        selectionView.getActions().add(new ListViewExtractror());
     }
 
     @FXML
@@ -173,11 +110,116 @@ public class SeparateOrderController extends StageController<SeparateOrderContro
     {
         return SeparateOrderController.class.getResource("separateOrder.fxml");
     }
-    
+
     @Override
     public String getTitle()
     {
         return LangFileLoader.getTranslation("tiltle.separateorderdialog");
+    }
+
+    private static void moveProductQty(Product product, BigDecimal quantity,
+            ListView<Map.Entry<Product, BigDecimal>> origin,
+            ListView<Map.Entry<Product, BigDecimal>> output)
+    {
+        addProductToList(product, quantity.negate(), origin);
+        addProductToList(product, quantity, output);
+    }
+
+    private static void addProductToList(Product product, BigDecimal quantity,
+            ListView<Map.Entry<Product, BigDecimal>> listView)
+    {
+        var list = listView.getItems();
+        var index = indexOfProduct(product, listView);
+
+        if (index == -1)
+        {
+            list.add(Map.entry(product, quantity));
+            return;
+        }
+
+        var entry = list.get(index);
+        list.remove(index);
+
+        var newEntry = Map.entry(product, entry.getValue().add(quantity));
+
+        if (newEntry.getValue().compareTo(BigDecimal.ZERO) != 0)
+        {
+            list.add(newEntry);
+        }
+    }
+
+    private static int indexOfProduct(Product product,
+            ListView<Map.Entry<Product, BigDecimal>> listView)
+    {
+        var list = listView.getItems();
+        for (var i = 0; i < list.size(); i++)
+        {
+            if (list.get(i).getKey().equals(product)) return i;
+        }
+
+        return -1;
+    }
+
+    private static class ListViewExtractror
+            extends ListSelectionView.ListSelectionAction<Map.Entry<Product, BigDecimal>>
+    {
+        public ListViewExtractror()
+        {
+            super(null, null);
+        }
+
+        @Override
+        public void initialize(ListView<Map.Entry<Product, BigDecimal>> sourceListView,
+                ListView<Map.Entry<Product, BigDecimal>> targetListView)
+        {
+            sourceListView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<>()
+            {
+                private boolean disabled = false;
+
+                @Override
+                public void changed(ObservableValue<? extends Map.Entry<Product, BigDecimal>> observable,
+                        Map.Entry<Product, BigDecimal> oldValue, Map.Entry<Product, BigDecimal> newValue)
+                {
+                    if (newValue == null) return;
+
+                    if (disabled)
+                    {
+                        disabled = false;
+                        return;
+                    }
+                    
+                    disabled = true;
+                    
+                    System.out.println(123);
+                    moveProductQty(newValue.getKey(), BigDecimal.ONE, sourceListView, targetListView);
+                    sourceListView.getSelectionModel().select(null);
+                }
+            });
+
+            targetListView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<>()
+            {
+                private boolean disabled = false;
+                
+                @Override
+                public void changed(ObservableValue<? extends Map.Entry<Product, BigDecimal>> observable,
+                        Map.Entry<Product, BigDecimal> oldValue, Map.Entry<Product, BigDecimal> newValue)
+                {
+                    if (newValue == null) return;
+
+                    if (disabled)
+                    {
+                        disabled = false;
+                        return;
+                    }
+                    
+                    disabled = true;
+                    
+                    System.out.println(123);
+                    moveProductQty(newValue.getKey(), BigDecimal.ONE, targetListView, sourceListView);
+                    targetListView.getSelectionModel().select(null);
+                }
+            });
+        }
     }
 
     private static class MoveOneUnitToTarget
