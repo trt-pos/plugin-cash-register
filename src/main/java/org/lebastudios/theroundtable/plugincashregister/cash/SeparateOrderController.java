@@ -4,6 +4,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.image.ImageView;
@@ -12,6 +13,7 @@ import javafx.stage.Modality;
 import org.lebastudios.theroundtable.apparience.ImageLoader;
 import org.lebastudios.theroundtable.controllers.StageController;
 import org.lebastudios.theroundtable.locale.LangFileLoader;
+import org.lebastudios.theroundtable.maths.BigDecimalOperations;
 import org.lebastudios.theroundtable.plugincashregister.PluginCashRegister;
 import org.lebastudios.theroundtable.plugincashregister.entities.Product;
 import org.lebastudios.theroundtable.ui.StageBuilder;
@@ -20,8 +22,10 @@ import java.math.BigDecimal;
 import java.net.URL;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.function.BiConsumer;
+import java.util.function.BinaryOperator;
 
 public class SeparateOrderController extends StageController<SeparateOrderController>
 {
@@ -32,6 +36,8 @@ public class SeparateOrderController extends StageController<SeparateOrderContro
     @FXML private ListView<Map.Entry<Product, BigDecimal>> sourceList;
     @FXML private ListView<Map.Entry<Product, BigDecimal>> targetList;
     @FXML private Button acceptButton;
+    @FXML private Label leftTotalLabel;
+    @FXML private Label rightTotalLabel;
 
     public SeparateOrderController(Order order, BiConsumer<Order, Order> acceptSeparation)
     {
@@ -58,10 +64,42 @@ public class SeparateOrderController extends StageController<SeparateOrderContro
 
         acceptButton.setDisable(true);
 
+        updateLeftTotal();
+        updateRightTotal();
+
+        sourceList.getItems().addListener((ListChangeListener<Map.Entry<Product, BigDecimal>>) _ -> updateLeftTotal());
+        targetList.getItems().addListener((ListChangeListener<Map.Entry<Product, BigDecimal>>) _ -> updateRightTotal());
+
         targetList.getItems().addListener(
                 (ListChangeListener<Map.Entry<Product, BigDecimal>>) _ -> acceptButton.setDisable(
-                        targetList.getItems().isEmpty())
+                        targetList.getItems().isEmpty()
+                )
         );
+    }
+
+    private void updateLeftTotal()
+    {
+        BigDecimal a = getTotalOf(sourceList.getItems());
+        leftTotalLabel.setText("Total: " + BigDecimalOperations.toString(a) + " € ");
+    }
+
+    private void updateRightTotal()
+    {
+        BigDecimal b = getTotalOf(targetList.getItems());
+        rightTotalLabel.setText("Total: " + BigDecimalOperations.toString(b) + " € ");
+    }
+
+    private BigDecimal getTotalOf(List<Map.Entry<Product, BigDecimal>> entries)
+    {
+        
+        BigDecimal total = new BigDecimal("0");
+
+        for (var entry : entries)
+        {
+            total = total.add(entry.getKey().getPrice().multiply(entry.getValue()));
+        }
+
+        return total;
     }
 
     @FXML
@@ -118,6 +156,8 @@ public class SeparateOrderController extends StageController<SeparateOrderContro
                 ListView<Map.Entry<Product, BigDecimal>> to
         )
         {
+            this.setGraphicTextGap(10);
+
             this.setOnMouseClicked(_ ->
             {
                 var item = this.getItem();

@@ -27,6 +27,7 @@
         <RowConstraints />
         <RowConstraints prefHeight="300"/>
         <RowConstraints />
+        <RowConstraints />
     </rowConstraints>
 
     <Label GridPane.rowIndex="0" GridPane.columnIndex="0" style="-fx-font-weight: bold;"
@@ -38,7 +39,15 @@
     <ListView GridPane.rowIndex="1" GridPane.columnIndex="0" GridPane.columnSpan="2" fx:id="sourceList"/>
     <ListView GridPane.rowIndex="1" GridPane.columnIndex="2" GridPane.columnSpan="2" fx:id="targetList"/>
 
-    <HBox GridPane.rowIndex="2" GridPane.columnIndex="0" GridPane.columnSpan="4" alignment="CENTER_RIGHT" spacing="5">
+    <Label GridPane.rowIndex="2" GridPane.columnIndex="0" GridPane.columnSpan="2" fx:id="leftTotalLabel"
+           maxWidth="Infinity" text="asd" textAlignment="RIGHT" alignment="CENTER_RIGHT" style="-fx-font-size: 20; -fx-font-weight: bold;"/>
+    <Label GridPane.rowIndex="2" GridPane.columnIndex="2" GridPane.columnSpan="2" fx:id="rightTotalLabel" 
+           maxWidth="Infinity" text="asd"  textAlignment="RIGHT" alignment="CENTER_RIGHT" style="-fx-font-size: 20; -fx-font-weight: bold;"/>
+    
+    <HBox GridPane.rowIndex="3" GridPane.columnIndex="0" GridPane.columnSpan="4" alignment="CENTER_RIGHT" spacing="5">
+        <padding>
+            <Insets top="10" />
+        </padding>
         <Button onAction="#cancel" text="%word.cancel"/>
         <Button fx:id="acceptButton" defaultButton="true" onAction="#accept" text="%word.accept"/>
     </HBox>
