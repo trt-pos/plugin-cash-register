@@ -8,6 +8,7 @@
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.control.Label?>
+<?import org.lebastudios.theroundtable.ui.IconView?>
 <GridPane xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/17.0.2-ea"
           fx:id="root" vgap="5" hgap="5">
     <padding>
@@ -16,6 +17,8 @@
 
     <columnConstraints>
         <ColumnConstraints prefWidth="300" hgrow="ALWAYS"/>
+        <ColumnConstraints prefWidth="25" halignment="CENTER" />
+        <ColumnConstraints prefWidth="25" halignment="CENTER" />
         <ColumnConstraints prefWidth="300" hgrow="ALWAYS"/>
     </columnConstraints>
     
@@ -27,13 +30,14 @@
 
     <Label GridPane.rowIndex="0" GridPane.columnIndex="0" style="-fx-font-weight: bold;"
            alignment="CENTER" textAlignment="CENTER" maxWidth="Infinity" text="%word.source"/>
-    <Label GridPane.rowIndex="0" GridPane.columnIndex="1" style="-fx-font-weight: bold;"
+    <IconView GridPane.rowIndex="0" GridPane.columnIndex="1" GridPane.columnSpan="2" iconName="transfer.png" />
+    <Label GridPane.rowIndex="0" GridPane.columnIndex="3" style="-fx-font-weight: bold;"
            alignment="CENTER" textAlignment="CENTER" maxWidth="Infinity" text="%word.separated"/>
     
-    <ListView GridPane.rowIndex="1" GridPane.columnIndex="0" fx:id="sourceList"/>
-    <ListView GridPane.rowIndex="1" GridPane.columnIndex="1" fx:id="targetList"/>
+    <ListView GridPane.rowIndex="1" GridPane.columnIndex="0" GridPane.columnSpan="2" fx:id="sourceList"/>
+    <ListView GridPane.rowIndex="1" GridPane.columnIndex="2" GridPane.columnSpan="2" fx:id="targetList"/>
 
-    <HBox GridPane.rowIndex="2" GridPane.columnIndex="0" GridPane.columnSpan="2" alignment="CENTER_RIGHT" spacing="5">
+    <HBox GridPane.rowIndex="2" GridPane.columnIndex="0" GridPane.columnSpan="4" alignment="CENTER_RIGHT" spacing="5">
         <Button onAction="#cancel" text="%word.cancel"/>
         <Button fx:id="acceptButton" defaultButton="true" onAction="#accept" text="%word.accept"/>
     </HBox>
