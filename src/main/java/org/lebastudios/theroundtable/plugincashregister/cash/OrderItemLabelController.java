@@ -75,6 +75,11 @@ public class OrderItemLabelController extends PaneController<OrderItemLabelContr
             return;
         }
 
+        if (actualEditting.getText().matches("0\\d+.*")) 
+        {
+            actualEditting.setText(actualEditting.getText().substring(1));
+        }
+        
         hasDefaultText.put(actualEditting, false);
     }
 
@@ -137,7 +142,7 @@ public class OrderItemLabelController extends PaneController<OrderItemLabelContr
             UIEffects.shakeNode(quantityLabel);
             return;
         }
-        
+
         try
         {
             new BigDecimal(unitPriceLabel.getText());
@@ -147,18 +152,19 @@ public class OrderItemLabelController extends PaneController<OrderItemLabelContr
             UIEffects.shakeNode(unitPriceLabel);
             return;
         }
-        
+
         this.orderItem.setQuantity(new BigDecimal(quantityLabel.getText()));
         this.orderItem.getBaseProduct().setTaxedPrice(new BigDecimal(unitPriceLabel.getText()));
-        
+
         checkRemoveOrderItemCondition();
-        
+
         CashRegister.getInstance().getActualOrder().collapseEqualItems();
-        
+
         CashRegister.onActualOrderModified.invoke();
+        
         setActualEditting(null);
     }
-
+    
     @FXML
     private void removeOneButton()
     {

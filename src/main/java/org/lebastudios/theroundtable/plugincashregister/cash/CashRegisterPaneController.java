@@ -199,7 +199,7 @@ public class CashRegisterPaneController extends PaneController<CashRegisterPaneC
 
     private void bindKeyboardWithVirtualPad()
     {
-        getRoot().addEventHandler(KeyEvent.KEY_PRESSED, event ->
+        getRoot().addEventFilter(KeyEvent.KEY_PRESSED, event ->
         {
             if (event.isConsumed()) return;
 
@@ -218,8 +218,8 @@ public class CashRegisterPaneController extends PaneController<CashRegisterPaneC
                 case DIGIT9, NUMPAD9 -> button9();
                 case DIGIT0, NUMPAD0 -> button0();
                 case BACK_SPACE -> buttonBackspace();
-                case DECIMAL, PERIOD -> buttonDot();
-                case MINUS, PLUS -> invertNumber();
+                case DECIMAL, PERIOD, COMMA -> buttonDot();
+                case MINUS, PLUS, ADD, SUBTRACT -> invertNumber();
                 case ENTER -> submitEditting();
                 
                 default -> consumed = false;
