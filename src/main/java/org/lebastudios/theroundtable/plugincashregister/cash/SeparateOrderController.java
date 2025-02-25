@@ -1,22 +1,21 @@
 package org.lebastudios.theroundtable.plugincashregister.cash;
 
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.stage.Modality;
-import org.controlsfx.control.ListSelectionView;
-import org.lebastudios.theroundtable.Launcher;
 import org.lebastudios.theroundtable.controllers.StageController;
 import org.lebastudios.theroundtable.locale.LangFileLoader;
+import org.lebastudios.theroundtable.plugincashregister.PluginCashRegister;
 import org.lebastudios.theroundtable.plugincashregister.entities.Product;
 import org.lebastudios.theroundtable.ui.StageBuilder;
 
 import java.math.BigDecimal;
 import java.net.URL;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.BiConsumer;
@@ -27,10 +26,10 @@ public class SeparateOrderController extends StageController<SeparateOrderContro
     private final HashMap<Product, BigDecimal> originalProducts;
     private final BiConsumer<Order, Order> acceptSeparation;
 
-    @FXML private ListView<Map.Entry<Product, BigDecimal>> sourceList; 
-    @FXML private ListView<Map.Entry<Product, BigDecimal>> targetList; 
-    @FXML private Button cancelButton;
-    
+    @FXML private ListView<Map.Entry<Product, BigDecimal>> sourceList;
+    @FXML private ListView<Map.Entry<Product, BigDecimal>> targetList;
+    @FXML private Button acceptButton;
+
     public SeparateOrderController(Order order, BiConsumer<Order, Order> acceptSeparation)
     {
         originalOrder = order;
@@ -48,52 +47,27 @@ public class SeparateOrderController extends StageController<SeparateOrderContro
     @Override
     protected void initialize()
     {
-        class MoveableItemListCell extends ListCell<Map.Entry<Product, BigDecimal>>
-        {
-            public MoveableItemListCell(
-                    ListView<Map.Entry<Product, BigDecimal>> from, 
-                    ListView<Map.Entry<Product, BigDecimal>> to
-            )
-            {
-                this.setOnMouseClicked(_ ->
-                {
-                    var item = this.getItem();
-
-                    if (item == null) return;
-
-                    moveProductQty(item.getKey(), BigDecimal.ONE, from, to);
-                });
-            }
-
-            @Override
-            public void updateItem(Map.Entry<Product, BigDecimal> item, boolean empty)
-            {
-                super.updateItem(item, empty);
-
-                if (item == null || empty)
-                {
-                    setText(null);
-                    setGraphic(null);
-                }
-                else
-                {
-                    setText(item.getValue().intValueExact() + " - " + item.getKey().getName());
-                    setGraphic(null);
-                }
-            }
-        }
-        
         sourceList.setCellFactory(from -> new MoveableItemListCell(from, targetList));
         targetList.setCellFactory(from -> new MoveableItemListCell(from, sourceList));
 
         sourceList.setItems(FXCollections.observableArrayList(originalProducts.entrySet()));
+        sourceList.getItems().sort(Comparator.comparing(o -> o.getKey().getName()));
+
+        acceptButton.setDisable(true);
+
+        targetList.getItems().addListener(
+                (ListChangeListener<Map.Entry<Product, BigDecimal>>) _ -> acceptButton.setDisable(
+                        targetList.getItems().isEmpty())
+        );
     }
 
     @FXML
     private void accept()
     {
         var generatedOrder = new Order();
-        generatedOrder.setOrderName(originalOrder.getOrderName() + " (Separated)");
+        generatedOrder.setOrderName(
+                originalOrder.getOrderName() + " (" + LangFileLoader.getTranslation("word.splitted") + ")"
+        );
 
         for (var variable : targetList.getItems())
         {
@@ -119,7 +93,7 @@ public class SeparateOrderController extends StageController<SeparateOrderContro
     @Override
     public Class<?> getBundleClass()
     {
-        return Launcher.class;
+        return PluginCashRegister.class;
     }
 
     @Override
@@ -134,46 +108,85 @@ public class SeparateOrderController extends StageController<SeparateOrderContro
         return LangFileLoader.getTranslation("tiltle.separateorderdialog");
     }
 
-    private static void moveProductQty(Product product, BigDecimal quantity,
-            ListView<Map.Entry<Product, BigDecimal>> origin,
-            ListView<Map.Entry<Product, BigDecimal>> output)
+    private static class MoveableItemListCell extends ListCell<Map.Entry<Product, BigDecimal>>
     {
-        addProductToList(product, quantity.negate(), origin);
-        addProductToList(product, quantity, output);
-    }
-
-    private static void addProductToList(Product product, BigDecimal quantity,
-            ListView<Map.Entry<Product, BigDecimal>> listView)
-    {
-        var list = listView.getItems();
-        var index = indexOfProduct(product, listView);
-
-        if (index == -1)
+        public MoveableItemListCell(
+                ListView<Map.Entry<Product, BigDecimal>> from,
+                ListView<Map.Entry<Product, BigDecimal>> to
+        )
         {
-            list.add(Map.entry(product, quantity));
-            return;
+            this.setOnMouseClicked(_ ->
+            {
+                var item = this.getItem();
+
+                if (item == null) return;
+
+                moveProductQty(item.getKey(), BigDecimal.ONE, from, to);
+                from.getItems().sort(Comparator.comparing(o -> o.getKey().getName()));
+                to.getItems().sort(Comparator.comparing(o -> o.getKey().getName()));
+
+                from.getSelectionModel().clearSelection();
+            });
         }
 
-        var entry = list.get(index);
-        list.remove(index);
-
-        var newEntry = Map.entry(product, entry.getValue().add(quantity));
-
-        if (newEntry.getValue().compareTo(BigDecimal.ZERO) != 0)
+        @Override
+        public void updateItem(Map.Entry<Product, BigDecimal> item, boolean empty)
         {
-            list.add(newEntry);
-        }
-    }
+            super.updateItem(item, empty);
 
-    private static int indexOfProduct(Product product,
-            ListView<Map.Entry<Product, BigDecimal>> listView)
-    {
-        var list = listView.getItems();
-        for (var i = 0; i < list.size(); i++)
-        {
-            if (list.get(i).getKey().equals(product)) return i;
+            if (item == null || empty)
+            {
+                setText(null);
+                setGraphic(null);
+            }
+            else
+            {
+                setText(item.getValue().intValueExact() + " - " + item.getKey().getName());
+                setGraphic(null);
+            }
         }
 
-        return -1;
+        private static void moveProductQty(Product product, BigDecimal quantity,
+                ListView<Map.Entry<Product, BigDecimal>> origin,
+                ListView<Map.Entry<Product, BigDecimal>> output)
+        {
+            addProductToList(product, quantity.negate(), origin);
+            addProductToList(product, quantity, output);
+        }
+
+        private static void addProductToList(Product product, BigDecimal quantity,
+                ListView<Map.Entry<Product, BigDecimal>> listView)
+        {
+            var list = listView.getItems();
+            var index = indexOfProduct(product, listView);
+
+            if (index == -1)
+            {
+                list.add(Map.entry(product, quantity));
+                return;
+            }
+
+            var entry = list.get(index);
+            list.remove(index);
+
+            var newEntry = Map.entry(product, entry.getValue().add(quantity));
+
+            if (newEntry.getValue().compareTo(BigDecimal.ZERO) != 0)
+            {
+                list.add(newEntry);
+            }
+        }
+
+        private static int indexOfProduct(Product product,
+                ListView<Map.Entry<Product, BigDecimal>> listView)
+        {
+            var list = listView.getItems();
+            for (var i = 0; i < list.size(); i++)
+            {
+                if (list.get(i).getKey().equals(product)) return i;
+            }
+
+            return -1;
+        }
     }
 }

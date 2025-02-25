@@ -3,20 +3,38 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ListView?>
+<?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.VBox?>
-<VBox xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/17.0.2-ea" fx:id="root" spacing="5">
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.control.Label?>
+<GridPane xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/17.0.2-ea"
+          fx:id="root" vgap="5" hgap="5">
     <padding>
-        <Insets bottom="5" left="5" right="5" top="5"/>
+        <Insets bottom="5" left="5" right="5" top="15"/>
     </padding>
 
-    <HBox spacing="5">
-        <ListView fx:id="sourceList" prefWidth="300" prefHeight="300"/>
-        <ListView fx:id="targetList" prefWidth="300" prefHeight="300"/>
-    </HBox>
+    <columnConstraints>
+        <ColumnConstraints prefWidth="300" hgrow="ALWAYS"/>
+        <ColumnConstraints prefWidth="300" hgrow="ALWAYS"/>
+    </columnConstraints>
+    
+    <rowConstraints>
+        <RowConstraints />
+        <RowConstraints prefHeight="300"/>
+        <RowConstraints />
+    </rowConstraints>
 
-    <HBox alignment="CENTER_RIGHT" spacing="10">
-        <Button fx:id="cancelButton" onAction="#cancel" text="%word.cancel"/>
-        <Button defaultButton="true" onAction="#accept" text="%word.accept"/>
+    <Label GridPane.rowIndex="0" GridPane.columnIndex="0" style="-fx-font-weight: bold;"
+           alignment="CENTER" textAlignment="CENTER" maxWidth="Infinity" text="%word.source"/>
+    <Label GridPane.rowIndex="0" GridPane.columnIndex="1" style="-fx-font-weight: bold;"
+           alignment="CENTER" textAlignment="CENTER" maxWidth="Infinity" text="%word.separated"/>
+    
+    <ListView GridPane.rowIndex="1" GridPane.columnIndex="0" fx:id="sourceList"/>
+    <ListView GridPane.rowIndex="1" GridPane.columnIndex="1" fx:id="targetList"/>
+
+    <HBox GridPane.rowIndex="2" GridPane.columnIndex="0" GridPane.columnSpan="2" alignment="CENTER_RIGHT" spacing="5">
+        <Button onAction="#cancel" text="%word.cancel"/>
+        <Button fx:id="acceptButton" defaultButton="true" onAction="#accept" text="%word.accept"/>
     </HBox>
-</VBox>
+</GridPane>

@@ -7,7 +7,7 @@
 <?import org.lebastudios.theroundtable.ui.IconButton?>
 <?import org.lebastudios.theroundtable.ui.SearchBox?>
 <VBox xmlns:fx="http://javafx.com/fxml" HBox.hgrow="ALWAYS"
-      xmlns="http://javafx.com/javafx">
+      xmlns="http://javafx.com/javafx" spacing="5">
     <padding>
         <Insets top="10" left="10" right="10" bottom="10"/>
     </padding>
