@@ -31,35 +31,44 @@ public class OrderItemLabelController extends PaneController<OrderItemLabelContr
 
     private final IEventMethod1<OrderItem> updateView = oiMod ->
     {
+        if (orderItem == null) return;
         if (orderItem != oiMod) return;
+
+        System.out.println("Updating view Listener: " + orderItem.getBaseProduct().getName() + " " + this);
         
         updateView();
     };
+
+    public OrderItemLabelController(OrderItem orderItem)
+    {
+        this.orderItem = orderItem;
+    }
     
     @FXML @Override protected void initialize()
     {
+        System.out.println("Initializing label for: " + this);
+        
         if (orderItem == null) return;
         
         hasDefaultText.put(quantityLabel, true);
         hasDefaultText.put(unitPriceLabel, true);
 
-        quantityLabel.setText(orderItem.getQuantity().toString());
-        productNameLabel.setText(orderItem.intoProduct().getName());
-        unitPriceLabel.setText(BigDecimalOperations.toString(orderItem.intoProduct().getPrice()));
-        totalPriceLabel.setText(BigDecimalOperations.toString(orderItem.getTotalPrice()));
-        
+        updateView();
+
         quantityLabel.setOnMouseClicked(_ ->
         {
-            submitEditting();
+            if (actualEditting == quantityLabel) return;
+            
+            if (actualEditting != null) submitEditting();
             setActualEditting(quantityLabel);
         });
         unitPriceLabel.setOnMouseClicked(_ ->
         {
-            submitEditting();
+            if (unitPriceLabel == actualEditting) return;
+
+            if (actualEditting != null) submitEditting();
             setActualEditting(unitPriceLabel);
         });
-        
-        productImg.setImage(ImageLoader.getSavedImage(orderItem.getBaseProduct().getImgPath()));
         
         CashRegister.onOrderItemModified.addWeakListener(updateView);
     }
@@ -175,26 +184,31 @@ public class OrderItemLabelController extends PaneController<OrderItemLabelContr
             UIEffects.shakeNode(unitPriceLabel);
             return;
         }
-
+        
         this.orderItem.setQuantity(new BigDecimal(quantityLabel.getText()));
         this.orderItem.getBaseProduct().setTaxedPrice(new BigDecimal(unitPriceLabel.getText()));
 
+        System.out.println("Submitted: " + orderItem.getBaseProduct().getName());
         CashRegister.onOrderItemModified.invoke(orderItem);
         
         checkRemoveOrderItemCondition();
 
         // Collapse equal items maybe is not necessary
         // CashRegister.getInstance().getActualOrder().collapseEqualItems();
-
         
         setActualEditting(null);
+        hasDefaultText.entrySet().forEach(entry -> entry.setValue(true));
     }
     
     public void updateView()
     {
+        System.out.println("Updated the view of: " + orderItem.getBaseProduct().getName());
+
         quantityLabel.setText(orderItem.getQuantity().toString());
+        productNameLabel.setText(orderItem.getBaseProduct().getName());
         unitPriceLabel.setText(BigDecimalOperations.toString(orderItem.intoProduct().getPrice()));
         totalPriceLabel.setText(BigDecimalOperations.toString(orderItem.getTotalPrice()));
+        productImg.setImage(ImageLoader.getSavedImage(orderItem.getBaseProduct().getImgPath()));
     }
     
     @FXML
@@ -205,7 +219,6 @@ public class OrderItemLabelController extends PaneController<OrderItemLabelContr
         checkRemoveOrderItemCondition();
         
         CashRegister.onOrderItemModified.invoke(orderItem);
-        updateView();
     }
 
     @FXML
@@ -214,7 +227,6 @@ public class OrderItemLabelController extends PaneController<OrderItemLabelContr
         orderItem.setQuantity(orderItem.getQuantity().add(BigDecimal.ONE));
 
         CashRegister.onOrderItemModified.invoke(orderItem);
-        updateView();
     }
 
     private void checkRemoveOrderItemCondition()

@@ -157,23 +157,17 @@ public class CashRegisterPaneController extends PaneController<CashRegisterPaneC
                         {
                             setText(null);
                             setGraphic(null);
+                            itemLabelControllers.remove(this);
                             return;
                         }
-                        
-                        if (!itemLabelControllers.containsKey(this)) 
-                        {
-                            var controller = new OrderItemLabelController();
-                            itemLabelControllers.put(this, controller);
-                            final var node = controller.getRoot();
-                            ((Pane) node).prefWidthProperty().bind(orderItemsListView.widthProperty().subtract(20));
-                        }
-                        
-                        final var orderItemLabelController = itemLabelControllers.get(this);
-                        
-                        orderItemLabelController.setOrderItem(orderItem);
-                        orderItemLabelController.initialize();
 
-                        setGraphic(orderItemLabelController.getRoot());
+                        System.out.println("Updating item label: " + orderItem.getBaseProduct().getName() + " " + this);
+                        OrderItemLabelController controller = new OrderItemLabelController(orderItem);
+                        itemLabelControllers.put(this, controller);
+                        final var node = controller.getRoot();
+                        ((Pane) node).prefWidthProperty().bind(orderItemsListView.widthProperty().subtract(20));
+                        
+                        setGraphic(controller.getRoot());
                     }
                 };
             }
