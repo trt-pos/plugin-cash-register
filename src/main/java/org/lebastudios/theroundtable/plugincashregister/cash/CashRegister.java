@@ -4,7 +4,7 @@ import com.github.anastaciocintra.escpos.EscPos;
 import com.github.anastaciocintra.output.PrinterOutputStream;
 import lombok.Getter;
 import lombok.SneakyThrows;
-import org.lebastudios.theroundtable.controllers.PaneController;
+import org.lebastudios.theroundtable.events.Event1;
 import org.lebastudios.theroundtable.plugincashregister.entities.Product;
 import org.lebastudios.theroundtable.events.Event;
 import org.lebastudios.theroundtable.locale.LangFileLoader;
@@ -13,13 +13,15 @@ import org.lebastudios.theroundtable.printers.PrinterManager;
 
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.util.LinkedHashMap;
-import java.util.List;
 
 @Getter
 public class CashRegister
 {
+    /// The actual order is considered modified when, a new label is added, removed, or a new order is set to show.
     public static Event onActualOrderModified = new Event();
+    /// An order item is modified when the qty or the unit price is changed.
+    /// If the qty goes to 0, the item is removed and the event onActualOrderModified is called instead of this.
+    public static Event1<OrderItem> onOrderItemModified = new Event1<>();
 
     private static CashRegister instance;
     
@@ -53,13 +55,13 @@ public class CashRegister
         if (orderItem == null) 
         {
             orderItems.add(new OrderItem(product.clone(), quantity));
+            CashRegister.onActualOrderModified.invoke();
         }
         else
         {
             orderItem.setQuantity(orderItem.getQuantity().add(quantity));
+            CashRegister.onOrderItemModified.invoke(orderItem);
         }
-        
-        CashRegister.onActualOrderModified.invoke();
     }
     
     public void resetActualOrder()

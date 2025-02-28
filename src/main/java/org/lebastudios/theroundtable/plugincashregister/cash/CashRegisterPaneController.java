@@ -85,6 +85,11 @@ public class CashRegisterPaneController extends PaneController<CashRegisterPaneC
             totalLabel.setText(CashRegister.getInstance().getActualOrder().getTotalStringRepresentation());
             orderTableNameLabel.setText(CashRegister.getInstance().getActualOrder().getOrderName());
         });
+
+        CashRegister.onOrderItemModified.addListener(_ ->
+        {
+            totalLabel.setText(CashRegister.getInstance().getActualOrder().getTotalStringRepresentation());
+        });
     }
 
     @FXML
@@ -122,6 +127,25 @@ public class CashRegisterPaneController extends PaneController<CashRegisterPaneC
                 {
                     {
                         this.setStyle("-fx-padding: 0;");
+                        
+                        this.setOnMouseClicked(e ->
+                        {
+                            if (actualProduct == itemLabelControllers.get(this)) return;
+                            
+                            if (actualProduct != null) 
+                            {
+                                actualProduct.submitEditting();
+                            }
+                            
+                            if (!this.isEmpty() && this.getItem() != null)
+                            {
+                                actualProduct = itemLabelControllers.get(this);
+                            }
+                            else
+                            {
+                                actualProduct = null;
+                            }
+                        });
                     }
                     
                     @Override
@@ -141,13 +165,10 @@ public class CashRegisterPaneController extends PaneController<CashRegisterPaneC
                             var controller = new OrderItemLabelController();
                             itemLabelControllers.put(this, controller);
                             final var node = controller.getRoot();
-                            node.setOnMouseClicked(_ -> actualProduct = controller);
                             ((Pane) node).prefWidthProperty().bind(orderItemsListView.widthProperty().subtract(20));
                         }
                         
                         final var orderItemLabelController = itemLabelControllers.get(this);
-
-                        actualProduct = orderItemLabelController;
                         
                         orderItemLabelController.setOrderItem(orderItem);
                         orderItemLabelController.initialize();

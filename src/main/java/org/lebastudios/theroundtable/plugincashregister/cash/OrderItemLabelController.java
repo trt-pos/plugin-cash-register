@@ -2,13 +2,13 @@ package org.lebastudios.theroundtable.plugincashregister.cash;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import lombok.Getter;
 import lombok.Setter;
 import org.lebastudios.theroundtable.apparience.ImageLoader;
 import org.lebastudios.theroundtable.apparience.UIEffects;
 import org.lebastudios.theroundtable.controllers.PaneController;
+import org.lebastudios.theroundtable.events.IEventMethod1;
 import org.lebastudios.theroundtable.plugincashregister.entities.Product;
 import org.lebastudios.theroundtable.maths.BigDecimalOperations;
 import org.lebastudios.theroundtable.plugincashregister.PluginCashRegister;
@@ -29,6 +29,13 @@ public class OrderItemLabelController extends PaneController<OrderItemLabelContr
     @FXML private ImageView productImg;
     @Getter private Label actualEditting;
 
+    private final IEventMethod1<OrderItem> updateView = oiMod ->
+    {
+        if (orderItem != oiMod) return;
+        
+        updateView();
+    };
+    
     @FXML @Override protected void initialize()
     {
         if (orderItem == null) return;
@@ -41,10 +48,20 @@ public class OrderItemLabelController extends PaneController<OrderItemLabelContr
         unitPriceLabel.setText(BigDecimalOperations.toString(orderItem.intoProduct().getPrice()));
         totalPriceLabel.setText(BigDecimalOperations.toString(orderItem.getTotalPrice()));
         
-        quantityLabel.setOnMouseClicked(_ -> setActualEditting(quantityLabel));
-        unitPriceLabel.setOnMouseClicked(_ -> setActualEditting(unitPriceLabel));
+        quantityLabel.setOnMouseClicked(_ ->
+        {
+            submitEditting();
+            setActualEditting(quantityLabel);
+        });
+        unitPriceLabel.setOnMouseClicked(_ ->
+        {
+            submitEditting();
+            setActualEditting(unitPriceLabel);
+        });
         
         productImg.setImage(ImageLoader.getSavedImage(orderItem.getBaseProduct().getImgPath()));
+        
+        CashRegister.onOrderItemModified.addWeakListener(updateView);
     }
 
     public Product getRepresentingProduct()
@@ -162,16 +179,22 @@ public class OrderItemLabelController extends PaneController<OrderItemLabelContr
         this.orderItem.setQuantity(new BigDecimal(quantityLabel.getText()));
         this.orderItem.getBaseProduct().setTaxedPrice(new BigDecimal(unitPriceLabel.getText()));
 
-        unitPriceLabel.setText(BigDecimalOperations.toString(orderItem.intoProduct().getPrice()));
-        totalPriceLabel.setText(BigDecimalOperations.toString(orderItem.getTotalPrice()));
+        CashRegister.onOrderItemModified.invoke(orderItem);
         
         checkRemoveOrderItemCondition();
 
-        CashRegister.getInstance().getActualOrder().collapseEqualItems();
+        // Collapse equal items maybe is not necessary
+        // CashRegister.getInstance().getActualOrder().collapseEqualItems();
 
-        CashRegister.onActualOrderModified.invoke();
         
         setActualEditting(null);
+    }
+    
+    public void updateView()
+    {
+        quantityLabel.setText(orderItem.getQuantity().toString());
+        unitPriceLabel.setText(BigDecimalOperations.toString(orderItem.intoProduct().getPrice()));
+        totalPriceLabel.setText(BigDecimalOperations.toString(orderItem.getTotalPrice()));
     }
     
     @FXML
@@ -181,7 +204,8 @@ public class OrderItemLabelController extends PaneController<OrderItemLabelContr
         
         checkRemoveOrderItemCondition();
         
-        CashRegister.onActualOrderModified.invoke();
+        CashRegister.onOrderItemModified.invoke(orderItem);
+        updateView();
     }
 
     @FXML
@@ -189,7 +213,8 @@ public class OrderItemLabelController extends PaneController<OrderItemLabelContr
     {
         orderItem.setQuantity(orderItem.getQuantity().add(BigDecimal.ONE));
 
-        CashRegister.onActualOrderModified.invoke();
+        CashRegister.onOrderItemModified.invoke(orderItem);
+        updateView();
     }
 
     private void checkRemoveOrderItemCondition()
@@ -197,6 +222,7 @@ public class OrderItemLabelController extends PaneController<OrderItemLabelContr
         if (orderItem.getQuantity().compareTo(BigDecimal.ZERO) <= 0)
         {
             CashRegister.getInstance().getActualOrder().getOrderItems().remove(orderItem);
+            CashRegister.onActualOrderModified.invoke();
         }
     }
     
