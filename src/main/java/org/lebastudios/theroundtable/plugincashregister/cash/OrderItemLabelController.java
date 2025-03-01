@@ -33,8 +33,6 @@ public class OrderItemLabelController extends PaneController<OrderItemLabelContr
     {
         if (orderItem == null) return;
         if (orderItem != oiMod) return;
-
-        System.out.println("Updating view Listener: " + orderItem.getBaseProduct().getName() + " " + this);
         
         updateView();
     };
@@ -46,10 +44,6 @@ public class OrderItemLabelController extends PaneController<OrderItemLabelContr
     
     @FXML @Override protected void initialize()
     {
-        System.out.println("Initializing label for: " + this);
-        
-        if (orderItem == null) return;
-        
         hasDefaultText.put(quantityLabel, true);
         hasDefaultText.put(unitPriceLabel, true);
 
@@ -73,6 +67,11 @@ public class OrderItemLabelController extends PaneController<OrderItemLabelContr
         CashRegister.onOrderItemModified.addWeakListener(updateView);
     }
 
+    public void removeListeners()
+    {
+        CashRegister.onOrderItemModified.removeWeakListener(updateView);
+    }
+    
     public Product getRepresentingProduct()
     {
         return orderItem.intoProduct();
@@ -188,12 +187,11 @@ public class OrderItemLabelController extends PaneController<OrderItemLabelContr
         this.orderItem.setQuantity(new BigDecimal(quantityLabel.getText()));
         this.orderItem.getBaseProduct().setTaxedPrice(new BigDecimal(unitPriceLabel.getText()));
 
-        System.out.println("Submitted: " + orderItem.getBaseProduct().getName());
         CashRegister.onOrderItemModified.invoke(orderItem);
         
         checkRemoveOrderItemCondition();
 
-        // Collapse equal items maybe is not necessary
+        // Should be nice to use this method, but it breaks everything, shit plugin
         // CashRegister.getInstance().getActualOrder().collapseEqualItems();
         
         setActualEditting(null);
@@ -202,8 +200,6 @@ public class OrderItemLabelController extends PaneController<OrderItemLabelContr
     
     public void updateView()
     {
-        System.out.println("Updated the view of: " + orderItem.getBaseProduct().getName());
-
         quantityLabel.setText(orderItem.getQuantity().toString());
         productNameLabel.setText(orderItem.getBaseProduct().getName());
         unitPriceLabel.setText(BigDecimalOperations.toString(orderItem.intoProduct().getPrice()));

@@ -67,7 +67,7 @@ public class Order
     
     public void collapseEqualItems()
     {
-        var products = new HashMap<Product, BigDecimal>();
+        var products = new LinkedHashMap<Product, BigDecimal>();
         
         for (var orderItem : orderItems)
         {

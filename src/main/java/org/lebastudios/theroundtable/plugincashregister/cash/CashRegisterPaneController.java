@@ -153,15 +153,19 @@ public class CashRegisterPaneController extends PaneController<CashRegisterPaneC
                     {
                         super.updateItem(orderItem, empty);
 
+                        if (itemLabelControllers.containsKey(this)) 
+                        {
+                            itemLabelControllers.get(this).removeListeners();
+                            itemLabelControllers.remove(this);
+                        }
+                        
                         if (empty || orderItem == null)
                         {
                             setText(null);
                             setGraphic(null);
-                            itemLabelControllers.remove(this);
                             return;
                         }
 
-                        System.out.println("Updating item label: " + orderItem.getBaseProduct().getName() + " " + this);
                         OrderItemLabelController controller = new OrderItemLabelController(orderItem);
                         itemLabelControllers.put(this, controller);
                         final var node = controller.getRoot();

@@ -7,19 +7,16 @@
 <?import org.lebastudios.theroundtable.ui.IconButton?>
 <?import org.lebastudios.theroundtable.ui.SearchBox?>
 <VBox xmlns:fx="http://javafx.com/fxml" HBox.hgrow="ALWAYS"
-      xmlns="http://javafx.com/javafx" spacing="5">
+      xmlns="http://javafx.com/javafx" spacing="10">
     <padding>
         <Insets top="10" left="10" right="10" bottom="10"/>
     </padding>
     <HBox spacing="5" alignment="CENTER_RIGHT">
-        <SearchBox prefWidth="150" fx:id="searchBox"/>
+        <SearchBox prefWidth="200" fx:id="searchBox"/>
     </HBox>
     <TabPane VBox.vgrow="ALWAYS" tabClosingPolicy="UNAVAILABLE" fx:id="mainTabPane"/>
 
     <HBox alignment="CENTER_RIGHT">
-        <padding>
-            <Insets bottom="5" right="5"/>
-        </padding>
         <IconButton onAction="#createNewProductWindow" iconSize="32" iconName="plus.png"/>
     </HBox>
 </VBox>

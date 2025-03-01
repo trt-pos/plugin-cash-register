@@ -5,16 +5,12 @@
 <?import javafx.scene.layout.*?>
 <?import org.lebastudios.theroundtable.ui.*?>
 <HBox maxWidth="Infinity" xmlns="http://javafx.com/javafx/17.0.12"
-      xmlns:fx="http://javafx.com/fxml/1" fx:id="root">
+      xmlns:fx="http://javafx.com/fxml/1" fx:id="root" spacing="5">
     <padding>
         <Insets top="15" bottom="15"/>
     </padding>
-    <Separator orientation="VERTICAL"/>
 
     <VBox minWidth="475" maxWidth="475" HBox.hgrow="ALWAYS" fx:id="keyboardParent" spacing="5">
-        <padding>
-            <Insets bottom="5" left="5" right="5" top="5"/>
-        </padding>
         <HBox alignment="CENTER_RIGHT">
             <Label HBox.hgrow="ALWAYS" fx:id="lastCollectedTotalLabel"/>
         </HBox>
