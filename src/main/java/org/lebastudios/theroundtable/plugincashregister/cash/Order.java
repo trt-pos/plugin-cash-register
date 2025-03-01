@@ -1,5 +1,6 @@
 package org.lebastudios.theroundtable.plugincashregister.cash;
 
+import com.sun.javafx.collections.ObservableListWrapper;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
@@ -15,7 +16,7 @@ import java.util.*;
 public class Order
 {
     private String orderName;
-    @Setter @Getter private List<OrderItem> orderItems = new ArrayList<>();
+    @Setter @Getter private List<OrderItem> orderItems = new ObservableListWrapper<>(new ArrayList<>());
 
     public static Order fromReceipt(int receiptId)
     {

@@ -17,10 +17,9 @@ import java.math.BigDecimal;
 @Getter
 public class CashRegister
 {
-    /// The actual order is considered modified when, a new label is added, removed, or a new order is set to show.
-    public static Event onActualOrderModified = new Event();
+    public static Event onActualOrderSwapped = new Event();
     /// An order item is modified when the qty or the unit price is changed.
-    /// If the qty goes to 0, the item is removed and the event onActualOrderModified is called instead of this.
+    /// If the qty goes to 0 or less, this event is not triggered.
     public static Event1<OrderItem> onOrderItemModified = new Event1<>();
 
     private static CashRegister instance;
@@ -55,7 +54,6 @@ public class CashRegister
         if (orderItem == null) 
         {
             orderItems.add(new OrderItem(product.clone(), quantity));
-            CashRegister.onActualOrderModified.invoke();
         }
         else
         {
@@ -67,8 +65,6 @@ public class CashRegister
     public void resetActualOrder()
     {
         actualOrder.reset();
-
-        CashRegister.onActualOrderModified.invoke();
     }
 
     public void printOrder()
@@ -92,7 +88,7 @@ public class CashRegister
         if (actualOrder == order) return;
 
         actualOrder = order;
-        CashRegister.onActualOrderModified.invoke();
+        CashRegister.onActualOrderSwapped.invoke();
     }
 
     @SneakyThrows

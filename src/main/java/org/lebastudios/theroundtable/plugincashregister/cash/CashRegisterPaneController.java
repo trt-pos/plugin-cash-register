@@ -3,6 +3,8 @@ package org.lebastudios.theroundtable.plugincashregister.cash;
 import com.github.anastaciocintra.escpos.EscPos;
 import com.github.anastaciocintra.output.PrinterOutputStream;
 import javafx.application.Platform;
+import javafx.collections.ListChangeListener;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.Label;
@@ -57,46 +59,19 @@ public class CashRegisterPaneController extends PaneController<CashRegisterPaneC
         {
             throw new IllegalStateException("Shouldn't be created more than once");
         }
-
-        CashRegister.onActualOrderModified.addListener(() ->
-        {
-            final var cashRegister = CashRegister.getInstance();
-
-            exitOrderButton.setVisible(cashRegister.getActualOrder() != cashRegister.getCashRegisterOrder());
-            clearActualOrderButton.setDisable(cashRegister.getActualOrder().getOrderItems().isEmpty());
-        });
-
-        CashRegister.onActualOrderModified.addListener(() ->
-        {
-            orderItemsListView.getItems().clear();
-            orderItemsListView.getItems().addAll(CashRegister.getInstance().getActualOrder().getOrderItems());
-        });
-
-        CashRegister.onActualOrderModified.addListener(() ->
-        {
-            boolean empty = CashRegister.getInstance().getActualOrder().getOrderItems().isEmpty();
-
-            collectOrderButton.setDisable(empty);
-            splitOrderButton.setDisable(empty);
-        });
-
-        CashRegister.onActualOrderModified.addListener(() ->
-        {
-            totalLabel.setText(CashRegister.getInstance().getActualOrder().getTotalStringRepresentation());
-            orderTableNameLabel.setText(CashRegister.getInstance().getActualOrder().getOrderName());
-        });
-
-        CashRegister.onOrderItemModified.addListener(_ ->
-        {
-            totalLabel.setText(CashRegister.getInstance().getActualOrder().getTotalStringRepresentation());
-        });
     }
 
     @FXML
     @Override
     protected void initialize()
     {
-        orderTableNameLabel.setText(CashRegister.getInstance().getActualOrder().getOrderName());
+        this.bindActualOrderToUi();
+        CashRegister.onActualOrderSwapped.addListener(this::bindActualOrderToUi);
+
+        CashRegister.onOrderItemModified.addListener(_ ->
+        {
+            totalLabel.setText(CashRegister.getInstance().getActualOrder().getTotalStringRepresentation());
+        });
 
         getRoot().addEventHandler(KeyEvent.KEY_PRESSED, this::escape);
         orderItemsListView.addEventHandler(KeyEvent.KEY_PRESSED, this::escape);
@@ -176,6 +151,29 @@ public class CashRegisterPaneController extends PaneController<CashRegisterPaneC
                 };
             }
         });
+    }
+
+    private void bindActualOrderToUi()
+    {
+        final CashRegister cashRegister = CashRegister.getInstance();
+        final Order actualOrder = cashRegister.getActualOrder();
+
+        ObservableList<OrderItem> items = (ObservableList<OrderItem>) actualOrder.getOrderItems();
+        orderItemsListView.setItems(items);
+
+        items.addListener((ListChangeListener<OrderItem>) _ ->
+        {
+            boolean empty = items.isEmpty();
+
+            clearActualOrderButton.setDisable(items.isEmpty());
+            collectOrderButton.setDisable(empty);
+            splitOrderButton.setDisable(empty);
+
+            totalLabel.setText(actualOrder.getTotalStringRepresentation());
+        });
+
+        exitOrderButton.setVisible(actualOrder != cashRegister.getCashRegisterOrder());
+        orderTableNameLabel.setText(actualOrder.getOrderName());
     }
 
     private void escape(KeyEvent event)
@@ -289,8 +287,6 @@ public class CashRegisterPaneController extends PaneController<CashRegisterPaneC
             {
                 original.removeOrderItem(orderItem);
             }
-
-            CashRegister.onActualOrderModified.invoke();
         }).instantiate();
     }
 

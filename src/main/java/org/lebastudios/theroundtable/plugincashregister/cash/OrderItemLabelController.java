@@ -230,7 +230,6 @@ public class OrderItemLabelController extends PaneController<OrderItemLabelContr
         if (orderItem.getQuantity().compareTo(BigDecimal.ZERO) <= 0)
         {
             CashRegister.getInstance().getActualOrder().getOrderItems().remove(orderItem);
-            CashRegister.onActualOrderModified.invoke();
         }
     }
     
