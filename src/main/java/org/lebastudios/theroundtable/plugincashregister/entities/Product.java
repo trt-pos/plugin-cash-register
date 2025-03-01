@@ -45,6 +45,11 @@ public class Product implements Cloneable
     @JoinColumn(name = "sub_category_name", referencedColumnName = "name")
     private SubCategory subCategory;
 
+    @Column(name = "category_name", insertable = false, updatable = false)
+    private String categoryName;
+    @Column(name = "sub_category_name", insertable = false, updatable = false)
+    private String subCategoryName;
+    
     public BigDecimal getTaxes()
     {
         return taxType == null ? taxes : taxType.getValue();

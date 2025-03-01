@@ -4,30 +4,31 @@ import com.github.anastaciocintra.escpos.EscPos;
 import com.github.anastaciocintra.output.PrinterOutputStream;
 import lombok.Getter;
 import lombok.SneakyThrows;
-import org.lebastudios.theroundtable.events.Event1;
-import org.lebastudios.theroundtable.plugincashregister.entities.Product;
 import org.lebastudios.theroundtable.events.Event;
+import org.lebastudios.theroundtable.events.Event1;
 import org.lebastudios.theroundtable.locale.LangFileLoader;
+import org.lebastudios.theroundtable.plugincashregister.entities.Product;
 import org.lebastudios.theroundtable.plugincashregister.printers.CashRegisterPrinterManager;
 import org.lebastudios.theroundtable.printers.PrinterManager;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 @Getter
 public class CashRegister
 {
     public static Event onActualOrderSwapped = new Event();
-    /// An order item is modified when the qty or the unit price is changed.
-    /// If the qty goes to 0 or less, this event is not triggered.
+    /// An order item is modified when the qty or the unit price is changed. If the qty goes to 0 or less, this event is
+    /// not triggered.
     public static Event1<OrderItem> onOrderItemModified = new Event1<>();
 
     private static CashRegister instance;
-    
+
     private final Order cashRegisterOrder;
-    
+
     private Order actualOrder;
-    
+
     private CashRegister()
     {
         cashRegisterOrder = new Order();
@@ -45,13 +46,18 @@ public class CashRegister
     public void addProduct(Product product, BigDecimal quantity)
     {
         var orderItems = actualOrder.getOrderItems();
-        
+
         var orderItem = orderItems.stream()
-                .filter(item -> item.getBaseProduct().equals(product))
+                .filter(item ->
+                        item.getBaseProduct().getName().equals(product.getName())
+                                && item.getBaseProduct().getSubCategoryName().equals(product.getSubCategoryName())
+                                && item.getBaseProduct().getCategoryName().equals(product.getCategoryName())
+                                && item.getBaseProduct().getPrice().setScale(2, RoundingMode.CEILING)
+                                .equals(product.getPrice().setScale(2, RoundingMode.CEILING)))
                 .findFirst()
                 .orElse(null);
-        
-        if (orderItem == null) 
+
+        if (orderItem == null)
         {
             orderItems.add(new OrderItem(product.clone(), quantity));
         }
@@ -61,7 +67,7 @@ public class CashRegister
             CashRegister.onOrderItemModified.invoke(orderItem);
         }
     }
-    
+
     public void resetActualOrder()
     {
         actualOrder.reset();
