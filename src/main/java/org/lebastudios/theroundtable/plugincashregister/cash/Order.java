@@ -85,7 +85,7 @@ public class Order
             }
         }
         
-        orderItems = new ArrayList<>(products.size());
+        orderItems.clear();
         
         for (var entry : products.entrySet())
         {

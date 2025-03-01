@@ -186,16 +186,16 @@ public class OrderItemLabelController extends PaneController<OrderItemLabelContr
         
         this.orderItem.setQuantity(new BigDecimal(quantityLabel.getText()));
         this.orderItem.getBaseProduct().setTaxedPrice(new BigDecimal(unitPriceLabel.getText()));
-
-        CashRegister.onOrderItemModified.invoke(orderItem);
+        
+        // This method could be used but is actually to expensive for the current use case
+        // CashRegister.getInstance().getActualOrder().collapseEqualItems();
         
         checkRemoveOrderItemCondition();
 
-        // Should be nice to use this method, but it breaks everything, shit plugin
-        // CashRegister.getInstance().getActualOrder().collapseEqualItems();
-        
         setActualEditting(null);
         hasDefaultText.entrySet().forEach(entry -> entry.setValue(true));
+        
+        CashRegister.onOrderItemModified.invoke(orderItem);
     }
     
     public void updateView()
