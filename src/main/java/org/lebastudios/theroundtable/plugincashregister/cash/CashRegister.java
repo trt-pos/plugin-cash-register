@@ -52,6 +52,7 @@ public class CashRegister
                         item.getBaseProduct().getName().equals(product.getName())
                                 && item.getBaseProduct().getSubCategoryName().equals(product.getSubCategoryName())
                                 && item.getBaseProduct().getCategoryName().equals(product.getCategoryName())
+                                && item.getBaseProduct().getImgPath().equals(product.getImgPath())
                                 && item.getBaseProduct().getPrice().setScale(2, RoundingMode.CEILING)
                                 .equals(product.getPrice().setScale(2, RoundingMode.CEILING)))
                 .findFirst()

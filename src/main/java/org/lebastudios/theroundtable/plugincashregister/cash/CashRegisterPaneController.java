@@ -6,9 +6,9 @@ import javafx.application.Platform;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
 import javafx.scene.control.Label;
-import javafx.scene.input.KeyCode;
+import javafx.scene.control.ListCell;
+import javafx.scene.control.ListView;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
@@ -16,17 +16,21 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.util.Callback;
 import org.lebastudios.theroundtable.MainStageController;
+import org.lebastudios.theroundtable.config.data.JSONFile;
+import org.lebastudios.theroundtable.controllers.PaneController;
 import org.lebastudios.theroundtable.dialogs.ConfirmationTextDialogController;
 import org.lebastudios.theroundtable.locale.LangFileLoader;
 import org.lebastudios.theroundtable.maths.BigDecimalOperations;
-import org.lebastudios.theroundtable.plugincashregister.config.data.CashRegisterStateData;
-import org.lebastudios.theroundtable.config.data.JSONFile;
-import org.lebastudios.theroundtable.controllers.PaneController;
 import org.lebastudios.theroundtable.plugincashregister.PluginCashRegister;
+import org.lebastudios.theroundtable.plugincashregister.config.data.CashRegisterStateData;
 import org.lebastudios.theroundtable.plugincashregister.entities.Receipt;
-import org.lebastudios.theroundtable.plugincashregister.products.*;
-import org.lebastudios.theroundtable.printers.*;
-import org.lebastudios.theroundtable.ui.*;
+import org.lebastudios.theroundtable.plugincashregister.products.ProductPaneController;
+import org.lebastudios.theroundtable.plugincashregister.products.ProductsUIController;
+import org.lebastudios.theroundtable.printers.OpenCashDrawer;
+import org.lebastudios.theroundtable.printers.PrinterManager;
+import org.lebastudios.theroundtable.ui.IconButton;
+import org.lebastudios.theroundtable.ui.IconTextButton;
+import org.lebastudios.theroundtable.ui.LoadingPaneController;
 
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -73,10 +77,7 @@ public class CashRegisterPaneController extends PaneController<CashRegisterPaneC
             totalLabel.setText(CashRegister.getInstance().getActualOrder().getTotalStringRepresentation());
         });
 
-        getRoot().addEventHandler(KeyEvent.KEY_PRESSED, this::escape);
-        orderItemsListView.addEventHandler(KeyEvent.KEY_PRESSED, this::escape);
-
-        bindKeyboardWithVirtualPad();
+        bindKeyboardActions();
 
         // Adding the products interface to the root
         HBox root = (HBox) getRoot();
@@ -94,7 +95,7 @@ public class CashRegisterPaneController extends PaneController<CashRegisterPaneC
         orderItemsListView.setCellFactory(new Callback<>()
         {
             private final HashMap<ListCell<OrderItem>, OrderItemLabelController> itemLabelControllers = new HashMap<>();
-            
+
             @Override
             public ListCell<OrderItem> call(ListView<OrderItem> orderItemListView)
             {
@@ -102,16 +103,16 @@ public class CashRegisterPaneController extends PaneController<CashRegisterPaneC
                 {
                     {
                         this.setStyle("-fx-padding: 0;");
-                        
+
                         this.setOnMouseClicked(e ->
                         {
                             if (actualProduct == itemLabelControllers.get(this)) return;
-                            
-                            if (actualProduct != null) 
+
+                            if (actualProduct != null)
                             {
                                 actualProduct.submitEditting();
                             }
-                            
+
                             if (!this.isEmpty() && this.getItem() != null)
                             {
                                 actualProduct = itemLabelControllers.get(this);
@@ -122,18 +123,18 @@ public class CashRegisterPaneController extends PaneController<CashRegisterPaneC
                             }
                         });
                     }
-                    
+
                     @Override
                     protected void updateItem(OrderItem orderItem, boolean empty)
                     {
                         super.updateItem(orderItem, empty);
 
-                        if (itemLabelControllers.containsKey(this)) 
+                        if (itemLabelControllers.containsKey(this))
                         {
                             itemLabelControllers.get(this).removeListeners();
                             itemLabelControllers.remove(this);
                         }
-                        
+
                         if (empty || orderItem == null)
                         {
                             setText(null);
@@ -145,7 +146,7 @@ public class CashRegisterPaneController extends PaneController<CashRegisterPaneC
                         itemLabelControllers.put(this, controller);
                         final var node = controller.getRoot();
                         ((Pane) node).prefWidthProperty().bind(orderItemsListView.widthProperty().subtract(20));
-                        
+
                         setGraphic(controller.getRoot());
                     }
                 };
@@ -176,49 +177,14 @@ public class CashRegisterPaneController extends PaneController<CashRegisterPaneC
         orderTableNameLabel.setText(actualOrder.getOrderName());
     }
 
-    private void escape(KeyEvent event)
-    {
-        if (event.isConsumed()) return;
-
-        if (event.getCode() == KeyCode.ESCAPE)
-        {
-            if (actualProduct != null)
-            {
-                actualProduct.setActualEditting(null);
-                actualProduct = null;
-            }
-
-            orderItemsListView.getSelectionModel().select(null);
-        }
-
-        event.consume();
-    }
-
-    public static void showInterface()
-    {
-        if (instance == null)
-        {
-            instance = new CashRegisterPaneController();
-        }
-
-        if (!new JSONFile<>(CashRegisterStateData.class).get().open)
-        {
-            MainStageController.getInstance().setCentralNode(new CashRegisterClosePaneController());
-            return;
-        }
-
-        ProductPaneController.onAction = product -> CashRegister.getInstance().addProduct(product, BigDecimal.ONE);
-        MainStageController.getInstance().setCentralNode(instance);
-    }
-
-    private void bindKeyboardWithVirtualPad()
+    private void bindKeyboardActions()
     {
         getRoot().addEventFilter(KeyEvent.KEY_PRESSED, event ->
         {
             if (event.isConsumed()) return;
 
             boolean consumed = true;
-            
+
             switch (event.getCode())
             {
                 case DIGIT1, NUMPAD1 -> button1();
@@ -235,7 +201,17 @@ public class CashRegisterPaneController extends PaneController<CashRegisterPaneC
                 case DECIMAL, PERIOD, COMMA -> buttonDot();
                 case MINUS, PLUS, ADD, SUBTRACT -> invertNumber();
                 case ENTER -> submitEditting();
-                
+                case ESCAPE ->
+                {
+                    if (actualProduct != null)
+                    {
+                        actualProduct.setActualEditting(null);
+                        actualProduct = null;
+                    }
+
+                    orderItemsListView.getSelectionModel().select(null);
+                }
+
                 default -> consumed = false;
             }
 
@@ -243,15 +219,39 @@ public class CashRegisterPaneController extends PaneController<CashRegisterPaneC
         });
     }
 
+    public static void showInterface()
+    {
+        if (instance == null)
+        {
+            instance = new CashRegisterPaneController();
+        }
+
+        if (!new JSONFile<>(CashRegisterStateData.class).get().open)
+        {
+            MainStageController.getInstance().setCentralNode(new CashRegisterClosePaneController());
+            return;
+        }
+
+        ProductPaneController.onAction = product -> {
+            instance.submitEditting();
+            CashRegister.getInstance().addProduct(product, BigDecimal.ONE);
+        };
+        MainStageController.getInstance().setCentralNode(instance);
+    }
+
     @FXML
     private void printOrder()
     {
+        submitEditting();
+
         CashRegister.getInstance().printOrder();
     }
 
     @FXML
     private void clearActualOrder()
     {
+        submitEditting();
+
         new ConfirmationTextDialogController(LangFileLoader.getTranslation("textblock.resetorder"), r ->
         {
             if (!r) return;
@@ -263,6 +263,8 @@ public class CashRegisterPaneController extends PaneController<CashRegisterPaneC
     @FXML
     private void collectOrder()
     {
+        submitEditting();
+
         new CollectOrderStageController(CashRegister.getInstance().getActualOrder(), receipt ->
         {
             updateLastCollectedReceipt(receipt);
@@ -274,36 +276,37 @@ public class CashRegisterPaneController extends PaneController<CashRegisterPaneC
     @FXML
     private void splitOrder()
     {
-        new SeparateOrderController(CashRegister.getInstance().getActualOrder(), this::separateOrder).instantiate();
-    }
+        submitEditting();
 
-    private void separateOrder(Order original, Order generated)
-    {
-        new CollectOrderStageController(generated, receipt ->
-        {
-            updateLastCollectedReceipt(receipt);
-            
-            for (OrderItem orderItem : generated.getOrderItems())
-            {
-                original.removeOrderItem(orderItem);
-            }
-        }).instantiate();
+        final Order actualOrder = CashRegister.getInstance().getActualOrder();
+        new SeparateOrderController(actualOrder,
+                (original, generated) -> new CollectOrderStageController(generated, receipt ->
+                {
+                    updateLastCollectedReceipt(receipt);
+
+                    for (OrderItem orderItem : generated.getOrderItems())
+                    {
+                        original.removeOrderItem(orderItem);
+                    }
+                }).instantiate()).instantiate();
     }
 
     private void updateLastCollectedReceipt(Receipt receipt)
     {
-        lastCollectedTotalLabel.setText(LangFileLoader.getTranslation("phrase.lastcollected") + " " 
-                + BigDecimalOperations.toString(receipt.getTaxedTotal()) + " €    " 
+        lastCollectedTotalLabel.setText(LangFileLoader.getTranslation("phrase.lastcollected") + " "
+                + BigDecimalOperations.toString(receipt.getTaxedTotal()) + " €    "
                 + LangFileLoader.getTranslation("word.payment") + " "
                 + BigDecimalOperations.toString(receipt.getPaymentAmount()) + " €    "
-                + LangFileLoader.getTranslation("word.change") + ": " 
+                + LangFileLoader.getTranslation("word.change") + ": "
                 + BigDecimalOperations.toString(receipt.getPaymentAmount().subtract(receipt.getTaxedTotal())) + " €"
         );
     }
-    
+
     @FXML
     private void exitOrder()
     {
+        submitEditting();
+
         CashRegister.getInstance().swapOrder(CashRegister.getInstance().getCashRegisterOrder());
     }
 
@@ -410,6 +413,8 @@ public class CashRegisterPaneController extends PaneController<CashRegisterPaneC
     @FXML
     private void openCashRegister()
     {
+        submitEditting();
+
         try
         {
             EscPos escPos = new EscPos(new PrinterOutputStream(PrinterManager.getInstance().getDefaultPrintService()));
@@ -425,6 +430,8 @@ public class CashRegisterPaneController extends PaneController<CashRegisterPaneC
     @FXML
     private void instantiateSeparator()
     {
+        submitEditting();
+
         var separator = new OrderItem.Separator();
         CashRegister.getInstance().getActualOrder().getOrderItems().add(separator);
 
@@ -435,6 +442,8 @@ public class CashRegisterPaneController extends PaneController<CashRegisterPaneC
     @FXML
     private void alterNumericKeyboardVisibility()
     {
+        submitEditting();
+
         isVisible = !isVisible;
 
         if (index == -1) index = keyboardParent.getChildren().indexOf(cashRegisterKeyboard);
@@ -454,18 +463,24 @@ public class CashRegisterPaneController extends PaneController<CashRegisterPaneC
     @FXML
     private void moneyIn()
     {
+        submitEditting();
+
         new TransactionCreatorStageController(TransactionCreatorStageController.TransactionType.ADD).instantiate();
     }
 
     @FXML
     private void moneyOut()
     {
+        submitEditting();
+
         new TransactionCreatorStageController(TransactionCreatorStageController.TransactionType.REMOVE).instantiate();
     }
 
     @FXML
     private void closeCashRegister()
     {
+        submitEditting();
+
         new CloseCashRegisterStageController().instantiate();
     }
 
