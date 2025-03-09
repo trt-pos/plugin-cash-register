@@ -36,6 +36,7 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.net.URL;
 import java.util.HashMap;
+import java.util.List;
 
 public class CashRegisterPaneController extends PaneController<CashRegisterPaneController>
 {
@@ -159,17 +160,15 @@ public class CashRegisterPaneController extends PaneController<CashRegisterPaneC
         final CashRegister cashRegister = CashRegister.getInstance();
         final Order actualOrder = cashRegister.getActualOrder();
 
-        ObservableList<OrderItem> items = (ObservableList<OrderItem>) actualOrder.getOrderItems();
+        ObservableList<OrderItem> items = actualOrder.getOrderItems();
         orderItemsListView.setItems(items);
 
+        updateDisableableButtons(items);
+        totalLabel.setText(actualOrder.getTotalStringRepresentation());
+        
         items.addListener((ListChangeListener<OrderItem>) _ ->
         {
-            boolean empty = items.isEmpty();
-
-            clearActualOrderButton.setDisable(items.isEmpty());
-            collectOrderButton.setDisable(empty);
-            splitOrderButton.setDisable(empty);
-
+            updateDisableableButtons(items);
             totalLabel.setText(actualOrder.getTotalStringRepresentation());
         });
 
@@ -177,6 +176,15 @@ public class CashRegisterPaneController extends PaneController<CashRegisterPaneC
         orderTableNameLabel.setText(actualOrder.getOrderName());
     }
 
+    private void updateDisableableButtons(List<OrderItem> items)
+    {
+        boolean empty = items.isEmpty();
+
+        clearActualOrderButton.setDisable(empty);
+        collectOrderButton.setDisable(empty);
+        splitOrderButton.setDisable(empty);
+    }
+    
     private void bindKeyboardActions()
     {
         getRoot().addEventFilter(KeyEvent.KEY_PRESSED, event ->

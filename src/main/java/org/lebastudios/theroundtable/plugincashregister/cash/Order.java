@@ -1,6 +1,7 @@
 package org.lebastudios.theroundtable.plugincashregister.cash;
 
 import com.sun.javafx.collections.ObservableListWrapper;
+import javafx.collections.ObservableList;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
@@ -16,7 +17,7 @@ import java.util.*;
 public class Order
 {
     private String orderName;
-    @Setter @Getter private List<OrderItem> orderItems = new ObservableListWrapper<>(new ArrayList<>());
+    @Setter @Getter private ObservableList<OrderItem> orderItems = new ObservableListWrapper<>(new ArrayList<>());
 
     public static Order fromReceipt(int receiptId)
     {
@@ -39,7 +40,7 @@ public class Order
             orderItems.add(new OrderItem(receiptItem.getProduct(), receiptItem.getQuantity()));
         }
 
-        order.setOrderItems(orderItems);
+        order.setOrderItems(new ObservableListWrapper<>(orderItems));
 
         return order;
     }
