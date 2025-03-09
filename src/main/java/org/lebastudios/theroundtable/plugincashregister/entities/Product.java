@@ -50,12 +50,14 @@ public class Product implements Cloneable
     @Column(name = "sub_category_name", insertable = false, updatable = false)
     private String subCategoryName;
     
+    /// If no taxType is set, the tax field is used.
+    /// Usefull when creating dynamically a product that is not  
+    /// intended to be saved in the database.
     public BigDecimal getTaxes()
     {
         return taxType == null ? taxes : taxType.getValue();
     }
     
-    @Deprecated
     public void setTaxes(BigDecimal taxes)
     {
         if (taxes.compareTo(BigDecimal.ZERO) < 0 || taxes.compareTo(BigDecimal.ONE) > 0)
