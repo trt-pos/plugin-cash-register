@@ -35,7 +35,7 @@ public class PluginCashRegister implements IPlugin
 {
     private static PluginCashRegister instance;
     private static final int DATABASE_VERSION = 5;
-    
+
     public static PluginCashRegister getInstance()
     {
         if (instance == null) throw new IllegalStateException("This plugin has to be instantiated");
@@ -63,13 +63,18 @@ public class PluginCashRegister implements IPlugin
                 ).instantiate();
             }
         });
-        
+
         PluginCashRegisterEvents.showOrder.addListener(order ->
         {
             var cashRegisterState = new JSONFile<>(CashRegisterStateData.class).get();
-            
-            if (!cashRegisterState.open) return;
-            
+
+            if (!cashRegisterState.open)
+            {
+                new InformationTextDialogController(LangFileLoader.getTranslation("phrase.cashregisterisclosed"))
+                        .instantiate(true);
+                return;
+            }
+
             CashRegister.getInstance().swapOrder(order);
             CashRegister.getInstance().showInterface();
         });
@@ -89,7 +94,7 @@ public class PluginCashRegister implements IPlugin
                 Event1.class.getMethod("addListener", Object.class),
                 PluginCashRegisterEvents.onProductModify
         );
-        
+
         PluginEvents.registerPluginEvent(
                 "plugin-cash-register",
                 "onReceiptEmitted",
@@ -97,7 +102,7 @@ public class PluginCashRegister implements IPlugin
                 Event1.class.getMethod("addListener", Object.class),
                 PluginCashRegisterEvents.onReceiptEmitted
         );
-        
+
         PluginEvents.registerPluginEvent(
                 "plugin-cash-register",
                 "onRequestReceiptBillNumber",
@@ -105,7 +110,7 @@ public class PluginCashRegister implements IPlugin
                 Event2.class.getMethod("addListener", Object.class),
                 PluginCashRegisterEvents.onRequestReceiptBillNumber
         );
-        
+
         PluginEvents.registerPluginEvent(
                 "plugin-cash-register",
                 "onRequestNewReceiptBillNumber",
@@ -113,7 +118,7 @@ public class PluginCashRegister implements IPlugin
                 Event2.class.getMethod("addListener", Object.class),
                 PluginCashRegisterEvents.onRequestNewReceiptBillNumber
         );
-        
+
         PluginEvents.registerPluginEvent(
                 "plugin-cash-register",
                 "onRequestNewRectificationBillNumber",
@@ -121,7 +126,7 @@ public class PluginCashRegister implements IPlugin
                 Event2.class.getMethod("addListener", Object.class),
                 PluginCashRegisterEvents.onRequestNewRectificationBillNumber
         );
-        
+
         PluginEvents.registerPluginEvent(
                 "plugin-cash-register",
                 "onReceiptBilled",
@@ -129,7 +134,7 @@ public class PluginCashRegister implements IPlugin
                 Event2.class.getMethod("addListener", Object.class),
                 PluginCashRegisterEvents.onReceiptBilled
         );
-        
+
         PluginEvents.registerPluginEvent(
                 "plugin-cash-register",
                 "onModifiedReceiptBilled",
@@ -210,6 +215,7 @@ public class PluginCashRegister implements IPlugin
 
         entities.add(Receipt.class);
         entities.add(Transaction.class);
+        entities.add(ReceiptModification.class);
 
         return entities;
     }
@@ -219,167 +225,165 @@ public class PluginCashRegister implements IPlugin
     {
         return DATABASE_VERSION;
     }
-    
+
     public void version1(Connection conn) throws SQLException
     {
         Statement statement = conn.createStatement();
 
         statement.addBatch("""
-create table cr_receipt
-(
-    id                     integer,
-    client_identifier      varchar(255),
-    client_name            varchar(255),
-    employee_name          varchar(255),
-    payment_amount         numeric(38, 2) not null,
-    payment_method         varchar(255)   not null,
-    table_name             varchar(255)   not null,
-    taxes_amount           numeric(38, 2) not null,
-    unknown_products_value numeric(38, 2) not null,
-    constraint pk_receipt primary key (id)
-);""");
-  
-        statement.addBatch("""
-create table cr_product_receipt
-(
-    id             integer,
-    product_name   varchar(255)   not null,
-    product_value  numeric(38, 2) not null,
-    quantity       numeric(38, 2) not null,
-    taxes          numeric(38, 2),
-    taxes_included boolean        not null,
-    total_value    numeric(38, 2) not null,
-    receipt_id     integer,
-    constraint receipt_line foreign key (receipt_id) references cr_receipt (id),
-    constraint pk_product_receipt primary key (id)
+                create table cr_receipt
+                (
+                    id                     integer,
+                    client_identifier      varchar(255),
+                    client_name            varchar(255),
+                    employee_name          varchar(255),
+                    payment_amount         numeric(38, 2) not null,
+                    payment_method         varchar(255)   not null,
+                    table_name             varchar(255)   not null,
+                    taxes_amount           numeric(38, 2) not null,
+                    unknown_products_value numeric(38, 2) not null,
+                    constraint pk_receipt primary key (id)
+                );""");
 
-);""");
-        
         statement.addBatch("""
-create table cr_transaction
-(
-    id          integer,
-    amount      numeric(38, 2) not null,
-    date        timestamp      not null,
-    description varchar(99999) not null,
-    receipt_id  integer,
-    constraint transaction_receipt foreign key (receipt_id) references cr_receipt (id),
-    constraint u_transactrion_receipt_id unique (receipt_id),
-    constraint pk_transaction primary key (id)
-);""");
-        
+                create table cr_product_receipt
+                (
+                    id             integer,
+                    product_name   varchar(255)   not null,
+                    product_value  numeric(38, 2) not null,
+                    quantity       numeric(38, 2) not null,
+                    taxes          numeric(38, 2),
+                    taxes_included boolean        not null,
+                    total_value    numeric(38, 2) not null,
+                    receipt_id     integer,
+                    constraint receipt_line foreign key (receipt_id) references cr_receipt (id),
+                    constraint pk_product_receipt primary key (id)
+                
+                );""");
+
         statement.addBatch("""
-create table pr_category
-(
-    name varchar(255) not null,
-    constraint pk_category primary key (name)
-);""");
-        
+                create table cr_transaction
+                (
+                    id          integer,
+                    amount      numeric(38, 2) not null,
+                    date        timestamp      not null,
+                    description varchar(99999) not null,
+                    receipt_id  integer,
+                    constraint transaction_receipt foreign key (receipt_id) references cr_receipt (id),
+                    constraint u_transactrion_receipt_id unique (receipt_id),
+                    constraint pk_transaction primary key (id)
+                );""");
+
         statement.addBatch("""
-create table pr_sub_category
-(
-    category_name varchar(255) not null,
-    name          varchar(255) not null,
-    constraint pk_sub_category primary key (category_name, name)
-);""");
-        
+                create table pr_category
+                (
+                    name varchar(255) not null,
+                    constraint pk_category primary key (name)
+                );""");
+
         statement.addBatch("""
-create table pr_product
-(
-    id                integer,
-    enabled           boolean         not null,
-    img_path          varchar(999999) not null,
-    name              varchar(255)    not null,
-    price             numeric(38, 2)  not null,
-    taxes             numeric(38, 2),
-    taxes_included    boolean         not null,
-    category_name     varchar(255),
-    sub_category_name varchar(255),
-    taxes_type        integer,
-    constraint fk_prduct_subcategory foreign key (category_name, sub_category_name) references pr_sub_category (category_name, name),
-    constraint pk_product primary key (id)
-);""");
-        
+                create table pr_sub_category
+                (
+                    category_name varchar(255) not null,
+                    name          varchar(255) not null,
+                    constraint pk_sub_category primary key (category_name, name)
+                );""");
+
         statement.addBatch("""
-create table pr_tax_type
-(
-    id          integer,
-    description varchar(255),
-    name        varchar(255) not null,
-    value       numeric(38, 2),
-    constraint u_tax_type_name unique (name),
-    constraint pk_tax_type primary key (id)
-);""");
-        
+                create table pr_product
+                (
+                    id                integer,
+                    enabled           boolean         not null,
+                    img_path          varchar(999999) not null,
+                    name              varchar(255)    not null,
+                    price             numeric(38, 2)  not null,
+                    taxes             numeric(38, 2),
+                    taxes_included    boolean         not null,
+                    category_name     varchar(255),
+                    sub_category_name varchar(255),
+                    taxes_type        integer,
+                    constraint fk_prduct_subcategory foreign key (category_name, sub_category_name) references pr_sub_category (category_name, name),
+                    constraint pk_product primary key (id)
+                );""");
+
+        statement.addBatch("""
+                create table pr_tax_type
+                (
+                    id          integer,
+                    description varchar(255),
+                    name        varchar(255) not null,
+                    value       numeric(38, 2),
+                    constraint u_tax_type_name unique (name),
+                    constraint pk_tax_type primary key (id)
+                );""");
+
         statement.executeBatch();
     }
-    
+
     public void version2(Connection conn) throws SQLException
     {
         Statement statement = conn.createStatement();
-        
+
         statement.addBatch("""
-alter table cr_receipt
-    drop column unknown_products_value;""");
-        
+                alter table cr_receipt
+                    drop column unknown_products_value;""");
+
         statement.executeBatch();
     }
-    
+
     public void version3(Connection conn) throws SQLException
     {
         Statement statement = conn.createStatement();
-        
+
         statement.addBatch("""
-update cr_receipt set payment_method = 'CASH' where payment_method = 'Contado' or payment_method = 'Cash';""");
-        
+                update cr_receipt set payment_method = 'CASH' where payment_method = 'Contado' or payment_method = 'Cash';""");
+
         statement.addBatch("""
-update cr_receipt set payment_method = 'CARD' where payment_method = 'Tarjeta' or payment_method = 'Card';""");
-        
+                update cr_receipt set payment_method = 'CARD' where payment_method = 'Tarjeta' or payment_method = 'Card';""");
+
         statement.executeBatch();
     }
-    
+
     public void version4(Connection conn) throws SQLException
     {
         Statement stat = conn.createStatement();
         // Adding a new table to store the rectification of a receipt
         stat.addBatch("""
-create table cr_receipt_modification
-(
-    id                integer,
-    new_receipt_id integer not null,
-    reason            text,
-    constraint pk_cr_receipt_modification primary key (id),
-    constraint fk_cr_receipt_modification_receipt foreign key (id) references cr_receipt(id),
-    constraint fk_cr_receipt_modification_modified_receipt foreign key (new_receipt_id) references cr_receipt (id)
-);
-""");
+                create table cr_receipt_modification
+                (
+                    id                integer,
+                    new_receipt_id integer not null,
+                    reason            text,
+                    constraint pk_cr_receipt_modification primary key (id),
+                    constraint fk_cr_receipt_modification_receipt foreign key (id) references cr_receipt(id),
+                    constraint fk_cr_receipt_modification_modified_receipt foreign key (new_receipt_id) references cr_receipt (id)
+                );
+                """);
         stat.executeBatch();
     }
-    
+
     public void version5(Connection conn) throws SQLException
     {
         Statement stat = conn.createStatement();
         // Adding a property to the receipt to store the status of the receipt
-        
+
         stat.addBatch("""
-alter table cr_receipt
-    add column status varchar(255) not null default 'DEFAULT';
-""");
-        
+                alter table cr_receipt
+                    add column status varchar(255) not null default 'DEFAULT';
+                """);
+
         // Adding a trigger to set the status to 'MODIFIED' when the receipt is inserted into cr_receipt_modification
         stat.addBatch("""
-create trigger cr_receipt_modification_insert
-    after insert on cr_receipt_modification
-    for each row
-    begin
-    update cr_receipt
-    set status = 'MODIFIED'
-    where id = new.id;
-    end
+                create trigger cr_receipt_modification_insert
+                    after insert on cr_receipt_modification
+                    for each row
+                    begin
+                    update cr_receipt
+                    set status = 'MODIFIED'
+                    where id = new.id;
+                    end
                 """);
-        
+
         stat.executeBatch();
     }
-    
-    // TODO: New version that adds the receipt status
 }

@@ -2,7 +2,6 @@ package org.lebastudios.theroundtable.plugincashregister.cash;
 
 import com.sun.javafx.collections.ObservableListWrapper;
 import javafx.collections.ObservableList;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import org.lebastudios.theroundtable.database.Database;
@@ -13,12 +12,22 @@ import org.lebastudios.theroundtable.plugincashregister.entities.Receipt;
 import java.math.BigDecimal;
 import java.util.*;
 
-@Data
 public class Order
 {
-    private String orderName;
-    @Setter @Getter private ObservableList<OrderItem> orderItems = new ObservableListWrapper<>(new ArrayList<>());
+    @Getter @Setter private String orderName;
+    private ObservableList<OrderItem> orderItems = new ObservableListWrapper<>(new ArrayList<>());
 
+    /// Legacy method. orderItems is no longer a simple List<>, but an ObservableList<>. Use getObservableOrderItems() instead.
+    public List<OrderItem> getOrderItems()
+    {
+        return orderItems;
+    }
+    
+    public ObservableList<OrderItem> getObservableOrderItems()
+    {
+        return orderItems;
+    }
+    
     public static Order fromReceipt(int receiptId)
     {
         return Database.getInstance().connectQuery(session ->
@@ -40,7 +49,7 @@ public class Order
             orderItems.add(new OrderItem(receiptItem.getProduct(), receiptItem.getQuantity()));
         }
 
-        order.setOrderItems(new ObservableListWrapper<>(orderItems));
+        order.orderItems = new ObservableListWrapper<>(orderItems);
 
         return order;
     }

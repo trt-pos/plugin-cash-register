@@ -160,7 +160,7 @@ public class CashRegisterPaneController extends PaneController<CashRegisterPaneC
         final CashRegister cashRegister = CashRegister.getInstance();
         final Order actualOrder = cashRegister.getActualOrder();
 
-        ObservableList<OrderItem> items = actualOrder.getOrderItems();
+        ObservableList<OrderItem> items = actualOrder.getObservableOrderItems();
         orderItemsListView.setItems(items);
 
         updateDisableableButtons(items);
