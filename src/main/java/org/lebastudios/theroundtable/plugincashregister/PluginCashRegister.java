@@ -267,7 +267,7 @@ public class PluginCashRegister implements IPlugin
                     id          integer,
                     amount      numeric(38, 2) not null,
                     date        timestamp      not null,
-                    description varchar(99999) not null,
+                    description text           not null,
                     receipt_id  integer,
                     constraint transaction_receipt foreign key (receipt_id) references cr_receipt (id),
                     constraint u_transactrion_receipt_id unique (receipt_id),
@@ -294,7 +294,7 @@ public class PluginCashRegister implements IPlugin
                 (
                     id                integer,
                     enabled           boolean         not null,
-                    img_path          varchar(999999) not null,
+                    img_path          text            not null,
                     name              varchar(255)    not null,
                     price             numeric(38, 2)  not null,
                     taxes             numeric(38, 2),
