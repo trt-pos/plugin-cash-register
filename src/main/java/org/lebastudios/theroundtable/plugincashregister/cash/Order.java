@@ -74,6 +74,10 @@ public class Order
         {
             orderItems.remove(orderItem);
         }
+        else
+        {
+            CashRegister.onOrderItemModified.invoke(orderItem);
+        }
     }
     
     public void collapseEqualItems()
