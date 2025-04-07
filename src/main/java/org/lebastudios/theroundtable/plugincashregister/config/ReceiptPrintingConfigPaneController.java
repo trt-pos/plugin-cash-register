@@ -1,14 +1,12 @@
 package org.lebastudios.theroundtable.plugincashregister.config;
 
 import com.github.anastaciocintra.escpos.EscPos;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
-import org.lebastudios.theroundtable.config.SettingsPaneController;
-import org.lebastudios.theroundtable.config.data.JSONFile;
+import org.lebastudios.theroundtable.config.ConfigPaneController;
 import org.lebastudios.theroundtable.locale.LangFileLoader;
-import org.lebastudios.theroundtable.plugincashregister.PluginCashRegister;
-import org.lebastudios.theroundtable.plugincashregister.config.data.ReceiptPrintingConfigData;
 import org.lebastudios.theroundtable.plugincashregister.entities.*;
 import org.lebastudios.theroundtable.plugincashregister.printers.CashRegisterPrinters;
 import org.lebastudios.theroundtable.printers.PrinterManager;
@@ -16,13 +14,18 @@ import org.lebastudios.theroundtable.printers.PrinterManager;
 import java.math.BigDecimal;
 import java.util.Set;
 
-public class ReceiptPrintingConfigPaneController extends SettingsPaneController
+public class ReceiptPrintingConfigPaneController extends ConfigPaneController<ReceiptPrintingConfigData>
 {
-    @FXML private CheckBox hideEstablishmentLogo;
-    @FXML private CheckBox hideReceiptData;
-    @FXML private CheckBox hideTaxesDesglose;
-    @FXML private CheckBox hidePaymentInfo;
-    @FXML private ChoiceBox<LogoSize> logoSize;
+    @FXML public CheckBox hideEstablishmentLogo;
+    @FXML public CheckBox hideReceiptData;
+    @FXML public CheckBox hideTaxesDesglose;
+    @FXML public CheckBox hidePaymentInfo;
+    @FXML public ChoiceBox<LogoSize> logoSize;
+
+    public ReceiptPrintingConfigPaneController()
+    {
+        super(new ReceiptPrintingConfigData(), LangFileLoader.getTranslation("phrase.receiptprinterconfig"), "print.png");
+    }
 
     private enum LogoSize
     {
@@ -62,38 +65,38 @@ public class ReceiptPrintingConfigPaneController extends SettingsPaneController
             };
         }
     }
-    
+
     @Override
-    protected void initialize()
+    public void updateConfigData(ReceiptPrintingConfigData configData)
+    {
+        configData.hideEstablishmentLogo = hideEstablishmentLogo.isSelected();
+        configData.hideTaxesDesglose = hideTaxesDesglose.isSelected();
+        configData.hidePaymentInfo = hidePaymentInfo.isSelected();
+        configData.hideReceiptData = hideReceiptData.isSelected();
+        configData.imageSize = logoSize.getValue().toInt();
+    }
+
+    @Override
+    public void updateUI(ReceiptPrintingConfigData configData)
     {
         logoSize.getItems().clear();
         logoSize.getItems().addAll(LogoSize.values());
-        
-        ReceiptPrintingConfigData receiptPrinterConf = new JSONFile<>(ReceiptPrintingConfigData.class).get();
-        
-        hideEstablishmentLogo.setSelected(receiptPrinterConf.hideEstablishmentLogo);
-        hideReceiptData.setSelected(receiptPrinterConf.hideReceiptData);
-        hideTaxesDesglose.setSelected(receiptPrinterConf.hideTaxesDesglose);
-        hidePaymentInfo.setSelected(receiptPrinterConf.hidePaymentInfo);
-        logoSize.setValue(LogoSize.fromInt(receiptPrinterConf.imageSize));
+
+        hideEstablishmentLogo.setSelected(configData.hideEstablishmentLogo);
+        hideReceiptData.setSelected(configData.hideReceiptData);
+        hideTaxesDesglose.setSelected(configData.hideTaxesDesglose);
+        hidePaymentInfo.setSelected(configData.hidePaymentInfo);
+        logoSize.setValue(LogoSize.fromInt(configData.imageSize));
     }
 
     @Override
-    public void apply()
+    public boolean validate()
     {
-        JSONFile<ReceiptPrintingConfigData> receiptPrinterConf = new JSONFile<>(ReceiptPrintingConfigData.class);
-        
-        receiptPrinterConf.get().hideEstablishmentLogo = hideEstablishmentLogo.isSelected();
-        receiptPrinterConf.get().hideTaxesDesglose = hideTaxesDesglose.isSelected();
-        receiptPrinterConf.get().hidePaymentInfo = hidePaymentInfo.isSelected();
-        receiptPrinterConf.get().hideReceiptData = hideReceiptData.isSelected();
-        receiptPrinterConf.get().imageSize = logoSize.getValue().toInt();
-        
-        receiptPrinterConf.save();
+        return true;
     }
 
     @FXML
-    private void printTestReceipt()
+    public void printTestReceipt(ActionEvent actionEvent)
     {
         Product p1 = new Product();
         Product p2 = new Product();
@@ -135,11 +138,5 @@ public class ReceiptPrintingConfigPaneController extends SettingsPaneController
         {
             exception.printStackTrace();
         }
-    }
-    
-    @Override
-    public Class<?> getBundleClass()
-    {
-        return PluginCashRegister.class;
     }
 }

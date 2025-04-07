@@ -2,11 +2,10 @@ package org.lebastudios.theroundtable.plugincashregister.cash;
 
 import com.github.anastaciocintra.escpos.EscPos;
 import com.github.anastaciocintra.output.PrinterOutputStream;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import org.lebastudios.theroundtable.controllers.PaneController;
-import org.lebastudios.theroundtable.plugincashregister.config.data.CashRegisterStateData;
-import org.lebastudios.theroundtable.config.data.JSONFile;
-import org.lebastudios.theroundtable.plugincashregister.PluginCashRegister;
+import org.lebastudios.theroundtable.plugincashregister.config.CashRegisterStateData;
 import org.lebastudios.theroundtable.printers.OpenCashDrawer;
 import org.lebastudios.theroundtable.printers.PrinterManager;
 
@@ -16,19 +15,19 @@ import java.time.LocalDateTime;
 public class CashRegisterClosePaneController extends PaneController<CashRegisterClosePaneController>
 {
     @FXML
-    private void openCashRegister()
+    public void openCashRegister(ActionEvent actionEvent)
     {
-        var cashRegisterState = new JSONFile<>(CashRegisterStateData.class);
+        var cashRegisterState = new CashRegisterStateData().load();
 
-        cashRegisterState.get().open = true;
-        cashRegisterState.get().openTime = LocalDateTime.now().toString();
+        cashRegisterState.open = true;
+        cashRegisterState.openTime = LocalDateTime.now().toString();
 
         cashRegisterState.save();
 
         CashRegisterPaneController.showInterface();
     }
     
-    @FXML private void openCashRegisterDrawer()
+    @FXML public void openCashRegisterDrawer(ActionEvent actionEvent)
     {
         try
         {
@@ -40,11 +39,5 @@ public class CashRegisterClosePaneController extends PaneController<CashRegister
         {
             throw new RuntimeException(e);
         }
-    }
-
-    @Override
-    public Class<?> getBundleClass()
-    {
-        return PluginCashRegister.class;
     }
 }

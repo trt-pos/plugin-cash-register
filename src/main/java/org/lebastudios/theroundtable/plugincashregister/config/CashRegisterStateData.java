@@ -1,11 +1,11 @@
-package org.lebastudios.theroundtable.plugincashregister.config.data;
+package org.lebastudios.theroundtable.plugincashregister.config;
 
-import org.lebastudios.theroundtable.config.data.FileRepresentator;
+import org.lebastudios.theroundtable.files.JsonFile;
 import org.lebastudios.theroundtable.plugincashregister.PluginCashRegister;
 
 import java.io.File;
 
-public class CashRegisterStateData implements FileRepresentator
+public class CashRegisterStateData extends JsonFile<CashRegisterStateData>
 {
     public boolean open = false;
     public String openTime = null;

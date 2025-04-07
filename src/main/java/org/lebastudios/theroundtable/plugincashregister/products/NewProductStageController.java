@@ -1,5 +1,6 @@
 package org.lebastudios.theroundtable.plugincashregister.products;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import org.lebastudios.theroundtable.database.Database;
 import org.lebastudios.theroundtable.plugincashregister.PluginCashRegisterEvents;
@@ -24,7 +25,7 @@ public class NewProductStageController extends ProductStageController
     }
 
     @FXML
-    private void mainButtonAction()
+    public void mainButtonAction(ActionEvent actionEvent)
     {
         if (!isProductDataValid()) return;
 

@@ -1,7 +1,7 @@
 package org.lebastudios.theroundtable.plugincashregister.cash;
 
 import com.github.anastaciocintra.escpos.EscPos;
-import com.github.anastaciocintra.output.PrinterOutputStream;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
@@ -11,23 +11,21 @@ import org.lebastudios.theroundtable.apparience.UIEffects;
 import org.lebastudios.theroundtable.controllers.StageController;
 import org.lebastudios.theroundtable.database.Database;
 import org.lebastudios.theroundtable.dialogs.ConfirmationTextDialogController;
-import org.lebastudios.theroundtable.plugincashregister.entities.Transaction;
 import org.lebastudios.theroundtable.locale.LangFileLoader;
-import org.lebastudios.theroundtable.plugincashregister.PluginCashRegister;
-import org.lebastudios.theroundtable.plugincashregister.printers.CashRegisterPrinterManager;
+import org.lebastudios.theroundtable.plugincashregister.entities.Transaction;
+import org.lebastudios.theroundtable.plugincashregister.printers.CashRegisterPrinters;
 import org.lebastudios.theroundtable.printers.PrinterManager;
 import org.lebastudios.theroundtable.ui.StageBuilder;
 
 import java.math.BigDecimal;
-import java.net.URL;
 import java.time.LocalDateTime;
 
 public class TransactionCreatorStageController extends StageController<TransactionCreatorStageController>
 {
     private final LocalDateTime localDateTime;
     private final TransactionType transactionType;
-    @FXML private TextField amountTextField;
-    @FXML private TextArea descriptionTextArea;
+    @FXML public TextField amountTextField;
+    @FXML public TextArea descriptionTextArea;
 
     public TransactionCreatorStageController(TransactionType transactionType)
     {
@@ -42,18 +40,6 @@ public class TransactionCreatorStageController extends StageController<Transacti
     }
 
     @Override
-    public URL getFXML()
-    {
-        return TransactionCreatorStageController.class.getResource("transactionCreatorPane.fxml");
-    }
-
-    @Override
-    public Class<?> getBundleClass()
-    {
-        return PluginCashRegister.class;
-    }
-
-    @Override
     public String getTitle()
     {
         var titleKey = transactionType == TransactionType.ADD
@@ -64,7 +50,7 @@ public class TransactionCreatorStageController extends StageController<Transacti
     }
 
     @FXML
-    private void mainAction()
+    public void mainAction(ActionEvent actionEvent)
     {
         var transaction = new Transaction();
 
@@ -100,32 +86,33 @@ public class TransactionCreatorStageController extends StageController<Transacti
         {
             session.persist(transaction);
             session.flush();
-            
-            try
-            {
-                EscPos escPos = new EscPos(new PrinterOutputStream(PrinterManager.getInstance().getDefaultPrintService()));
-                CashRegisterPrinterManager.getInstance().getTransactionPrinter().print(escPos, transaction);
 
+            try (EscPos escPos = CashRegisterPrinters.getInstance()
+                    .printTransaction(transaction, PrinterManager.getInstance().getDefaultPrintService())
+            )
+            {
                 escPos.feed(5).cut(EscPos.CutMode.PART).close();
-                cancel();
+                cancel(null);
             }
             catch (Exception e)
             {
-                new ConfirmationTextDialogController(LangFileLoader.getTranslation("textblock.printingerror"), response ->
-                {
-                    if (!response) {
-                        session.getTransaction().rollback();
-                        return;
-                    }
+                new ConfirmationTextDialogController(LangFileLoader.getTranslation("textblock.printingerror"),
+                        response ->
+                        {
+                            if (!response)
+                            {
+                                session.getTransaction().rollback();
+                                return;
+                            }
 
-                    cancel();
-                }).instantiate();
+                            cancel(null);
+                        }).instantiate();
             }
         });
     }
-    
+
     @FXML
-    private void cancel()
+    public void cancel(ActionEvent actionEvent)
     {
         ((Stage) amountTextField.getScene().getWindow()).close();
     }

@@ -17,12 +17,12 @@ import java.math.BigDecimal;
 
 public class TaxTypeCreatorStageController extends StageController<TaxTypeCreatorStageController>
 {
-    @FXML private TextField nameField;
-    @FXML private TextField taxField;
-    @FXML private TextArea descriptionField;
+    @FXML public TextField nameField;
+    @FXML public TextField taxField;
+    @FXML public TextArea descriptionField;
 
     @FXML
-    private void saveButtonAction(ActionEvent actionEvent)
+    public void saveButtonAction(ActionEvent actionEvent)
     {
         if (!validateData()) return;
 
@@ -38,7 +38,7 @@ public class TaxTypeCreatorStageController extends StageController<TaxTypeCreato
     }
 
     @FXML
-    private void cancelButtonAction(ActionEvent actionEvent)
+    public void cancelButtonAction(ActionEvent actionEvent)
     {
         close();
     }
@@ -78,11 +78,5 @@ public class TaxTypeCreatorStageController extends StageController<TaxTypeCreato
     public String getTitle()
     {
         return "Taxes type creator";
-    }
-
-    @Override
-    public Class<?> getBundleClass()
-    {
-        return PluginCashRegister.class;
     }
 }

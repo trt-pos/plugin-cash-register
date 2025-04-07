@@ -1,32 +1,48 @@
 package org.lebastudios.theroundtable.plugincashregister.config;
 
 import javafx.application.Platform;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
-import org.lebastudios.theroundtable.config.SettingsPaneController;
+import org.lebastudios.theroundtable.config.ConfigPaneController;
+import org.lebastudios.theroundtable.config.NoConfigFile;
 import org.lebastudios.theroundtable.database.Database;
 import org.lebastudios.theroundtable.dialogs.InformationTextDialogController;
 import org.lebastudios.theroundtable.locale.LangFileLoader;
-import org.lebastudios.theroundtable.plugincashregister.PluginCashRegister;
 import org.lebastudios.theroundtable.plugincashregister.entities.TaxType;
 import org.lebastudios.theroundtable.plugincashregister.products.ModifyTaxTypeStageController;
 import org.lebastudios.theroundtable.plugincashregister.products.TaxTypeCreatorStageController;
 import org.lebastudios.theroundtable.ui.IconButton;
 
+
 import java.util.List;
 
-public class TaxesTypesConfigPaneController extends SettingsPaneController
+public class TaxesTypesConfigPaneController extends ConfigPaneController<NoConfigFile>
 {
-    @FXML private VBox taxesTypesContainer;
+    @FXML public VBox taxesTypesContainer;
+
+    public TaxesTypesConfigPaneController()
+    {
+        super(new NoConfigFile(), LangFileLoader.getTranslation("phrase.taxestypes"), "taxes.png");
+    }
 
     @Override
-    protected void initialize()
+    public void updateConfigData(NoConfigFile configData) {}
+
+    @Override
+    public void updateUI(NoConfigFile configData)
     {
         updateTaxesTypesContainer();
+    }
+
+    @Override
+    public boolean validate()
+    {
+        return true;
     }
 
     private void updateTaxesTypesContainer()
@@ -44,17 +60,8 @@ public class TaxesTypesConfigPaneController extends SettingsPaneController
         })).start();
     }
 
-    @Override
-    public void apply() {}
-
-    @Override
-    public Class<?> getBundleClass()
-    {
-        return PluginCashRegister.class;
-    }
-
     @FXML
-    private void plusButtonAction()
+    public void plusButtonAction(ActionEvent actionEvent)
     {
         new TaxTypeCreatorStageController().instantiate(true);
         updateTaxesTypesContainer();

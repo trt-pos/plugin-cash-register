@@ -6,18 +6,18 @@ import javafx.scene.control.TreeItem;
 import lombok.SneakyThrows;
 import org.lebastudios.theroundtable.MainStageController;
 import org.lebastudios.theroundtable.config.SettingsItem;
-import org.lebastudios.theroundtable.config.data.JSONFile;
 import org.lebastudios.theroundtable.dialogs.InformationTextDialogController;
 import org.lebastudios.theroundtable.events.AppLifeCicleEvents;
 import org.lebastudios.theroundtable.events.Event1;
 import org.lebastudios.theroundtable.events.Event2;
 import org.lebastudios.theroundtable.events.PluginEvents;
+import org.lebastudios.theroundtable.fxml2java.CompileFxml;
 import org.lebastudios.theroundtable.locale.LangFileLoader;
 import org.lebastudios.theroundtable.plugincashregister.cash.CashRegister;
 import org.lebastudios.theroundtable.plugincashregister.cash.CashRegisterPaneController;
+import org.lebastudios.theroundtable.plugincashregister.config.CashRegisterStateData;
 import org.lebastudios.theroundtable.plugincashregister.config.ReceiptPrintingConfigPaneController;
 import org.lebastudios.theroundtable.plugincashregister.config.TaxesTypesConfigPaneController;
-import org.lebastudios.theroundtable.plugincashregister.config.data.CashRegisterStateData;
 import org.lebastudios.theroundtable.plugincashregister.entities.*;
 import org.lebastudios.theroundtable.plugincashregister.products.ModifyProductStageController;
 import org.lebastudios.theroundtable.plugincashregister.products.ProductPaneController;
@@ -31,6 +31,13 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+@CompileFxml(
+        directories = {
+                "org/lebastudios/theroundtable/plugincashregister/cash",
+                "org/lebastudios/theroundtable/plugincashregister/config",
+                "org/lebastudios/theroundtable/plugincashregister/products",
+        }
+)
 public class PluginCashRegister implements IPlugin
 {
     private static PluginCashRegister instance;
@@ -54,7 +61,7 @@ public class PluginCashRegister implements IPlugin
         {
             if (windowEvent.isConsumed()) return;
 
-            var cashRegisterState = new JSONFile<>(CashRegisterStateData.class).get();
+            var cashRegisterState = new CashRegisterStateData().load();
             if (cashRegisterState.open)
             {
                 windowEvent.consume();
@@ -66,7 +73,7 @@ public class PluginCashRegister implements IPlugin
 
         PluginCashRegisterEvents.showOrder.addListener(order ->
         {
-            var cashRegisterState = new JSONFile<>(CashRegisterStateData.class).get();
+            var cashRegisterState = new CashRegisterStateData().load();
 
             if (!cashRegisterState.open)
             {
@@ -187,15 +194,12 @@ public class PluginCashRegister implements IPlugin
         cashRegisterConfigSection.setExpanded(false);
 
         cashRegisterConfigSection.getChildren().add(
-                new TreeItem<>(new SettingsItem(LangFileLoader.getTranslation("phrase.receiptprinterconfig"),
-                        "print.png", new ReceiptPrintingConfigPaneController())
+                new TreeItem<>(new SettingsItem(new ReceiptPrintingConfigPaneController())
                 )
         );
 
         cashRegisterConfigSection.getChildren().add(
-                new TreeItem<>(new SettingsItem(LangFileLoader.getTranslation("phrase.taxestypes"),
-                        "taxes.png", new TaxesTypesConfigPaneController())
-                )
+                new TreeItem<>(new SettingsItem(new TaxesTypesConfigPaneController()))
         );
 
         return cashRegisterConfigSection;

@@ -2,6 +2,7 @@ package org.lebastudios.theroundtable.plugincashregister.cash;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -14,12 +15,10 @@ import org.lebastudios.theroundtable.apparience.ImageLoader;
 import org.lebastudios.theroundtable.controllers.StageController;
 import org.lebastudios.theroundtable.locale.LangFileLoader;
 import org.lebastudios.theroundtable.maths.BigDecimalOperations;
-import org.lebastudios.theroundtable.plugincashregister.PluginCashRegister;
 import org.lebastudios.theroundtable.plugincashregister.entities.Product;
 import org.lebastudios.theroundtable.ui.StageBuilder;
 
 import java.math.BigDecimal;
-import java.net.URL;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
@@ -32,11 +31,11 @@ public class SeparateOrderController extends StageController<SeparateOrderContro
     private final HashMap<Product, BigDecimal> originalProducts;
     private final BiConsumer<Order, Order> acceptSeparation;
 
-    @FXML private ListView<Map.Entry<Product, BigDecimal>> sourceList;
-    @FXML private ListView<Map.Entry<Product, BigDecimal>> targetList;
-    @FXML private Button acceptButton;
-    @FXML private Label leftTotalLabel;
-    @FXML private Label rightTotalLabel;
+    @FXML public ListView<Map.Entry<Product, BigDecimal>> sourceList;
+    @FXML public ListView<Map.Entry<Product, BigDecimal>> targetList;
+    @FXML public Button acceptButton;
+    @FXML public Label leftTotalLabel;
+    @FXML public Label rightTotalLabel;
 
     public SeparateOrderController(Order order, BiConsumer<Order, Order> acceptSeparation)
     {
@@ -102,7 +101,7 @@ public class SeparateOrderController extends StageController<SeparateOrderContro
     }
 
     @FXML
-    private void accept()
+    public void accept(ActionEvent actionEvent)
     {
         var generatedOrder = new Order();
         generatedOrder.setOrderName(
@@ -115,7 +114,7 @@ public class SeparateOrderController extends StageController<SeparateOrderContro
         }
 
         acceptSeparation.accept(originalOrder, generatedOrder);
-        cancel();
+        cancel(null);
     }
 
     @Override
@@ -125,23 +124,10 @@ public class SeparateOrderController extends StageController<SeparateOrderContro
     }
 
     @FXML
-    private void cancel()
+    public void cancel(ActionEvent actionEvent)
     {
         close();
     }
-
-    @Override
-    public Class<?> getBundleClass()
-    {
-        return PluginCashRegister.class;
-    }
-
-    @Override
-    public URL getFXML()
-    {
-        return SeparateOrderController.class.getResource("separateOrder.fxml");
-    }
-
     @Override
     public String getTitle()
     {

@@ -1,6 +1,7 @@
 package org.lebastudios.theroundtable.plugincashregister.products;
 
 import javafx.application.Platform;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
@@ -27,8 +28,8 @@ import java.util.function.Consumer;
 
 public class ProductsUIController extends PaneController<ProductsUIController>
 {
-    @FXML private SearchBox searchBox;
-    @FXML private TabPane mainTabPane;
+    @FXML public SearchBox searchBox;
+    @FXML public TabPane mainTabPane;
     private final boolean showDiabledProducts;
 
     private final IEventMethod1<Product> onProductModifyListener = _ -> loadProducts(searchBox.getText());
@@ -50,19 +51,6 @@ public class ProductsUIController extends PaneController<ProductsUIController>
 
         loadProducts("");
     }
-
-    @Override
-    public Class<?> getBundleClass()
-    {
-        return PluginCashRegister.class;
-    }
-
-    @Override
-    public URL getFXML()
-    {
-        return ProductsUIController.class.getResource("productsUI.fxml");
-    }
-
     private void showProducts(String filterText)
     {
         var selectedCategory = mainTabPane.getSelectionModel().getSelectedItem();
@@ -194,7 +182,7 @@ public class ProductsUIController extends PaneController<ProductsUIController>
     }
 
     @FXML
-    private void createNewProductWindow()
+    public void createNewProductWindow(ActionEvent actionEvent)
     {
         new NewProductStageController().instantiate();
     }

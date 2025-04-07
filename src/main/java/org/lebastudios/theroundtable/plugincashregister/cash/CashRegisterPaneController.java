@@ -5,6 +5,7 @@ import com.github.anastaciocintra.output.PrinterOutputStream;
 import javafx.application.Platform;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
@@ -16,13 +17,11 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.util.Callback;
 import org.lebastudios.theroundtable.MainStageController;
-import org.lebastudios.theroundtable.config.data.JSONFile;
 import org.lebastudios.theroundtable.controllers.PaneController;
 import org.lebastudios.theroundtable.dialogs.ConfirmationTextDialogController;
 import org.lebastudios.theroundtable.locale.LangFileLoader;
 import org.lebastudios.theroundtable.maths.BigDecimalOperations;
-import org.lebastudios.theroundtable.plugincashregister.PluginCashRegister;
-import org.lebastudios.theroundtable.plugincashregister.config.data.CashRegisterStateData;
+import org.lebastudios.theroundtable.plugincashregister.config.CashRegisterStateData;
 import org.lebastudios.theroundtable.plugincashregister.entities.Receipt;
 import org.lebastudios.theroundtable.plugincashregister.products.ProductPaneController;
 import org.lebastudios.theroundtable.plugincashregister.products.ProductsUIController;
@@ -34,7 +33,6 @@ import org.lebastudios.theroundtable.ui.LoadingPaneController;
 
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.net.URL;
 import java.util.HashMap;
 import java.util.List;
 
@@ -42,17 +40,17 @@ public class CashRegisterPaneController extends PaneController<CashRegisterPaneC
 {
     private static CashRegisterPaneController instance;
 
-    @FXML private ListView<OrderItem> orderItemsListView;
-    @FXML private VBox cashRegisterKeyboard;
-    @FXML private VBox keyboardParent;
-    @FXML private Label orderTableNameLabel;
-    @FXML private Label totalLabel;
-    @FXML private Label lastCollectedTotalLabel;
-    @FXML private IconButton alterVisibilityButton;
-    @FXML private IconButton exitOrderButton;
-    @FXML private IconButton clearActualOrderButton;
-    @FXML private IconTextButton collectOrderButton;
-    @FXML private IconButton splitOrderButton;
+    @FXML public ListView<OrderItem> orderItemsListView;
+    @FXML public VBox cashRegisterKeyboard;
+    @FXML public VBox keyboardParent;
+    @FXML public Label orderTableNameLabel;
+    @FXML public Label totalLabel;
+    @FXML public Label lastCollectedTotalLabel;
+    @FXML public IconButton alterVisibilityButton;
+    @FXML public IconButton exitOrderButton;
+    @FXML public IconButton clearActualOrderButton;
+    @FXML public IconTextButton collectOrderButton;
+    @FXML public IconButton splitOrderButton;
 
     private OrderItemLabelController actualProduct;
     private boolean isVisible = true;
@@ -195,20 +193,20 @@ public class CashRegisterPaneController extends PaneController<CashRegisterPaneC
 
             switch (event.getCode())
             {
-                case DIGIT1, NUMPAD1 -> button1();
-                case DIGIT2, NUMPAD2 -> button2();
-                case DIGIT3, NUMPAD3 -> button3();
-                case DIGIT4, NUMPAD4 -> button4();
-                case DIGIT5, NUMPAD5 -> button5();
-                case DIGIT6, NUMPAD6 -> button6();
-                case DIGIT7, NUMPAD7 -> button7();
-                case DIGIT8, NUMPAD8 -> button8();
-                case DIGIT9, NUMPAD9 -> button9();
-                case DIGIT0, NUMPAD0 -> button0();
-                case BACK_SPACE -> buttonBackspace();
-                case DECIMAL, PERIOD, COMMA -> buttonDot();
-                case MINUS, PLUS, ADD, SUBTRACT -> invertNumber();
-                case ENTER -> submitEditting();
+                case DIGIT1, NUMPAD1 -> button1(null);
+                case DIGIT2, NUMPAD2 -> button2(null);
+                case DIGIT3, NUMPAD3 -> button3(null);
+                case DIGIT4, NUMPAD4 -> button4(null);
+                case DIGIT5, NUMPAD5 -> button5(null);
+                case DIGIT6, NUMPAD6 -> button6(null);
+                case DIGIT7, NUMPAD7 -> button7(null);
+                case DIGIT8, NUMPAD8 -> button8(null);
+                case DIGIT9, NUMPAD9 -> button9(null);
+                case DIGIT0, NUMPAD0 -> button0(null);
+                case BACK_SPACE -> buttonBackspace(null);
+                case DECIMAL, PERIOD, COMMA -> buttonDot(null);
+                case MINUS, PLUS, ADD, SUBTRACT -> invertNumber(null);
+                case ENTER -> submitEditting(null);
                 case ESCAPE ->
                 {
                     if (actualProduct != null)
@@ -234,31 +232,31 @@ public class CashRegisterPaneController extends PaneController<CashRegisterPaneC
             instance = new CashRegisterPaneController();
         }
 
-        if (!new JSONFile<>(CashRegisterStateData.class).get().open)
+        if (!new CashRegisterStateData().load().open)
         {
             MainStageController.getInstance().setCentralNode(new CashRegisterClosePaneController());
             return;
         }
 
         ProductPaneController.onAction = product -> {
-            instance.submitEditting();
+            instance.submitEditting(null);
             CashRegister.getInstance().addProduct(product, BigDecimal.ONE);
         };
         MainStageController.getInstance().setCentralNode(instance);
     }
 
     @FXML
-    private void printOrder()
+    public void printOrder(ActionEvent actionEvent)
     {
-        submitEditting();
+        submitEditting(null);
 
         CashRegister.getInstance().printOrder();
     }
 
     @FXML
-    private void clearActualOrder()
+    public void clearActualOrder(ActionEvent actionEvent)
     {
-        submitEditting();
+        submitEditting(null);
 
         new ConfirmationTextDialogController(LangFileLoader.getTranslation("textblock.resetorder"), r ->
         {
@@ -269,9 +267,9 @@ public class CashRegisterPaneController extends PaneController<CashRegisterPaneC
     }
 
     @FXML
-    private void collectOrder()
+    public void collectOrder(ActionEvent actionEvent)
     {
-        submitEditting();
+        submitEditting(null);
 
         new CollectOrderStageController(CashRegister.getInstance().getActualOrder(), receipt ->
         {
@@ -282,9 +280,9 @@ public class CashRegisterPaneController extends PaneController<CashRegisterPaneC
     }
 
     @FXML
-    private void splitOrder()
+    public void splitOrder(ActionEvent actionEvent)
     {
-        submitEditting();
+        submitEditting(null);
 
         final Order actualOrder = CashRegister.getInstance().getActualOrder();
         new SeparateOrderController(actualOrder,
@@ -311,99 +309,99 @@ public class CashRegisterPaneController extends PaneController<CashRegisterPaneC
     }
 
     @FXML
-    private void exitOrder()
+    public void exitOrder(ActionEvent actionEvent)
     {
-        submitEditting();
+        submitEditting(null);
 
         CashRegister.getInstance().swapOrder(CashRegister.getInstance().getCashRegisterOrder());
     }
 
     @FXML
-    private void button1()
+    public void button1(ActionEvent actionEvent)
     {
         if (actualProduct == null) return;
         actualProduct.edit("1");
     }
 
     @FXML
-    private void button2()
+    public void button2(ActionEvent actionEvent)
     {
         if (actualProduct == null) return;
         actualProduct.edit("2");
     }
 
     @FXML
-    private void button3()
+    public void button3(ActionEvent actionEvent)
     {
         if (actualProduct == null) return;
         actualProduct.edit("3");
     }
 
     @FXML
-    private void button4()
+    public void button4(ActionEvent actionEvent)
     {
         if (actualProduct == null) return;
         actualProduct.edit("4");
     }
 
     @FXML
-    private void button5()
+    public void button5(ActionEvent actionEvent)
     {
         if (actualProduct == null) return;
         actualProduct.edit("5");
     }
 
     @FXML
-    private void button6()
+    public void button6(ActionEvent actionEvent)
     {
         if (actualProduct == null) return;
         actualProduct.edit("6");
     }
 
     @FXML
-    private void button7()
+    public void button7(ActionEvent actionEvent)
     {
         if (actualProduct == null) return;
         actualProduct.edit("7");
     }
 
     @FXML
-    private void button8()
+    public void button8(ActionEvent actionEvent)
     {
         if (actualProduct == null) return;
         actualProduct.edit("8");
     }
 
     @FXML
-    private void button9()
+    public void button9(ActionEvent actionEvent)
     {
         if (actualProduct == null) return;
         actualProduct.edit("9");
     }
 
     @FXML
-    private void button0()
+    public void button0(ActionEvent actionEvent)
     {
         if (actualProduct == null) return;
         actualProduct.edit("0");
     }
 
     @FXML
-    private void buttonBackspace()
+    public void buttonBackspace(ActionEvent actionEvent)
     {
         if (actualProduct == null) return;
         actualProduct.removeLast();
     }
 
     @FXML
-    private void buttonDot()
+    public void buttonDot(ActionEvent actionEvent)
     {
         if (actualProduct == null) return;
         actualProduct.edit(".");
     }
 
     @FXML
-    private void invertNumber()
+    public void invertNumber(ActionEvent actionEvent)
     {
         if (actualProduct == null) return;
         actualProduct.invertNumber();
@@ -411,7 +409,7 @@ public class CashRegisterPaneController extends PaneController<CashRegisterPaneC
 
 
     @FXML
-    private void submitEditting()
+    public void submitEditting(ActionEvent actionEvent)
     {
         if (actualProduct == null) return;
         actualProduct.submitEditting();
@@ -419,9 +417,9 @@ public class CashRegisterPaneController extends PaneController<CashRegisterPaneC
     }
 
     @FXML
-    private void openCashRegister()
+    public void openCashRegister(ActionEvent actionEvent)
     {
-        submitEditting();
+        submitEditting(null);
 
         try
         {
@@ -436,9 +434,9 @@ public class CashRegisterPaneController extends PaneController<CashRegisterPaneC
     }
 
     @FXML
-    private void instantiateSeparator()
+    public void instantiateSeparator(ActionEvent actionEvent)
     {
-        submitEditting();
+        submitEditting(null);
 
         var separator = new OrderItem.Separator();
         CashRegister.getInstance().getActualOrder().getOrderItems().add(separator);
@@ -448,9 +446,9 @@ public class CashRegisterPaneController extends PaneController<CashRegisterPaneC
     }
 
     @FXML
-    private void alterNumericKeyboardVisibility()
+    public void alterNumericKeyboardVisibility(ActionEvent actionEvent)
     {
-        submitEditting();
+        submitEditting(null);
 
         isVisible = !isVisible;
 
@@ -469,38 +467,25 @@ public class CashRegisterPaneController extends PaneController<CashRegisterPaneC
     }
 
     @FXML
-    private void moneyIn()
+    public void moneyIn(ActionEvent actionEvent)
     {
-        submitEditting();
+        submitEditting(null);
 
         new TransactionCreatorStageController(TransactionCreatorStageController.TransactionType.ADD).instantiate();
     }
 
     @FXML
-    private void moneyOut()
+    public void moneyOut(ActionEvent actionEvent)
     {
-        submitEditting();
+        submitEditting(null);
 
         new TransactionCreatorStageController(TransactionCreatorStageController.TransactionType.REMOVE).instantiate();
     }
 
     @FXML
-    private void closeCashRegister()
+    public void closeCashRegister(ActionEvent actionEvent)
     {
-        submitEditting();
+        submitEditting(null);
 
         new CloseCashRegisterStageController().instantiate();
-    }
-
-    @Override
-    public Class<?> getBundleClass()
-    {
-        return PluginCashRegister.class;
-    }
-
-    @Override
-    public URL getFXML()
-    {
-        return CashRegisterPaneController.class.getResource("cashRegisterPane.fxml");
-    }
-}
+    }}

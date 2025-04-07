@@ -2,12 +2,11 @@ package org.lebastudios.theroundtable.plugincashregister.printers;
 
 import com.github.anastaciocintra.escpos.EscPos;
 import com.github.anastaciocintra.escpos.EscPosConst;
-import org.lebastudios.theroundtable.config.data.JSONFile;
 import org.lebastudios.theroundtable.locale.LangFileLoader;
 import org.lebastudios.theroundtable.maths.BigDecimalOperations;
 import org.lebastudios.theroundtable.plugincashregister.cash.OrderItem;
 import org.lebastudios.theroundtable.plugincashregister.cash.PaymentMethod;
-import org.lebastudios.theroundtable.plugincashregister.config.data.ReceiptPrintingConfigData;
+import org.lebastudios.theroundtable.plugincashregister.config.ReceiptPrintingConfigData;
 import org.lebastudios.theroundtable.plugincashregister.entities.Receipt;
 import org.lebastudios.theroundtable.printers.InLinePrinter;
 import org.lebastudios.theroundtable.printers.LineFiller;
@@ -26,7 +25,7 @@ public class BasicReceiptBodyPrinter extends ReceiptPrinter
     @Override
     public EscPos print(EscPos escpos) throws IOException
     {
-        var printerConfig = new JSONFile<>(ReceiptPrintingConfigData.class).get();
+        var printerConfig = new ReceiptPrintingConfigData().load();
         
         if (!printerConfig.hideReceiptData)
         {

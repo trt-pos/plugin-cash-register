@@ -27,7 +27,7 @@
     <Label text="%word.taxes" GridPane.columnIndex="0" GridPane.rowIndex="1" />
     <HBox spacing="5" GridPane.columnIndex="1" GridPane.rowIndex="1">
         <TextField promptText="10" fx:id="taxField" alignment="CENTER_RIGHT" prefColumnCount="3" />
-        <Label maxWidth="Infinity" text="\%" />
+        <Label maxWidth="Infinity" text=" %" />
     </HBox>
     <Label text="%word.description" GridPane.columnIndex="2" GridPane.rowIndex="1" />
     <TextArea fx:id="descriptionField" prefColumnCount="20" prefRowCount="3" GridPane.columnIndex="3" GridPane.rowIndex="1" />

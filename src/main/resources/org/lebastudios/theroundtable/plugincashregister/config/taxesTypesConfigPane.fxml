@@ -14,11 +14,13 @@
     <Label text="%phrase.taxestypes" style="-fx-font-size: 20; -fx-font-weight: bold;"/>
     <StackPane VBox.vgrow="ALWAYS" styleClass="border-round">
         <ScrollPane fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" pannable="true">
-            <VBox fx:id="taxesTypesContainer" spacing="5">
-                <padding>
-                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
-                </padding>
-            </VBox>
+            <content>
+                <VBox fx:id="taxesTypesContainer" spacing="5">
+                    <padding>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+                    </padding>
+                </VBox>
+            </content>
         </ScrollPane>
         <IconButton iconName="plus.png" StackPane.alignment="BOTTOM_RIGHT" onAction="#plusButtonAction">
             <StackPane.margin>

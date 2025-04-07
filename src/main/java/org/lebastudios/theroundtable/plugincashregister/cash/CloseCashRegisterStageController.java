@@ -3,13 +3,13 @@ package org.lebastudios.theroundtable.plugincashregister.cash;
 import com.github.anastaciocintra.escpos.EscPos;
 import com.github.anastaciocintra.escpos.Style;
 import com.github.anastaciocintra.output.PrinterOutputStream;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.CheckBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import lombok.SneakyThrows;
-import org.lebastudios.theroundtable.plugincashregister.config.data.CashRegisterStateData;
-import org.lebastudios.theroundtable.config.data.JSONFile;
+import org.lebastudios.theroundtable.plugincashregister.config.CashRegisterStateData;
 import org.lebastudios.theroundtable.controllers.StageController;
 import org.lebastudios.theroundtable.database.Database;
 import org.lebastudios.theroundtable.plugincashregister.entities.Product;
@@ -17,7 +17,6 @@ import org.lebastudios.theroundtable.plugincashregister.entities.Receipt;
 import org.lebastudios.theroundtable.plugincashregister.entities.Transaction;
 import org.lebastudios.theroundtable.locale.LangFileLoader;
 import org.lebastudios.theroundtable.maths.BigDecimalOperations;
-import org.lebastudios.theroundtable.plugincashregister.PluginCashRegister;
 import org.lebastudios.theroundtable.printers.InLinePrinter;
 import org.lebastudios.theroundtable.printers.LineFiller;
 import org.lebastudios.theroundtable.printers.PrinterManager;
@@ -25,7 +24,6 @@ import org.lebastudios.theroundtable.printers.Styles;
 import org.lebastudios.theroundtable.ui.StageBuilder;
 
 import java.math.BigDecimal;
-import java.net.URL;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.HashMap;
@@ -35,12 +33,12 @@ public class CloseCashRegisterStageController extends StageController<CloseCashR
 {
     private final LocalDateTime from;
     private final LocalDateTime to;
-    @FXML private CheckBox includeTransaction;
-    @FXML private CheckBox includeProducts;
+    @FXML public CheckBox includeTransaction;
+    @FXML public CheckBox includeProducts;
 
     public CloseCashRegisterStageController()
     {
-        var cashRegisterState = new JSONFile<>(CashRegisterStateData.class).get();
+        var cashRegisterState = new CashRegisterStateData().load();
 
         from = LocalDateTime.parse(cashRegisterState.openTime);
         to = LocalDateTime.now();
@@ -51,19 +49,6 @@ public class CloseCashRegisterStageController extends StageController<CloseCashR
     {
         stageBuilder.setModality(Modality.APPLICATION_MODAL);
     }
-
-    @Override
-    public URL getFXML()
-    {
-        return CloseCashRegisterStageController.class.getResource("closeCashRegisterStage.fxml");
-    }
-
-    @Override
-    public Class<?> getBundleClass()
-    {
-        return PluginCashRegister.class;
-    }
-
     @Override
     public String getTitle()
     {
@@ -71,20 +56,20 @@ public class CloseCashRegisterStageController extends StageController<CloseCashR
     }
 
     @FXML
-    private void acceptAndPrint()
+    public void acceptAndPrint(ActionEvent actionEvent)
     {
-        var cashRegisterState = new JSONFile<>(CashRegisterStateData.class);
+        var cashRegisterState = new CashRegisterStateData().load();
 
         printDay(from, to);
 
-        cashRegisterState.get().open = false;
-        cashRegisterState.get().openTime = "";
+        cashRegisterState.open = false;
+        cashRegisterState.openTime = "";
 
         cashRegisterState.save();
 
         CashRegisterPaneController.showInterface();
 
-        cancel();
+        cancel(null);
     }
 
     private void printDay(LocalDateTime from, LocalDateTime to)
@@ -163,7 +148,7 @@ public class CloseCashRegisterStageController extends StageController<CloseCashR
     }
 
     @FXML
-    private void cancel()
+    public void cancel(ActionEvent actionEvent)
     {
         ((Stage) includeProducts.getScene().getWindow()).close();
     }

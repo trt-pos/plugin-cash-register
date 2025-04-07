@@ -20,8 +20,8 @@ public class ProductPaneController extends PaneController<ProductPaneController>
 
     private final Product product;
 
-    @FXML private Label label;
-    @FXML private ImageView imageView;
+    @FXML public Label label;
+    @FXML public ImageView imageView;
 
     public ProductPaneController(Product product)
     {
@@ -43,17 +43,4 @@ public class ProductPaneController extends PaneController<ProductPaneController>
         }).start();
         
         getRoot().setOnMouseClicked(_ -> onAction.accept(product));
-    }
-
-    @Override
-    public Class<?> getBundleClass()
-    {
-        return PluginCashRegister.class;
-    }
-
-    @Override
-    public URL getFXML()
-    {
-        return ProductPaneController.class.getResource("productPane.fxml");
-    }
-}
+    }}

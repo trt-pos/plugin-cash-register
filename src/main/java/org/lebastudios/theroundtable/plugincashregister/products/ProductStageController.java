@@ -1,5 +1,6 @@
 package org.lebastudios.theroundtable.plugincashregister.products;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.Modality;
@@ -17,6 +18,7 @@ import org.lebastudios.theroundtable.plugincashregister.entities.SubCategory;
 import org.lebastudios.theroundtable.plugincashregister.PluginCashRegister;
 import org.lebastudios.theroundtable.plugincashregister.entities.TaxType;
 import org.lebastudios.theroundtable.ui.BigDecimalField;
+import org.lebastudios.theroundtable.ui.IconButton;
 import org.lebastudios.theroundtable.ui.IconView;
 import org.lebastudios.theroundtable.ui.StageBuilder;
 
@@ -26,15 +28,16 @@ import java.util.HashSet;
 
 public abstract class ProductStageController extends StageController<ProductStageController>
 {
-    @FXML protected CheckBox enabledProduct;
-    @FXML protected CheckBox taxesIncluded;
-    @FXML protected TextField productName;
-    @FXML protected TextField mainCategory;
-    @FXML protected TextField subCategory;
-    @FXML protected BigDecimalField price;
-    @FXML protected ChoiceBox<TaxType> taxes;
-    @FXML protected IconView productIcon;
-    @FXML protected Button mainButton;
+    @FXML public CheckBox enabledProduct;
+    @FXML public CheckBox taxesIncluded;
+    @FXML public TextField productName;
+    @FXML public TextField mainCategory;
+    @FXML public TextField subCategory;
+    @FXML public BigDecimalField price;
+    @FXML public ChoiceBox<TaxType> taxes;
+    @FXML public IconView productIcon;
+    @FXML public Button mainButton;
+    @FXML public IconButton deleteButton;
 
     protected String imgPath = "";
 
@@ -67,7 +70,7 @@ public abstract class ProductStageController extends StageController<ProductStag
 
     @SneakyThrows
     @FXML
-    private void openImageSelector()
+    public void openImageSelector(ActionEvent actionEvent)
     {
         var result = ImageLoader.showImageChooser(this.getStage().getOwner());
         
@@ -78,22 +81,10 @@ public abstract class ProductStageController extends StageController<ProductStag
     }
 
     @Override
-    public final Class<?> getBundleClass()
-    {
-        return PluginCashRegister.class;
-    }
-
-    @Override
     protected void customizeStageBuilder(StageBuilder stageBuilder)
     {
         stageBuilder.setModality(Modality.APPLICATION_MODAL)
                 .setResizeable(false);
-    }
-
-    @Override
-    public final URL getFXML()
-    {
-        return ProductStageController.class.getResource("newProductWindow.fxml");
     }
 
     protected boolean isProductDataValid()

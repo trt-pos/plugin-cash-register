@@ -5,9 +5,8 @@ import com.github.anastaciocintra.escpos.EscPosConst;
 import com.github.anastaciocintra.escpos.image.BitImageWrapper;
 import com.github.anastaciocintra.escpos.image.BitonalThreshold;
 import com.github.anastaciocintra.escpos.image.ImageWrapperInterface;
-import org.lebastudios.theroundtable.config.data.EstablishmentConfigData;
-import org.lebastudios.theroundtable.config.data.JSONFile;
-import org.lebastudios.theroundtable.plugincashregister.config.data.ReceiptPrintingConfigData;
+import org.lebastudios.theroundtable.config.EstablishmentConfigData;
+import org.lebastudios.theroundtable.plugincashregister.config.ReceiptPrintingConfigData;
 import org.lebastudios.theroundtable.printers.IPrinter;
 import org.lebastudios.theroundtable.printers.ImagePrinter;
 import org.lebastudios.theroundtable.printers.PrintNotEmptyString;
@@ -21,11 +20,11 @@ public class BasicReceiptHeaderPrinter implements IPrinter
     @Override
     public EscPos print(EscPos escpos) throws IOException
     {
-        var establishmentDat = new JSONFile<>(EstablishmentConfigData.class).get();
+        var establishmentDat = new EstablishmentConfigData().load();
 
         var logoFile = new File(establishmentDat.logoImgPath);
 
-        if (logoFile.exists() && !new JSONFile<>(ReceiptPrintingConfigData.class).get().hideEstablishmentLogo)
+        if (logoFile.exists() && !new ReceiptPrintingConfigData().load().hideEstablishmentLogo)
         {
             ImageWrapperInterface<?> wrapper = new BitImageWrapper();
             wrapper.setJustification(EscPosConst.Justification.Center);
@@ -33,7 +32,7 @@ public class BasicReceiptHeaderPrinter implements IPrinter
             BitonalThreshold bitonalThreshold = new BitonalThreshold(170);
 
             final var imagePrinter = new ImagePrinter(logoFile, wrapper, bitonalThreshold);
-            imagePrinter.setWidth(new JSONFile<>(ReceiptPrintingConfigData.class).get().imageSize);
+            imagePrinter.setWidth(new ReceiptPrintingConfigData().load().imageSize);
             imagePrinter.print(escpos);
             
             escpos.feed(1);

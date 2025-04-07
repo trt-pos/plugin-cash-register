@@ -16,9 +16,9 @@ import java.net.URL;
 
 public class ModifyTaxTypeStageController extends StageController<ModifyTaxTypeStageController>
 {
-    @FXML private TextField nameField;
-    @FXML private TextField taxField;
-    @FXML private TextArea descriptionField;
+    @FXML public TextField nameField;
+    @FXML public TextField taxField;
+    @FXML public TextArea descriptionField;
     
     private final TaxType taxType;
     
@@ -36,7 +36,7 @@ public class ModifyTaxTypeStageController extends StageController<ModifyTaxTypeS
     }
 
     @FXML
-    private void saveButtonAction(ActionEvent actionEvent)
+    public void saveButtonAction(ActionEvent actionEvent)
     {
         if (!validateData()) return;
 
@@ -55,7 +55,7 @@ public class ModifyTaxTypeStageController extends StageController<ModifyTaxTypeS
     }
 
     @FXML
-    private void cancelButtonAction(ActionEvent actionEvent)
+    public void cancelButtonAction(ActionEvent actionEvent)
     {
         close();
     }
@@ -89,17 +89,4 @@ public class ModifyTaxTypeStageController extends StageController<ModifyTaxTypeS
     public String getTitle()
     {
         return "Modify Tax Type";
-    }
-
-    @Override
-    public Class<?> getBundleClass()
-    {
-        return PluginCashRegister.class;
-    }
-
-    @Override
-    public URL getFXML()
-    {
-        return TaxTypeCreatorStageController.class.getResource("taxTypeCreatorStage.fxml");
-    }
-}
+    }}

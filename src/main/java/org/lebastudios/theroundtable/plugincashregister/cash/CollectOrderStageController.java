@@ -2,6 +2,7 @@ package org.lebastudios.theroundtable.plugincashregister.cash;
 
 import com.github.anastaciocintra.escpos.EscPos;
 import com.github.anastaciocintra.output.PrinterOutputStream;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
@@ -15,16 +16,14 @@ import org.lebastudios.theroundtable.database.Database;
 import org.lebastudios.theroundtable.dialogs.InformationTextDialogController;
 import org.lebastudios.theroundtable.locale.LangFileLoader;
 import org.lebastudios.theroundtable.maths.BigDecimalOperations;
-import org.lebastudios.theroundtable.plugincashregister.PluginCashRegister;
 import org.lebastudios.theroundtable.plugincashregister.PluginCashRegisterEvents;
 import org.lebastudios.theroundtable.plugincashregister.entities.Receipt;
-import org.lebastudios.theroundtable.plugincashregister.printers.CashRegisterPrinterManager;
+import org.lebastudios.theroundtable.plugincashregister.printers.CashRegisterPrinters;
 import org.lebastudios.theroundtable.printers.OpenCashDrawer;
 import org.lebastudios.theroundtable.printers.PrinterManager;
 import org.lebastudios.theroundtable.ui.BigDecimalField;
 import org.lebastudios.theroundtable.ui.StageBuilder;
 
-import java.net.URL;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.function.Consumer;
@@ -33,18 +32,18 @@ public class CollectOrderStageController extends StageController<CollectOrderSta
 {
     private final Order order;
     private final Consumer<Receipt> onDone;
-    @FXML private BigDecimalField amountPaidField;
-    @FXML private TextField clientNameField;
-    @FXML private TextField clientIdentifierField;
-    @FXML private RadioButton cashRadioButton;
-    @FXML private RadioButton cardRadioButton;
-    @FXML private CheckBox defineClientOption;
-    @FXML private GridPane clientDataContainer;
+    @FXML public BigDecimalField amountPaidField;
+    @FXML public TextField clientNameField;
+    @FXML public TextField clientIdentifierField;
+    @FXML public RadioButton cashRadioButton;
+    @FXML public RadioButton cardRadioButton;
+    @FXML public CheckBox defineClientOption;
+    @FXML public GridPane clientDataContainer;
     private ToggleGroup paymentMethodToggleGroup;
-    @FXML private Label orderTimeLabel;
-    @FXML private Label orderDateLabel;
-    @FXML private Label orderTotalLabel;
-    @FXML private HBox amountPaidBox;
+    @FXML public Label orderTimeLabel;
+    @FXML public Label orderDateLabel;
+    @FXML public Label orderTotalLabel;
+    @FXML public HBox amountPaidBox;
 
     public CollectOrderStageController(Order order, Consumer<Receipt> onDone)
     {
@@ -97,28 +96,15 @@ public class CollectOrderStageController extends StageController<CollectOrderSta
                 .setModality(Modality.APPLICATION_MODAL);
     }
 
-    @Override
-    public Class<?> getBundleClass()
-    {
-        return PluginCashRegister.class;
-    }
-
-    @Override
-    public URL getFXML()
-    {
-        return CollectOrderStageController.class.getResource("collectOrderPane.fxml");
-    }
-
     @FXML
-    private void submitAndPrint()
+    public void submitAndPrint(ActionEvent actionEvent)
     {
         saveReceiptInDatabase(receipt ->
         {
-            try (EscPos escpos = new EscPos(
-                    new PrinterOutputStream(PrinterManager.getInstance().getDefaultPrintService())))
+            try (EscPos escpos = CashRegisterPrinters.getInstance()
+                    .printReceipt(receipt, PrinterManager.getInstance().getDefaultPrintService())
+            )
             {
-                CashRegisterPrinterManager.getInstance().getReceiptPrinter().print(escpos, receipt, order);
-
                 escpos.feed(5).cut(EscPos.CutMode.PART);
             }
             catch (Exception exception)
@@ -133,7 +119,7 @@ public class CollectOrderStageController extends StageController<CollectOrderSta
     }
 
     @FXML
-    private void submit()
+    public void submit(ActionEvent actionEvent)
     {
         saveReceiptInDatabase(_ ->
         {
@@ -159,7 +145,7 @@ public class CollectOrderStageController extends StageController<CollectOrderSta
         if (receipt == null) return;
 
         boolean[] error = {false};
-        
+
         Database.getInstance().connectTransaction(session ->
         {
             try
@@ -177,20 +163,20 @@ public class CollectOrderStageController extends StageController<CollectOrderSta
                 error[0] = true;
             }
         });
-        
+
         if (error[0]) return;
 
         StringBuffer billNumber = new StringBuffer();
         PluginCashRegisterEvents.onRequestNewReceiptBillNumber.invoke(receipt.getId(), billNumber);
-        
-        if (!billNumber.isEmpty()) 
+
+        if (!billNumber.isEmpty())
         {
             PluginCashRegisterEvents.onReceiptBilled.invoke(receipt, billNumber.toString());
         }
-        
+
         printerAction.accept(receipt);
         PluginCashRegisterEvents.onReceiptEmitted.invoke(receipt);
-        
+
         ((Stage) cashRadioButton.getScene().getWindow()).close();
         onDone.accept(receipt);
     }

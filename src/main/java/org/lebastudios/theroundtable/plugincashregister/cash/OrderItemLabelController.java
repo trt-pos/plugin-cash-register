@@ -1,5 +1,6 @@
 package org.lebastudios.theroundtable.plugincashregister.cash;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
@@ -11,7 +12,6 @@ import org.lebastudios.theroundtable.controllers.PaneController;
 import org.lebastudios.theroundtable.events.IEventMethod1;
 import org.lebastudios.theroundtable.plugincashregister.entities.Product;
 import org.lebastudios.theroundtable.maths.BigDecimalOperations;
-import org.lebastudios.theroundtable.plugincashregister.PluginCashRegister;
 
 import java.math.BigDecimal;
 import java.util.HashMap;
@@ -23,10 +23,10 @@ public class OrderItemLabelController extends PaneController<OrderItemLabelContr
     private final Map<Label, Boolean> hasDefaultText = new HashMap<>();
     
     @FXML @Getter public Label unitPriceLabel;
-    @FXML @Getter private Label quantityLabel;
-    @FXML @Getter private Label productNameLabel;
-    @FXML @Getter private Label totalPriceLabel;
-    @FXML private ImageView productImg;
+    @FXML @Getter public Label quantityLabel;
+    @FXML @Getter public Label productNameLabel;
+    @FXML @Getter public Label totalPriceLabel;
+    @FXML public ImageView productImg;
     @Getter private Label actualEditting;
 
     private final IEventMethod1<OrderItem> updateView = oiMod ->
@@ -208,7 +208,7 @@ public class OrderItemLabelController extends PaneController<OrderItemLabelContr
     }
     
     @FXML
-    private void removeOneButton()
+    public void removeOneButton(ActionEvent actionEvent)
     {
         orderItem.setQuantity(orderItem.getQuantity().subtract(BigDecimal.ONE));
         
@@ -218,7 +218,7 @@ public class OrderItemLabelController extends PaneController<OrderItemLabelContr
     }
 
     @FXML
-    private void addOneButton()
+    public void addOneButton(ActionEvent actionEvent)
     {
         orderItem.setQuantity(orderItem.getQuantity().add(BigDecimal.ONE));
 
@@ -231,11 +231,5 @@ public class OrderItemLabelController extends PaneController<OrderItemLabelContr
         {
             CashRegister.getInstance().getActualOrder().getOrderItems().remove(orderItem);
         }
-    }
-    
-    @Override
-    public Class<?> getBundleClass()
-    {
-        return PluginCashRegister.class;
     }
 }

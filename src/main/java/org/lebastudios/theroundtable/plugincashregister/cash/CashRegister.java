@@ -1,14 +1,13 @@
 package org.lebastudios.theroundtable.plugincashregister.cash;
 
 import com.github.anastaciocintra.escpos.EscPos;
-import com.github.anastaciocintra.output.PrinterOutputStream;
 import lombok.Getter;
 import lombok.SneakyThrows;
 import org.lebastudios.theroundtable.events.Event;
 import org.lebastudios.theroundtable.events.Event1;
 import org.lebastudios.theroundtable.locale.LangFileLoader;
 import org.lebastudios.theroundtable.plugincashregister.entities.Product;
-import org.lebastudios.theroundtable.plugincashregister.printers.CashRegisterPrinterManager;
+import org.lebastudios.theroundtable.plugincashregister.printers.CashRegisterPrinters;
 import org.lebastudios.theroundtable.printers.PrinterManager;
 
 import java.io.IOException;
@@ -76,13 +75,12 @@ public class CashRegister
 
     public void printOrder()
     {
-        try
+        try (EscPos escpos = CashRegisterPrinters.getInstance().printOrder(
+                actualOrder, PrinterManager.getInstance().getDefaultPrintService()
+        ))
         {
-            EscPos escpos = new EscPos(new PrinterOutputStream(PrinterManager.getInstance().getDefaultPrintService()));
-            CashRegisterPrinterManager.getInstance().getOrderPrinter().print(escpos, actualOrder);
             escpos.feed(5);
             escpos.cut(EscPos.CutMode.PART);
-            escpos.close();
         }
         catch (IOException e)
         {

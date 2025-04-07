@@ -13,7 +13,6 @@ import org.lebastudios.theroundtable.ui.IconButton;
 public class ModifyProductStageController extends ProductStageController
 {
     private final Product product;
-    @FXML private IconButton deleteButton;
 
     public ModifyProductStageController(Product product)
     {
@@ -75,7 +74,7 @@ public class ModifyProductStageController extends ProductStageController
     }
 
     @FXML
-    private void mainButtonAction()
+    public void mainButtonAction()
     {
         if (!isProductDataValid()) return;
 

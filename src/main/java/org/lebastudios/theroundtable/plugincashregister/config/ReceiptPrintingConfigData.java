@@ -1,12 +1,12 @@
-package org.lebastudios.theroundtable.plugincashregister.config.data;
+package org.lebastudios.theroundtable.plugincashregister.config;
 
-import org.lebastudios.theroundtable.config.Settings;
-import org.lebastudios.theroundtable.config.data.FileRepresentator;
+import org.lebastudios.theroundtable.config.AppConfiguration;
+import org.lebastudios.theroundtable.config.ConfigData;
 import org.lebastudios.theroundtable.printers.Printer80;
 
 import java.io.File;
 
-public class ReceiptPrintingConfigData implements FileRepresentator
+public class ReceiptPrintingConfigData extends ConfigData<ReceiptPrintingConfigData>
 {
     public boolean hideReceiptData = false;
     public boolean hideTaxesDesglose = false;
@@ -17,6 +17,6 @@ public class ReceiptPrintingConfigData implements FileRepresentator
     @Override
     public File getFile()
     {
-        return new File(Settings.getGlobalDir() + "/receipt-printing-settings.json");
+        return new File(AppConfiguration.getGlobalDir() + "/receipt-printing-settings.json");
     }
 }
