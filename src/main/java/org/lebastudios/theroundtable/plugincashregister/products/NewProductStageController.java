@@ -27,7 +27,7 @@ public class NewProductStageController extends ProductStageController
     @FXML
     public void mainButtonAction(ActionEvent actionEvent)
     {
-        if (!isProductDataValid()) return;
+        if (!validate()) return;
 
         // Create new product
         Database.getInstance().connectTransaction(session -> saveProductInfo(session, new Product()));

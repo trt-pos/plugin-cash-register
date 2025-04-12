@@ -1,14 +1,13 @@
 package org.lebastudios.theroundtable.plugincashregister.products;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import lombok.SneakyThrows;
 import org.lebastudios.theroundtable.apparience.ImageLoader;
 import org.lebastudios.theroundtable.database.Database;
 import org.lebastudios.theroundtable.plugincashregister.PluginCashRegisterEvents;
 import org.lebastudios.theroundtable.plugincashregister.entities.Product;
-import org.lebastudios.theroundtable.dialogs.ConfirmationTextDialogController;
 import org.lebastudios.theroundtable.locale.LangFileLoader;
-import org.lebastudios.theroundtable.ui.IconButton;
 
 public class ModifyProductStageController extends ProductStageController
 {
@@ -74,9 +73,9 @@ public class ModifyProductStageController extends ProductStageController
     }
 
     @FXML
-    public void mainButtonAction()
+    public void mainButtonAction(ActionEvent actionEvent)
     {
-        if (!isProductDataValid()) return;
+        if (!validate()) return;
 
         Database.getInstance().connectTransaction(session ->
                 saveProductInfo(session, session.get(Product.class, product.getId()))

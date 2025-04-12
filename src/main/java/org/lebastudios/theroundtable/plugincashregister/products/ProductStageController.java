@@ -15,7 +15,6 @@ import org.lebastudios.theroundtable.database.Database;
 import org.lebastudios.theroundtable.plugincashregister.entities.Category;
 import org.lebastudios.theroundtable.plugincashregister.entities.Product;
 import org.lebastudios.theroundtable.plugincashregister.entities.SubCategory;
-import org.lebastudios.theroundtable.plugincashregister.PluginCashRegister;
 import org.lebastudios.theroundtable.plugincashregister.entities.TaxType;
 import org.lebastudios.theroundtable.ui.BigDecimalField;
 import org.lebastudios.theroundtable.ui.IconButton;
@@ -23,7 +22,6 @@ import org.lebastudios.theroundtable.ui.IconView;
 import org.lebastudios.theroundtable.ui.StageBuilder;
 
 import java.io.File;
-import java.net.URL;
 import java.util.HashSet;
 
 public abstract class ProductStageController extends StageController<ProductStageController>
@@ -87,7 +85,7 @@ public abstract class ProductStageController extends StageController<ProductStag
                 .setResizeable(false);
     }
 
-    protected boolean isProductDataValid()
+    protected final boolean validate()
     {
         productName.setText(productName.getText().trim());
         mainCategory.setText(mainCategory.getText().trim());
@@ -177,5 +175,15 @@ public abstract class ProductStageController extends StageController<ProductStag
         product.setEnabled(enabledProduct.isSelected());
         product.setTaxesIncluded(taxesIncluded.isSelected());
         product.setTaxType(taxes.getSelectionModel().getSelectedItem());
+    }
+    
+    @FXML
+    public abstract void mainButtonAction(ActionEvent actionEvent);
+
+    @Override
+    protected void loadFXML()
+    {
+        root = new org.lebastudios.theroundtable.plugincashregister.products.ProductStage$View(this);
+        this.initialize();
     }
 }
