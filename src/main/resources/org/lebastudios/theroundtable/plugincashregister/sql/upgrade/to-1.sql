@@ -8,8 +8,11 @@ create table cr_receipt
     payment_method         varchar(255)   not null,
     table_name             varchar(255)   not null,
     taxes_amount           numeric(38, 2) not null,
+    unknown_products_value numeric(38, 2) not null,
     constraint pk_receipt primary key (id)
 );
+
+-- DELIMITER
 
 create table cr_product_receipt
 (
@@ -26,23 +29,29 @@ create table cr_product_receipt
 
 );
 
+-- DELIMITER
+
 create table cr_transaction
 (
     id          integer,
     amount      numeric(38, 2) not null,
     date        timestamp      not null,
-    description varchar(99999) not null,
+    description text           not null,
     receipt_id  integer,
     constraint transaction_receipt foreign key (receipt_id) references cr_receipt (id),
     constraint u_transactrion_receipt_id unique (receipt_id),
     constraint pk_transaction primary key (id)
 );
 
+-- DELIMITER
+
 create table pr_category
 (
     name varchar(255) not null,
     constraint pk_category primary key (name)
 );
+
+-- DELIMITER
 
 create table pr_sub_category
 (
@@ -51,11 +60,13 @@ create table pr_sub_category
     constraint pk_sub_category primary key (category_name, name)
 );
 
+-- DELIMITER
+
 create table pr_product
 (
     id                integer,
     enabled           boolean         not null,
-    img_path          varchar(999999) not null,
+    img_path          text            not null,
     name              varchar(255)    not null,
     price             numeric(38, 2)  not null,
     taxes             numeric(38, 2),
@@ -67,6 +78,8 @@ create table pr_product
     constraint pk_product primary key (id)
 );
 
+-- DELIMITER
+
 create table pr_tax_type
 (
     id          integer,
@@ -76,4 +89,3 @@ create table pr_tax_type
     constraint u_tax_type_name unique (name),
     constraint pk_tax_type primary key (id)
 );
-

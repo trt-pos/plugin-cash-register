@@ -1,0 +1,1 @@
+drop table cr_receipt_modification;
