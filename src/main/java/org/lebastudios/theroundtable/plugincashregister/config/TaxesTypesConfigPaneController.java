@@ -18,7 +18,6 @@ import org.lebastudios.theroundtable.plugincashregister.products.ModifyTaxTypeSt
 import org.lebastudios.theroundtable.plugincashregister.products.TaxTypeCreatorStageController;
 import org.lebastudios.theroundtable.ui.IconButton;
 
-
 import java.util.List;
 
 public class TaxesTypesConfigPaneController extends ConfigPaneController<NoConfigFile>
@@ -47,16 +46,16 @@ public class TaxesTypesConfigPaneController extends ConfigPaneController<NoConfi
 
     private void updateTaxesTypesContainer()
     {
-        taxesTypesContainer.getChildren().clear();
-
         new Thread(() -> Database.getInstance().connectQuery(session ->
         {
             List<TaxType> results = session.createQuery("FROM TaxType", TaxType.class).getResultList();
             Platform.runLater(() ->
-                    results.forEach(
-                            taxesType -> taxesTypesContainer.getChildren().add(createTaxesTypeNode(taxesType))
-                    )
-            );
+            {
+                taxesTypesContainer.getChildren().clear();
+                results.forEach(
+                        taxesType -> taxesTypesContainer.getChildren().add(createTaxesTypeNode(taxesType))
+                );
+            });
         })).start();
     }
 
@@ -94,16 +93,16 @@ public class TaxesTypesConfigPaneController extends ConfigPaneController<NoConfi
         final var delete = getDeleteButton(taxType);
 
         root.getChildren().addAll(left, edit, delete);
-        
+
         return root;
     }
 
     private IconButton getDeleteButton(TaxType taxType)
     {
         IconButton delete = new IconButton("delete.png");
-        delete.setOnAction(_ -> 
+        delete.setOnAction(_ ->
         {
-            Database.getInstance().connectTransaction(session -> 
+            Database.getInstance().connectTransaction(session ->
             {
                 TaxType instance = session.get(TaxType.class, taxType.getId());
                 if (instance == null)
@@ -111,15 +110,15 @@ public class TaxesTypesConfigPaneController extends ConfigPaneController<NoConfi
                     new InformationTextDialogController("Something went wrong. Please try again.").instantiate();
                     return;
                 }
-                
-                if (!instance.getProducts().isEmpty()) 
+
+                if (!instance.getProducts().isEmpty())
                 {
                     new InformationTextDialogController(
                             LangFileLoader.getTranslation("textblock.taxestypeisbeingused")
                     ).instantiate();
                     return;
                 }
-                
+
                 session.remove(instance);
             });
 
