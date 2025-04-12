@@ -87,7 +87,11 @@ public class CashRegisterPaneController extends PaneController<CashRegisterPaneC
         new Thread(() ->
         {
             final var node = new ProductsUIController(false).getRoot();
-            Platform.runLater(() -> root.getChildren().set(0, node));
+            Platform.runLater(() ->
+            {
+                root.getChildren().set(0, node);
+                HBox.setHgrow(node, Priority.ALWAYS);
+            });
         }).start();
 
         // ListView row factory
@@ -163,7 +167,7 @@ public class CashRegisterPaneController extends PaneController<CashRegisterPaneC
 
         updateDisableableButtons(items);
         totalLabel.setText(actualOrder.getTotalStringRepresentation());
-        
+
         items.addListener((ListChangeListener<OrderItem>) _ ->
         {
             updateDisableableButtons(items);
@@ -182,7 +186,7 @@ public class CashRegisterPaneController extends PaneController<CashRegisterPaneC
         collectOrderButton.setDisable(empty);
         splitOrderButton.setDisable(empty);
     }
-    
+
     private void bindKeyboardActions()
     {
         getRoot().addEventFilter(KeyEvent.KEY_PRESSED, event ->
@@ -238,7 +242,8 @@ public class CashRegisterPaneController extends PaneController<CashRegisterPaneC
             return;
         }
 
-        ProductPaneController.onAction = product -> {
+        ProductPaneController.onAction = product ->
+        {
             instance.submitEditting(null);
             CashRegister.getInstance().addProduct(product, BigDecimal.ONE);
         };
@@ -488,4 +493,5 @@ public class CashRegisterPaneController extends PaneController<CashRegisterPaneC
         submitEditting(null);
 
         new CloseCashRegisterStageController().instantiate();
-    }}
+    }
+}
