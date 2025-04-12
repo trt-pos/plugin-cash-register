@@ -6,6 +6,7 @@ import javafx.scene.control.TreeItem;
 import lombok.SneakyThrows;
 import org.lebastudios.theroundtable.MainStageController;
 import org.lebastudios.theroundtable.config.SettingsItem;
+import org.lebastudios.theroundtable.database.Dbms;
 import org.lebastudios.theroundtable.dialogs.InformationTextDialogController;
 import org.lebastudios.theroundtable.events.AppLifeCicleEvents;
 import org.lebastudios.theroundtable.events.Event1;
@@ -230,7 +231,7 @@ public class PluginCashRegister implements IPlugin
         return DATABASE_VERSION;
     }
 
-    public void version1(Connection conn) throws SQLException
+    public void upgradeTo1(Connection conn, Dbms dbms) throws SQLException
     {
         Statement statement = conn.createStatement();
 
@@ -324,7 +325,7 @@ public class PluginCashRegister implements IPlugin
         statement.executeBatch();
     }
 
-    public void version2(Connection conn) throws SQLException
+    public void upgradeTo2(Connection conn, Dbms dbms) throws SQLException
     {
         Statement statement = conn.createStatement();
 
@@ -335,7 +336,7 @@ public class PluginCashRegister implements IPlugin
         statement.executeBatch();
     }
 
-    public void version3(Connection conn) throws SQLException
+    public void upgradeTo3(Connection conn, Dbms dbms) throws SQLException
     {
         Statement statement = conn.createStatement();
 
@@ -348,7 +349,7 @@ public class PluginCashRegister implements IPlugin
         statement.executeBatch();
     }
 
-    public void version4(Connection conn) throws SQLException
+    public void upgradeTo4(Connection conn, Dbms dbms) throws SQLException
     {
         Statement stat = conn.createStatement();
         // Adding a new table to store the rectification of a receipt
@@ -366,7 +367,7 @@ public class PluginCashRegister implements IPlugin
         stat.executeBatch();
     }
 
-    public void version5(Connection conn) throws SQLException
+    public void upgradeTo5(Connection conn, Dbms dbms) throws SQLException
     {
         Statement stat = conn.createStatement();
         // Adding a property to the receipt to store the status of the receipt
