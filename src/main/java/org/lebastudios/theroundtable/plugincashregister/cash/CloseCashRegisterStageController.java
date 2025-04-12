@@ -52,7 +52,7 @@ public class CloseCashRegisterStageController extends StageController<CloseCashR
     @Override
     public String getTitle()
     {
-        return LangFileLoader.getTranslation("phrase.closeCashRegister");
+        return LangFileLoader.getTranslation("plugincashregister.phrase.closeCashRegister");
     }
 
     @FXML
@@ -92,13 +92,13 @@ public class CloseCashRegisterStageController extends StageController<CloseCashR
                 var escpos = new EscPos(new PrinterOutputStream(PrinterManager.getInstance().getDefaultPrintService()));
 
                 escpos.writeLF(Styles.CENTERED,
-                        "    " + LangFileLoader.getTranslation("word.from") + " " + from.toLocalDate().toString()
-                                + " " + LangFileLoader.getTranslation("word.at")
+                        "    " + LangFileLoader.getTranslation("plugincashregister.word.from") + " " + from.toLocalDate().toString()
+                                + " " + LangFileLoader.getTranslation("plugincashregister.word.at")
                                 + " " + from.toLocalTime().truncatedTo(ChronoUnit.SECONDS).toString());
 
                 escpos.writeLF(Styles.CENTERED,
-                        "    " + LangFileLoader.getTranslation("word.to") + " " + to.toLocalDate().toString()
-                                + " " + LangFileLoader.getTranslation("word.at")
+                        "    " + LangFileLoader.getTranslation("plugincashregister.word.to") + " " + to.toLocalDate().toString()
+                                + " " + LangFileLoader.getTranslation("plugincashregister.word.at")
                                 + " " + to.toLocalTime().truncatedTo(ChronoUnit.SECONDS).toString());
                 
                 escpos.feed(1);
@@ -159,7 +159,7 @@ public class CloseCashRegisterStageController extends StageController<CloseCashR
         escPos.feed(1);
         new LineFiller("-").print(escPos);
 
-        new InLinePrinter().concatLeft("    " + LangFileLoader.getTranslation("word.transactions"))
+        new InLinePrinter().concatLeft("    " + LangFileLoader.getTranslation("plugincashregister.word.transactions"))
                 .concatRight("Total: " + transactions.size()).print(escPos);
         new LineFiller("-").print(escPos);
 
@@ -199,7 +199,7 @@ public class CloseCashRegisterStageController extends StageController<CloseCashR
             }
         }
 
-        new InLinePrinter().concatLeft("    " + LangFileLoader.getTranslation("word.products"))
+        new InLinePrinter().concatLeft("    " + LangFileLoader.getTranslation("plugincashregister.word.products"))
                 .concatRight(" Total: " + count).print(escPos);
         new LineFiller("-").print(escPos);
 

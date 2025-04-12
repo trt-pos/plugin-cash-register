@@ -304,11 +304,11 @@ public class CashRegisterPaneController extends PaneController<CashRegisterPaneC
 
     private void updateLastCollectedReceipt(Receipt receipt)
     {
-        lastCollectedTotalLabel.setText(LangFileLoader.getTranslation("phrase.lastcollected") + " "
+        lastCollectedTotalLabel.setText(LangFileLoader.getTranslation("plugincashregister.phrase.lastcollected") + " "
                 + BigDecimalOperations.toString(receipt.getTaxedTotal()) + " €    "
-                + LangFileLoader.getTranslation("word.payment") + " "
+                + LangFileLoader.getTranslation("plugincashregister.word.payment") + " "
                 + BigDecimalOperations.toString(receipt.getPaymentAmount()) + " €    "
-                + LangFileLoader.getTranslation("word.change") + ": "
+                + LangFileLoader.getTranslation("plugincashregister.word.change") + ": "
                 + BigDecimalOperations.toString(receipt.getPaymentAmount().subtract(receipt.getTaxedTotal())) + " €"
         );
     }

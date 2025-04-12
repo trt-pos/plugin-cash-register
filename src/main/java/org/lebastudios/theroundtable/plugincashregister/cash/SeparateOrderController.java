@@ -105,7 +105,7 @@ public class SeparateOrderController extends StageController<SeparateOrderContro
     {
         var generatedOrder = new Order();
         generatedOrder.setOrderName(
-                originalOrder.getOrderName() + " (" + LangFileLoader.getTranslation("word.splitted") + ")"
+                originalOrder.getOrderName() + " (" + LangFileLoader.getTranslation("plugincashregister.word.splitted") + ")"
         );
 
         for (var variable : targetList.getItems())

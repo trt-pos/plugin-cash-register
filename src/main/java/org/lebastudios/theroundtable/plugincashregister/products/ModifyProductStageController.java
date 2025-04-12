@@ -41,7 +41,7 @@ public class ModifyProductStageController extends ProductStageController
         taxes.getSelectionModel().select(product.getTaxType());
         mainCategory.setText(product.getSubCategory().getId().categoryName());
         subCategory.setText(product.getSubCategory().getId().name());
-        mainButton.setText(LangFileLoader.getTranslation("word.save"));
+        mainButton.setText(LangFileLoader.getTranslation("plugincashregister.word.save"));
 
         deleteButton.setVisible(true);
         deleteButton.setOnAction(_ -> deleteButtonAction());

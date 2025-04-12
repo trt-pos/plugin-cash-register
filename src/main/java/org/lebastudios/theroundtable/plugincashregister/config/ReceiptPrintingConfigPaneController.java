@@ -24,7 +24,7 @@ public class ReceiptPrintingConfigPaneController extends ConfigPaneController<Re
 
     public ReceiptPrintingConfigPaneController()
     {
-        super(new ReceiptPrintingConfigData(), LangFileLoader.getTranslation("phrase.receiptprinterconfig"), "print.png");
+        super(new ReceiptPrintingConfigData(), LangFileLoader.getTranslation("plugincashregister.phrase.receiptprinterconfig"), "print.png");
     }
 
     private enum LogoSize
@@ -36,10 +36,10 @@ public class ReceiptPrintingConfigPaneController extends ConfigPaneController<Re
         {
             return LangFileLoader.getTranslation(switch (this)
             {
-                case TINY -> LangFileLoader.getTranslation("word.tiny");
-                case SMALL -> LangFileLoader.getTranslation("word.small");
-                case MEDIUM -> LangFileLoader.getTranslation("word.medium");
-                case LARGE -> LangFileLoader.getTranslation("word.large");
+                case TINY -> LangFileLoader.getTranslation("plugincashregister.word.tiny");
+                case SMALL -> LangFileLoader.getTranslation("plugincashregister.word.small");
+                case MEDIUM -> LangFileLoader.getTranslation("plugincashregister.word.medium");
+                case LARGE -> LangFileLoader.getTranslation("plugincashregister.word.large");
             });
         }
         

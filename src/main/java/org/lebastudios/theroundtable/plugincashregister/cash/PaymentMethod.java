@@ -9,7 +9,7 @@ public enum PaymentMethod
 
     public String translate()
     {
-        return LangFileLoader.getTranslation("word." +
+        return LangFileLoader.getTranslation("plugincashregister.word." +
                 switch (this)
                 {
                     case CASH -> "cash";

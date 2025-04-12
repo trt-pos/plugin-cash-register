@@ -7,9 +7,9 @@
       xmlns="http://javafx.com/javafx"
       alignment="CENTER">
     <HBox VBox.vgrow="ALWAYS" spacing="15" HBox.hgrow="ALWAYS" alignment="CENTER">
-        <Button prefWidth="150" prefHeight="150" text="%phrase.opencashregister" wrapText="true"
+        <Button prefWidth="150" prefHeight="150" text="%plugincashregister.phrase.opencashregister" wrapText="true"
                 textAlignment="CENTER" onAction="#openCashRegister"/>
-        <Button prefWidth="150" prefHeight="150" text="%phrase.opencashdrawer" wrapText="true"
+        <Button prefWidth="150" prefHeight="150" text="%plugincashregister.phrase.opencashdrawer" wrapText="true"
                 textAlignment="CENTER" onAction="#openCashRegisterDrawer"/>
     </HBox>
 </VBox>

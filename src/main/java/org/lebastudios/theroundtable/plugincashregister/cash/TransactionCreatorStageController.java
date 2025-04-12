@@ -43,8 +43,8 @@ public class TransactionCreatorStageController extends StageController<Transacti
     public String getTitle()
     {
         var titleKey = transactionType == TransactionType.ADD
-                ? "word.put"
-                : "word.get";
+                ? "plugincashregister.word.put"
+                : "plugincashregister.word.get";
 
         return LangFileLoader.getTranslation(titleKey);
     }

@@ -12,14 +12,14 @@
 
     <VBox spacing="10">
         <HBox>
-            <Label wrapText="true" prefWidth="350" text="%phrase.includeothertransactions"/>
+            <Label wrapText="true" prefWidth="350" text="%plugincashregister.phrase.includeothertransactions"/>
             <HBox>
                 <CheckBox fx:id="includeTransaction"/>
             </HBox>
         </HBox>
 
         <HBox>
-            <Label wrapText="true" prefWidth="350" text="%phrase.includeproductssold"/>
+            <Label wrapText="true" prefWidth="350" text="%plugincashregister.phrase.includeproductssold"/>
             <HBox>
                 <CheckBox fx:id="includeProducts"/>
             </HBox>
@@ -27,7 +27,7 @@
     </VBox>
 
     <HBox alignment="CENTER_RIGHT" spacing="5">
-        <Button text="%word.cancel" onAction="#cancel"/>
-        <Button text="%phrase.acceptandprint" onAction="#acceptAndPrint"/>
+        <Button text="%plugincashregister.word.cancel" onAction="#cancel"/>
+        <Button text="%plugincashregister.phrase.acceptandprint" onAction="#acceptAndPrint"/>
     </HBox>
 </VBox>

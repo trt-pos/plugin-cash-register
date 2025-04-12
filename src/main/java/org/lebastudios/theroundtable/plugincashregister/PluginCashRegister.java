@@ -74,7 +74,7 @@ public class PluginCashRegister implements IPlugin
 
             if (!cashRegisterState.open)
             {
-                new InformationTextDialogController(LangFileLoader.getTranslation("phrase.cashregisterisclosed"))
+                new InformationTextDialogController(LangFileLoader.getTranslation("plugincashregister.phrase.cashregisterisclosed"))
                         .instantiate(true);
                 return;
             }
@@ -185,7 +185,7 @@ public class PluginCashRegister implements IPlugin
     public TreeItem<SettingsItem> getSettingsRootTreeItem()
     {
         var cashRegisterConfigSection = new TreeItem<>(
-                new SettingsItem(LangFileLoader.getTranslation("word.cashregister"),
+                new SettingsItem(LangFileLoader.getTranslation("plugincashregister.word.cashregister"),
                         "cash-register.png", null)
         );
         cashRegisterConfigSection.setExpanded(false);

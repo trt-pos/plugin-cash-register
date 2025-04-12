@@ -29,13 +29,13 @@ public class BasicReceiptBodyPrinter extends ReceiptPrinter
         
         if (!printerConfig.hideReceiptData)
         {
-            escpos.writeLF(LangFileLoader.getTranslation("phrase.tablename")
+            escpos.writeLF(LangFileLoader.getTranslation("plugincashregister.phrase.tablename")
                     + ": " + receipt.getTableName());
 
-            escpos.writeLF(LangFileLoader.getTranslation("word.client")
+            escpos.writeLF(LangFileLoader.getTranslation("plugincashregister.word.client")
                     + ": " + receipt.getClientString());
 
-            escpos.writeLF(LangFileLoader.getTranslation("phrase.attendedby")
+            escpos.writeLF(LangFileLoader.getTranslation("plugincashregister.phrase.attendedby")
                     + receipt.getAttendantName());
         }
 
@@ -84,13 +84,13 @@ public class BasicReceiptBodyPrinter extends ReceiptPrinter
         // Payment Info
         if (!printerConfig.hidePaymentInfo)
         {
-            escpos.writeLF(LangFileLoader.getTranslation("word.method") + ": "
+            escpos.writeLF(LangFileLoader.getTranslation("plugincashregister.word.method") + ": "
                     + PaymentMethod.valueOf(receipt.getPaymentMethod()).translate()
             );
 
-            escpos.writeLF(LangFileLoader.getTranslation("word.amount") + ": "
+            escpos.writeLF(LangFileLoader.getTranslation("plugincashregister.word.amount") + ": "
                     + BigDecimalOperations.toString(receipt.getPaymentAmount()) + " "
-                    + LangFileLoader.getTranslation("word.change") + ": " +
+                    + LangFileLoader.getTranslation("plugincashregister.word.change") + ": " +
                     BigDecimalOperations.toString(receipt.getPaymentAmount().subtract(receipt.getTransaction().getAmount()))
             );
 
@@ -111,8 +111,8 @@ public class BasicReceiptBodyPrinter extends ReceiptPrinter
         var taxes = total.subtract(base);
 
         new InLinePrinter().concatLeft(BigDecimalOperations.toString(percentageOver100), 6)
-                .concatLeft(" % " + LangFileLoader.getTranslation("word.iva") + " ")
-                .concatLeft(LangFileLoader.getTranslation("word.over"))
+                .concatLeft(" % " + LangFileLoader.getTranslation("plugincashregister.word.iva") + " ")
+                .concatLeft(LangFileLoader.getTranslation("plugincashregister.word.over"))
                 .concatRight(BigDecimalOperations.toString(base), 8, EscPosConst.Justification.Right)
                 .concatRight(BigDecimalOperations.toString(taxes), 8, EscPosConst.Justification.Right).print(escpos);
     }

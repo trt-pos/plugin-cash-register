@@ -31,7 +31,7 @@ public class CashRegister
     private CashRegister()
     {
         cashRegisterOrder = new Order();
-        cashRegisterOrder.setOrderName(LangFileLoader.getTranslation("word.cashregister"));
+        cashRegisterOrder.setOrderName(LangFileLoader.getTranslation("plugincashregister.word.cashregister"));
         actualOrder = cashRegisterOrder;
     }
 

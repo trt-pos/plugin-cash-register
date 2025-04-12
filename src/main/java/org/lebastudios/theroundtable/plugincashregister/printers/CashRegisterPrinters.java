@@ -44,9 +44,9 @@ public class CashRegisterPrinters
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
  
             escpos.writeLF(Styles.CENTERED,
-                    LangFileLoader.getTranslation("word.date") + ": "
+                    LangFileLoader.getTranslation("plugincashregister.word.date") + ": "
                             + receipt.getTransaction().getDate().toLocalDate().format(formatter) + "  " +
-                            LangFileLoader.getTranslation("word.time") + ": " +
+                            LangFileLoader.getTranslation("plugincashregister.word.time") + ": " +
                             receipt.getTransaction().getDate().toLocalTime().truncatedTo(ChronoUnit.SECONDS)
                                     .toString()
             );
@@ -60,22 +60,22 @@ public class CashRegisterPrinters
                 PluginCashRegisterEvents.onRequestReceiptBillNumber.invoke(oldReceipt.getId(), billNumber);
                 String oldReceiptId = billNumber.isEmpty() ? oldReceipt.getId() + "" : billNumber.toString();
 
-                escpos.writeLF(LangFileLoader.getTranslation("phrase.rectificationreceipt") +
+                escpos.writeLF(LangFileLoader.getTranslation("plugincashregister.phrase.rectificationreceipt") +
                         ": " + receiptId
                 );
-                escpos.writeLF(LangFileLoader.getTranslation("phrase.modifiesreceipt")
+                escpos.writeLF(LangFileLoader.getTranslation("plugincashregister.phrase.modifiesreceipt")
                         + ": " + oldReceiptId
-                        + " " + LangFileLoader.getTranslation("phrase.withdate") + " "
+                        + " " + LangFileLoader.getTranslation("plugincashregister.phrase.withdate") + " "
                         + oldReceipt.getTransaction().getDate().toLocalDate().format(formatter)
                 );
                 // TODO: Make a IPrinter class that prints long texts wrapping them
                 escpos.writeLF(
-                        LangFileLoader.getTranslation("phrase.reason") + ": " + receipt.getModifies().getReason()
+                        LangFileLoader.getTranslation("plugincashregister.phrase.reason") + ": " + receipt.getModifies().getReason()
                 );
             }
             else
             {
-                escpos.writeLF(LangFileLoader.getTranslation("phrase.simplifiedreceipt") +
+                escpos.writeLF(LangFileLoader.getTranslation("plugincashregister.phrase.simplifiedreceipt") +
                         ": " + receiptId
                 );
             }
@@ -89,14 +89,14 @@ public class CashRegisterPrinters
                 String newReceiptId =
                         billNumber.isEmpty() ? newReceipt.getId() + "" : billNumber.toString();
 
-                escpos.writeLF(LangFileLoader.getTranslation("phrase.modifiedbyreceipt")
+                escpos.writeLF(LangFileLoader.getTranslation("plugincashregister.phrase.modifiedbyreceipt")
                         + ": " + newReceiptId 
-                        + " " + LangFileLoader.getTranslation("phrase.withdate") + " "
+                        + " " + LangFileLoader.getTranslation("plugincashregister.phrase.withdate") + " "
                         + newReceipt.getTransaction().getDate().toLocalDate().format(formatter)
                 );
                 
                 escpos.writeLF(
-                        LangFileLoader.getTranslation("phrase.reason") + ": " + receipt.getModifiedBy().getReason()
+                        LangFileLoader.getTranslation("plugincashregister.phrase.reason") + ": " + receipt.getModifiedBy().getReason()
                 );
             }
             

@@ -60,7 +60,7 @@ public class ProductsUIController extends PaneController<ProductsUIController>
         products.forEach((mainCategory, subCategories) ->
         {
             var tabName = mainCategory.isBlank()
-                    ? LangFileLoader.getTranslation("word.generic")
+                    ? LangFileLoader.getTranslation("plugincashregister.word.generic")
                     : mainCategory;
 
             Tab tab = new Tab(tabName);
@@ -112,7 +112,7 @@ public class ProductsUIController extends PaneController<ProductsUIController>
         {
             VBox subCategoryPane = new VBox(10);
             Label subCategoryLabel = new Label(subCategory.isBlank()
-                    ? LangFileLoader.getTranslation("word.generic")
+                    ? LangFileLoader.getTranslation("plugincashregister.word.generic")
                     : subCategory
             );
             subCategoryLabel.setStyle("-fx-font-size: 18px; -fx-font-weight: bold;");

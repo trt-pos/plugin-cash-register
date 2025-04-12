@@ -34,11 +34,11 @@ public class BasicTransactionPrinter extends TransactionPrinter
         new LineFiller("-").print(escpos);
 
         escpos.writeLF(Styles.CENTERED,
-                LangFileLoader.getTranslation("word.date") + " " + transaction.getDate().toLocalDate().toString()
+                LangFileLoader.getTranslation("plugincashregister.word.date") + " " + transaction.getDate().toLocalDate().toString()
         );
 
         escpos.writeLF(Styles.CENTERED,
-                LangFileLoader.getTranslation("word.time") + " "
+                LangFileLoader.getTranslation("plugincashregister.word.time") + " "
                         + transaction.getDate().toLocalTime().truncatedTo(ChronoUnit.SECONDS).toString()
         );
 

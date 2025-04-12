@@ -105,7 +105,7 @@ public class Receipt
         session.persist(this);
         session.flush();
 
-        transaction.setDescription(LangFileLoader.getTranslation("word.receipt") + " #" + id);
+        transaction.setDescription(LangFileLoader.getTranslation("plugincashregister.word.receipt") + " #" + id);
         session.merge(this);
 
     }
@@ -124,7 +124,7 @@ public class Receipt
     {
         if (clientName == null)
         {
-            return LangFileLoader.getTranslation("phrase.generalpublicclient");
+            return LangFileLoader.getTranslation("plugincashregister.phrase.generalpublicclient");
         }
         else
         {
