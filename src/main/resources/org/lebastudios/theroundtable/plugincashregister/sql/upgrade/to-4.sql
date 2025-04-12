@@ -1,6 +1,6 @@
 create table cr_receipt_modification
 (
-    id             integer,
+    id             integer autoincrement,
     new_receipt_id integer not null,
     reason         text,
     constraint pk_cr_receipt_modification primary key (id),

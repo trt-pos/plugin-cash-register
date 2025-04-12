@@ -1,6 +1,6 @@
 create table cr_receipt
 (
-    id                     integer,
+    id                     integer autoincrement,
     client_identifier      varchar(255),
     client_name            varchar(255),
     employee_name          varchar(255),
@@ -16,7 +16,7 @@ create table cr_receipt
 
 create table cr_product_receipt
 (
-    id             integer,
+    id             integer autoincrement,
     product_name   varchar(255)   not null,
     product_value  numeric(38, 2) not null,
     quantity       numeric(38, 2) not null,
@@ -33,7 +33,7 @@ create table cr_product_receipt
 
 create table cr_transaction
 (
-    id          integer,
+    id          integer autoincrement,
     amount      numeric(38, 2) not null,
     date        timestamp      not null,
     description text           not null,
@@ -64,13 +64,13 @@ create table pr_sub_category
 
 create table pr_product
 (
-    id                integer,
-    enabled           boolean         not null,
-    img_path          text            not null,
-    name              varchar(255)    not null,
-    price             numeric(38, 2)  not null,
+    id                integer autoincrement,
+    enabled           boolean        not null,
+    img_path          text           not null,
+    name              varchar(255)   not null,
+    price             numeric(38, 2) not null,
     taxes             numeric(38, 2),
-    taxes_included    boolean         not null,
+    taxes_included    boolean        not null,
     category_name     varchar(255),
     sub_category_name varchar(255),
     taxes_type        integer,
@@ -82,7 +82,7 @@ create table pr_product
 
 create table pr_tax_type
 (
-    id          integer,
+    id          integer autoincrement,
     description varchar(255),
     name        varchar(255) not null,
     value       numeric(38, 2),
