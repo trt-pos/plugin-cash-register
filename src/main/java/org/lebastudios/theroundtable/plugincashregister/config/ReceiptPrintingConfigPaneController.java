@@ -34,13 +34,13 @@ public class ReceiptPrintingConfigPaneController extends ConfigPaneController<Re
         @Override
         public String toString()
         {
-            return LangFileLoader.getTranslation(switch (this)
+            return switch (this)
             {
                 case TINY -> LangFileLoader.getTranslation("plugincashregister.word.tiny");
                 case SMALL -> LangFileLoader.getTranslation("plugincashregister.word.small");
                 case MEDIUM -> LangFileLoader.getTranslation("plugincashregister.word.medium");
                 case LARGE -> LangFileLoader.getTranslation("plugincashregister.word.large");
-            });
+            };
         }
         
         public int toInt()
