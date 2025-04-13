@@ -44,9 +44,9 @@ public class CashRegisterPrinters
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
  
             escpos.writeLF(Styles.CENTERED,
-                    LangFileLoader.getTranslation("plugincashregister.word.date") + ": "
+                    LangFileLoader.getTranslation("word.date") + ": "
                             + receipt.getTransaction().getDate().toLocalDate().format(formatter) + "  " +
-                            LangFileLoader.getTranslation("plugincashregister.word.time") + ": " +
+                            LangFileLoader.getTranslation("word.time") + ": " +
                             receipt.getTransaction().getDate().toLocalTime().truncatedTo(ChronoUnit.SECONDS)
                                     .toString()
             );
@@ -63,7 +63,7 @@ public class CashRegisterPrinters
                 escpos.writeLF(LangFileLoader.getTranslation("plugincashregister.phrase.rectificationreceipt") +
                         ": " + receiptId
                 );
-                escpos.writeLF(LangFileLoader.getTranslation("plugincashregister.phrase.modifiesreceipt")
+                escpos.writeLF(LangFileLoader.getTranslation("plugincashregister.phrase.modifiedreceipt")
                         + ": " + oldReceiptId
                         + " " + LangFileLoader.getTranslation("plugincashregister.phrase.withdate") + " "
                         + oldReceipt.getTransaction().getDate().toLocalDate().format(formatter)

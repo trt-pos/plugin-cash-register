@@ -34,10 +34,11 @@ plugincashregister.word.tiny,Tiny,Enano
 plugincashregister.word.small,Small,Pequeño
 plugincashregister.word.medium,Medium,Mediano
 plugincashregister.word.large,Large,Grande
-plugincashregister.phrase.modifiesreceipt,Rectifies,Rectifica a
+plugincashregister.phrase.modifiedreceipt,Rectifies,Rectifica a
 plugincashregister.phrase.modifiedbyreceipt,Rectified by,Rectificada por
 plugincashregister.phrase.reason,Reason,Razon
 plugincashregister.phrase.withdate,with date,con fecha
 plugincashregister.phrase.rectificationreceipt,Rectification receipt,Factura rectificativa
 plugincashregister.word.splitted,Splitted,Separado
 plugincashregister.phrase.cashregisterisclosed,The Cash register is close. Try opening it first.,La Caja está cerrada. Pruebe a abrirla primero.
+plugincashregister.phrase.simplifiedreceipt,Simplified Receipt,Factura simplificada

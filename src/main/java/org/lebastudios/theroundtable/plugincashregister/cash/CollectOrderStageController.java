@@ -8,25 +8,28 @@ import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Modality;
-import javafx.stage.Stage;
+import lombok.AllArgsConstructor;
 import org.lebastudios.theroundtable.accounts.AccountManager;
 import org.lebastudios.theroundtable.apparience.UIEffects;
 import org.lebastudios.theroundtable.controllers.StageController;
 import org.lebastudios.theroundtable.database.Database;
-import org.lebastudios.theroundtable.dialogs.InformationTextDialogController;
-import org.lebastudios.theroundtable.locale.LangFileLoader;
+import org.lebastudios.theroundtable.dialogs.ExceptionDialogController;
 import org.lebastudios.theroundtable.maths.BigDecimalOperations;
 import org.lebastudios.theroundtable.plugincashregister.PluginCashRegisterEvents;
 import org.lebastudios.theroundtable.plugincashregister.entities.Receipt;
 import org.lebastudios.theroundtable.plugincashregister.printers.CashRegisterPrinters;
 import org.lebastudios.theroundtable.printers.OpenCashDrawer;
+import org.lebastudios.theroundtable.printers.PrintTask;
 import org.lebastudios.theroundtable.printers.PrinterManager;
+import org.lebastudios.theroundtable.tasks.Task;
 import org.lebastudios.theroundtable.ui.BigDecimalField;
 import org.lebastudios.theroundtable.ui.StageBuilder;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.function.Consumer;
+import java.util.function.Function;
 
 public class CollectOrderStageController extends StageController<CollectOrderStageController>
 {
@@ -101,19 +104,26 @@ public class CollectOrderStageController extends StageController<CollectOrderSta
     {
         saveReceiptInDatabase(receipt ->
         {
-            try (EscPos escpos = CashRegisterPrinters.getInstance()
-                    .printReceipt(receipt, PrinterManager.getInstance().getDefaultPrintService())
-            )
+            try
             {
-                escpos.feed(5).cut(EscPos.CutMode.PART);
+                EscPos escpos = CashRegisterPrinters.getInstance().printReceipt(
+                        receipt, 
+                        PrinterManager.getInstance().getDefaultPrintService()
+                );
+                
+                return new PrintTask(escpos)
+                {
+                    @Override
+                    protected EscPos print(EscPos escpos) throws IOException
+                    {
+                        return escpos;
+                    }
+                };
             }
-            catch (Exception exception)
+            catch (IOException e)
             {
-                exception.printStackTrace();
-                new InformationTextDialogController(String.format("%s\nException: %s",
-                        LangFileLoader.getTranslation("plugincashregister.textblock.errorprinting"),
-                        exception.getMessage()
-                )).instantiate();
+                new ExceptionDialogController(e).instantiate(true);
+                return null;
             }
         });
     }
@@ -121,64 +131,28 @@ public class CollectOrderStageController extends StageController<CollectOrderSta
     @FXML
     public void submit(ActionEvent actionEvent)
     {
-        saveReceiptInDatabase(_ ->
+        try (PrinterOutputStream outputStream = new PrinterOutputStream(
+                PrinterManager.getInstance().getDefaultPrintService()
+        ))
         {
-            try (EscPos escpos = new EscPos(
-                    new PrinterOutputStream(PrinterManager.getInstance().getDefaultPrintService())))
+            saveReceiptInDatabase(_ -> new PrintTask(new EscPos(outputStream))
             {
-                new OpenCashDrawer().print(escpos);
-            }
-            catch (Exception exception)
-            {
-                exception.printStackTrace();
-                new InformationTextDialogController(String.format("%s\nException: %s",
-                        LangFileLoader.getTranslation("plugincashregister.textblock.errorprinting"),
-                        exception.getMessage()
-                )).instantiate();
-            }
-        });
+                @Override
+                protected EscPos print(EscPos escpos) throws IOException
+                {
+                    return new OpenCashDrawer().print(escpos);
+                }
+            });
+        }
+        catch (IOException e)
+        {
+            new ExceptionDialogController(e).instantiate(true);
+        }
     }
 
-    private void saveReceiptInDatabase(Consumer<Receipt> printerAction)
+    private void saveReceiptInDatabase(Function<Receipt, PrintTask> printerAction)
     {
-        final var receipt = generateReceiptObject();
-        if (receipt == null) return;
-
-        boolean[] error = {false};
-
-        Database.getInstance().connectTransaction(session ->
-        {
-            try
-            {
-                receipt.setOrder(order, session);
-            }
-            catch (Exception exception)
-            {
-                exception.printStackTrace();
-                new InformationTextDialogController(String.format("%s\nException: %s",
-                        LangFileLoader.getTranslation("plugincashregister.textblock.errorsavingreceipt"),
-                        exception.getMessage()
-                )).instantiate();
-                session.getTransaction().rollback();
-                error[0] = true;
-            }
-        });
-
-        if (error[0]) return;
-
-        StringBuffer billNumber = new StringBuffer();
-        PluginCashRegisterEvents.onRequestNewReceiptBillNumber.invoke(receipt.getId(), billNumber);
-
-        if (!billNumber.isEmpty())
-        {
-            PluginCashRegisterEvents.onReceiptBilled.invoke(receipt, billNumber.toString());
-        }
-
-        printerAction.accept(receipt);
-        PluginCashRegisterEvents.onReceiptEmitted.invoke(receipt);
-
-        ((Stage) cashRadioButton.getScene().getWindow()).close();
-        onDone.accept(receipt);
+        new SaveReceiptAndPrintTask(printerAction).execute(true);
     }
 
     private Receipt generateReceiptObject()
@@ -242,5 +216,61 @@ public class CollectOrderStageController extends StageController<CollectOrderSta
     public String getTitle()
     {
         return "Collect Order";
+    }
+
+    @AllArgsConstructor
+    private class SaveReceiptAndPrintTask extends Task<Void>
+    {
+        private final Function<Receipt, PrintTask> printerAction;
+
+        @Override
+        protected Void call() throws Exception
+        {
+            updateTitle("Saving and printing");
+
+            updateMessage("Generating the receipt");
+            updateProgress(0, 1);
+            Receipt receipt = generateReceiptObject();
+
+            if (receipt == null) return null;
+
+            receipt.setOrder(order);
+            
+            updateMessage("Requesting bill number");
+            updateProgress(0.25, 1);
+            StringBuffer billNumber = new StringBuffer();
+            PluginCashRegisterEvents.onRequestNewReceiptBillNumber.invoke(receipt.getId(), billNumber);
+
+            if (!billNumber.isEmpty())
+            {
+                PluginCashRegisterEvents.onReceiptBilled.invoke(receipt, billNumber.toString());
+            }
+
+            updateMessage("Calling the printer");
+            updateProgress(0.50, 1);
+            PrintTask printTask = printerAction.apply(receipt);
+            
+            printTask.setOnTaskComplete(_ ->
+            {
+                updateMessage("Saving the receipt");
+                updateProgress(0.75, 1);
+                boolean success = Database.getInstance().connectTransactionWithBool(session ->
+                {
+                    session.persist(receipt);
+                });
+
+                if (!success) return;
+
+                updateMessage("Finishing the process");
+                updateProgress(0.95, 1);
+                PluginCashRegisterEvents.onReceiptEmitted.invoke(receipt);
+
+                CollectOrderStageController.this.close();
+                onDone.accept(receipt);
+            });
+            
+            executeSubtask(printTask);
+            return null;
+        }
     }
 }

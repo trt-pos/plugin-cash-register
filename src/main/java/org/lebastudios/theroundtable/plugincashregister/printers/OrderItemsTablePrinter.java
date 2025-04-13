@@ -30,9 +30,9 @@ public class OrderItemsTablePrinter implements IPrinter
         new InLinePrinter()
                 .concatLeft(LangFileLoader.getTranslation("plugincashregister.word.qty"), 6)
                 .concatLeft(" ")
-                .concatLeft(LangFileLoader.getTranslation("plugincashregister.word.product"), 22)
+                .concatLeft(LangFileLoader.getTranslation("word.product"), 22)
                 .concatRight(LangFileLoader.getTranslation("plugincashregister.word.price"), 8, EscPosConst.Justification.Left_Default)
-                .concatRight(LangFileLoader.getTranslation("plugincashregister.word.import"), 10, EscPosConst.Justification.Left_Default)
+                .concatRight(LangFileLoader.getTranslation("word.import"), 10, EscPosConst.Justification.Left_Default)
                 .print(escpos);
 
         new LineFiller("-").print(escpos);

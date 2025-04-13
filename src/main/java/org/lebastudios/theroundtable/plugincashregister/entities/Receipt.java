@@ -5,10 +5,10 @@ import javafx.scene.image.Image;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.Session;
 import org.lebastudios.theroundtable.apparience.ImageLoader;
 import org.lebastudios.theroundtable.database.entities.Account;
 import org.lebastudios.theroundtable.locale.LangFileLoader;
+import org.lebastudios.theroundtable.locale.LocaleManager;
 import org.lebastudios.theroundtable.plugincashregister.cash.Order;
 import org.lebastudios.theroundtable.plugincashregister.cash.OrderItem;
 
@@ -57,11 +57,11 @@ public class Receipt
 
     @OneToOne(mappedBy = "receipt", optional = false, cascade = CascadeType.PERSIST)
     @Setter private Transaction transaction;
-    
+
     /// When the receipt has been modified, this field will be set.
     @OneToOne(mappedBy = "superReceipt")
     ReceiptModification modifiedBy;
-    
+
     /// When this receipt is a modification of another receipt, this field will be set.
     @OneToOne(mappedBy = "newReceipt")
     ReceiptModification modifies;
@@ -81,7 +81,7 @@ public class Receipt
         clientIdentifier = identifier;
     }
 
-    public void setOrder(Order order, Session session)
+    public void setOrder(Order order)
     {
         tableName = order.getOrderName();
         taxesAmount = order.getTotalTaxes();
@@ -96,18 +96,19 @@ public class Receipt
             products.add(productReceipt);
         }
 
+        LocalDateTime now = LocalDateTime.now();
+
         Transaction transaction = new Transaction();
         transaction.setAmount(order.getTotal());
-        transaction.setDate(LocalDateTime.now());
+        transaction.setDate(now);
+        transaction.setDescription(
+                LangFileLoader.getTranslation("plugincashregister.word.receipt")
+                + " "
+                + LocaleManager.getInstance().getActualDateTimeFormatter().format(now)
+        );
+
         transaction.setReceipt(this);
         this.transaction = transaction;
-
-        session.persist(this);
-        session.flush();
-
-        transaction.setDescription(LangFileLoader.getTranslation("plugincashregister.word.receipt") + " #" + id);
-        session.merge(this);
-
     }
 
     public BigDecimal getTaxedTotal()
@@ -124,7 +125,7 @@ public class Receipt
     {
         if (clientName == null)
         {
-            return LangFileLoader.getTranslation("plugincashregister.phrase.generalpublicclient");
+            return LangFileLoader.getTranslation("phrase.generalpublicclient");
         }
         else
         {
@@ -143,11 +144,11 @@ public class Receipt
     {
         return ImageLoader.getIcon(status.getIconName());
     }
-    
+
     public enum Status
     {
-        DELETED, 
-        DEFAULT, 
+        DELETED,
+        DEFAULT,
         MODIFIED;
 
         public String getIconName()
