@@ -263,7 +263,7 @@ public class CashRegisterPaneController extends PaneController<CashRegisterPaneC
     {
         submitEditting(null);
 
-        new ConfirmationTextDialogController(LangFileLoader.getTranslation("textblock.resetorder"), r ->
+        new ConfirmationTextDialogController(LangFileLoader.getTranslation("plugincashregister.textblock.resetorder"), r ->
         {
             if (!r) return;
 

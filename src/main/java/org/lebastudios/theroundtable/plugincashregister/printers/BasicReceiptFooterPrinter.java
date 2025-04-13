@@ -14,7 +14,7 @@ public class BasicReceiptFooterPrinter implements IPrinter
     public EscPos print(EscPos escpos) throws IOException
     {
         var centered = new Style().setBold(true).setJustification(EscPosConst.Justification.Center);
-        escpos.writeLF(centered, LangFileLoader.getTranslation("ticket.footerbye"));
+        escpos.writeLF(centered, LangFileLoader.getTranslation("plugincashregister.ticket.footerbye"));
         return escpos;
     }
 }

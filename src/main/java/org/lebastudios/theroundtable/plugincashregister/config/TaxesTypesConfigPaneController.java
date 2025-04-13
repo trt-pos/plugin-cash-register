@@ -114,7 +114,7 @@ public class TaxesTypesConfigPaneController extends ConfigPaneController<NoConfi
                 if (!instance.getProducts().isEmpty())
                 {
                     new InformationTextDialogController(
-                            LangFileLoader.getTranslation("textblock.taxestypeisbeingused")
+                            LangFileLoader.getTranslation("plugincashregister.textblock.taxestypeisbeingused")
                     ).instantiate();
                     return;
                 }

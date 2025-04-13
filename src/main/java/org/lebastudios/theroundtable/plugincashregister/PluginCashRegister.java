@@ -54,20 +54,6 @@ public class PluginCashRegister implements IPlugin
     {
         instance = this;
 
-        AppLifeCicleEvents.OnAppCloseRequest.addListener(windowEvent ->
-        {
-            if (windowEvent.isConsumed()) return;
-
-            var cashRegisterState = new CashRegisterStateData().load();
-            if (cashRegisterState.open)
-            {
-                windowEvent.consume();
-                new InformationTextDialogController(
-                        LangFileLoader.getTranslation("textblock.needtoclosethecashregister")
-                ).instantiate();
-            }
-        });
-
         PluginCashRegisterEvents.showOrder.addListener(order ->
         {
             var cashRegisterState = new CashRegisterStateData().load();

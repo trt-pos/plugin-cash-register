@@ -111,7 +111,7 @@ public class CollectOrderStageController extends StageController<CollectOrderSta
             {
                 exception.printStackTrace();
                 new InformationTextDialogController(String.format("%s\nException: %s",
-                        LangFileLoader.getTranslation("textblock.errorprinting"),
+                        LangFileLoader.getTranslation("plugincashregister.textblock.errorprinting"),
                         exception.getMessage()
                 )).instantiate();
             }
@@ -132,7 +132,7 @@ public class CollectOrderStageController extends StageController<CollectOrderSta
             {
                 exception.printStackTrace();
                 new InformationTextDialogController(String.format("%s\nException: %s",
-                        LangFileLoader.getTranslation("textblock.errorprinting"),
+                        LangFileLoader.getTranslation("plugincashregister.textblock.errorprinting"),
                         exception.getMessage()
                 )).instantiate();
             }
@@ -156,7 +156,7 @@ public class CollectOrderStageController extends StageController<CollectOrderSta
             {
                 exception.printStackTrace();
                 new InformationTextDialogController(String.format("%s\nException: %s",
-                        LangFileLoader.getTranslation("textblock.errorsavingreceipt"),
+                        LangFileLoader.getTranslation("plugincashregister.textblock.errorsavingreceipt"),
                         exception.getMessage()
                 )).instantiate();
                 session.getTransaction().rollback();
