@@ -8,6 +8,7 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
+import org.lebastudios.theroundtable.apparience.UIEffects;
 import org.lebastudios.theroundtable.config.ConfigPaneController;
 import org.lebastudios.theroundtable.config.NoConfigFile;
 import org.lebastudios.theroundtable.database.Database;
@@ -15,7 +16,7 @@ import org.lebastudios.theroundtable.dialogs.InformationTextDialogController;
 import org.lebastudios.theroundtable.locale.LangFileLoader;
 import org.lebastudios.theroundtable.plugincashregister.entities.TaxType;
 import org.lebastudios.theroundtable.plugincashregister.products.ModifyTaxTypeStageController;
-import org.lebastudios.theroundtable.plugincashregister.products.TaxTypeCreatorStageController;
+import org.lebastudios.theroundtable.plugincashregister.products.NewTaxTypeStageController;
 import org.lebastudios.theroundtable.ui.IconButton;
 
 import java.util.List;
@@ -23,6 +24,7 @@ import java.util.List;
 public class TaxesTypesConfigPaneController extends ConfigPaneController<NoConfigFile>
 {
     @FXML public VBox taxesTypesContainer;
+    @FXML public IconButton plusButton;
 
     public TaxesTypesConfigPaneController()
     {
@@ -41,6 +43,12 @@ public class TaxesTypesConfigPaneController extends ConfigPaneController<NoConfi
     @Override
     public boolean validate()
     {
+        if (taxesTypesContainer.getChildren().isEmpty())
+        {
+            UIEffects.shakeNode(plusButton);
+            return false;
+        }
+        
         return true;
     }
 
@@ -62,7 +70,9 @@ public class TaxesTypesConfigPaneController extends ConfigPaneController<NoConfi
     @FXML
     public void plusButtonAction(ActionEvent actionEvent)
     {
-        new TaxTypeCreatorStageController().instantiate(true);
+        new NewTaxTypeStageController()
+                .setOwner(this.getStage())
+                .instantiate(true);
         updateTaxesTypesContainer();
     }
 
@@ -86,7 +96,9 @@ public class TaxesTypesConfigPaneController extends ConfigPaneController<NoConfi
         IconButton edit = new IconButton("edit.png");
         edit.setOnAction(_ ->
         {
-            new ModifyTaxTypeStageController(taxType).instantiate(true);
+            new ModifyTaxTypeStageController(taxType)
+                    .setOwner(this.getStage())
+                    .instantiate(true);
             updateTaxesTypesContainer();
         });
 

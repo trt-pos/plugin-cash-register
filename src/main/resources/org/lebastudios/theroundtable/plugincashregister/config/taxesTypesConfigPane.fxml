@@ -7,6 +7,7 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
 <VBox fx:id="root" spacing="15" xmlns="http://javafx.com/javafx/17.0.12"
+      fx:controller="org.lebastudios.theroundtable.plugincashregister.config.TaxesTypesConfigPaneController"
       xmlns:fx="http://javafx.com/fxml/1">
     <padding>
         <Insets top="10" right="10" bottom="10" left="10"/>
@@ -22,7 +23,7 @@
                 </VBox>
             </content>
         </ScrollPane>
-        <IconButton iconName="plus.png" StackPane.alignment="BOTTOM_RIGHT" onAction="#plusButtonAction">
+        <IconButton fx:id="plusButton" iconName="plus.png" StackPane.alignment="BOTTOM_RIGHT" onAction="#plusButtonAction">
             <StackPane.margin>
                 <Insets bottom="5" right="5"/>
             </StackPane.margin>

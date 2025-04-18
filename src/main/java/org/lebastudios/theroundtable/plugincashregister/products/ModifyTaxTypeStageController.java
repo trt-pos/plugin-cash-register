@@ -4,24 +4,14 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
-import org.lebastudios.theroundtable.apparience.UIEffects;
-import org.lebastudios.theroundtable.controllers.StageController;
 import org.lebastudios.theroundtable.database.Database;
 import org.lebastudios.theroundtable.maths.BigDecimalOperations;
-import org.lebastudios.theroundtable.plugincashregister.PluginCashRegister;
 import org.lebastudios.theroundtable.plugincashregister.entities.TaxType;
 
 import java.math.BigDecimal;
-import java.net.URL;
 
-public class ModifyTaxTypeStageController extends StageController<ModifyTaxTypeStageController>
+public class ModifyTaxTypeStageController extends TaxTypeStageController
 {
-    @FXML public TextField nameField;
-    @FXML public TextField taxField;
-    @FXML public TextArea descriptionField;
-    
-    private final TaxType taxType;
-    
     public ModifyTaxTypeStageController(TaxType taxType)
     {
         this.taxType = taxType;
@@ -36,6 +26,7 @@ public class ModifyTaxTypeStageController extends StageController<ModifyTaxTypeS
     }
 
     @FXML
+    @Override
     public void saveButtonAction(ActionEvent actionEvent)
     {
         if (!validateData()) return;
@@ -54,37 +45,6 @@ public class ModifyTaxTypeStageController extends StageController<ModifyTaxTypeS
         cancelButtonAction(actionEvent);
     }
 
-    @FXML
-    public void cancelButtonAction(ActionEvent actionEvent)
-    {
-        close();
-    }
-    
-    private boolean validateData()
-    {
-        nameField.setText(nameField.getText().trim());
-        descriptionField.setText(descriptionField.getText().trim());
-        taxField.setText(taxField.getText().trim());
-
-        if (nameField.getText().isBlank())
-        {
-            UIEffects.shakeNode(nameField);
-            return false;
-        }
-
-        try
-        {
-            new BigDecimal(taxField.getText());
-        }
-        catch (Exception exception)
-        {
-            UIEffects.shakeNode(taxField);
-            return false;
-        }
-
-        return true;
-    }
-    
     @Override
     public String getTitle()
     {

@@ -1,5 +1,6 @@
 package org.lebastudios.theroundtable.plugincashregister.products;
 
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -8,10 +9,14 @@ import javafx.util.StringConverter;
 import lombok.SneakyThrows;
 import org.controlsfx.control.textfield.TextFields;
 import org.hibernate.Session;
+import org.lebastudios.theroundtable.TheRoundTableApplication;
 import org.lebastudios.theroundtable.apparience.ImageLoader;
 import org.lebastudios.theroundtable.apparience.UIEffects;
+import org.lebastudios.theroundtable.config.RequestConfigStageController;
 import org.lebastudios.theroundtable.controllers.StageController;
 import org.lebastudios.theroundtable.database.Database;
+import org.lebastudios.theroundtable.locale.LangFileLoader;
+import org.lebastudios.theroundtable.plugincashregister.config.TaxesTypesConfigPaneController;
 import org.lebastudios.theroundtable.plugincashregister.entities.Category;
 import org.lebastudios.theroundtable.plugincashregister.entities.Product;
 import org.lebastudios.theroundtable.plugincashregister.entities.SubCategory;
@@ -23,6 +28,7 @@ import org.lebastudios.theroundtable.ui.StageBuilder;
 
 import java.io.File;
 import java.util.HashSet;
+import java.util.List;
 
 public abstract class ProductStageController extends StageController<ProductStageController>
 {
@@ -45,14 +51,7 @@ public abstract class ProductStageController extends StageController<ProductStag
     {
         new Thread(() -> Database.getInstance().connectQuery(session ->
         {
-            // Loading TaxesTypes from the database
             taxes.getItems().clear();
-            taxes.getItems().addAll(session.createQuery("FROM TaxType", TaxType.class).list());
-            if (!taxes.getItems().isEmpty())
-            {
-                taxes.selectionModelProperty().get().select(0);
-            }
-            
             taxes.setConverter(new StringConverter<>()
             {
                 @Override
@@ -61,6 +60,23 @@ public abstract class ProductStageController extends StageController<ProductStag
                 @Override
                 public TaxType fromString(String string) {return null;}
             });
+            
+            List<TaxType> taxesList = session.createQuery("FROM TaxType", TaxType.class).list();
+            
+            if (taxesList.isEmpty())
+            {
+                TheRoundTableApplication.executeInFxThreadAndWait(() ->
+                {
+                    new RequestConfigStageController(new TaxesTypesConfigPaneController())
+                            .setOwner(this.getStage())
+                            .setTitle(LangFileLoader.getTranslation("plugincashregister.reqconfig.notaxtypes"))
+                            .instantiate(true);
+                });
+
+                taxesList = session.createQuery("FROM TaxType", TaxType.class).list();
+            }
+            taxes.getItems().addAll(taxesList);
+            Platform.runLater(() -> taxes.selectionModelProperty().get().select(0));
 
             // Loading Categories and SubCategories from the database
             var categories = session.createQuery("SELECT name FROM Category", String.class).list();
@@ -75,7 +91,7 @@ public abstract class ProductStageController extends StageController<ProductStag
     @FXML
     public void openImageSelector(ActionEvent actionEvent)
     {
-        var result = ImageLoader.showImageChooser(this.getStage().getOwner());
+        var result = ImageLoader.showImageChooser(this.getStage());
         
         if (result == null) return;
         

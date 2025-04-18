@@ -23,7 +23,6 @@ plugincashregister.word.at,at,a las
 plugincashregister.word.transactions,Transactions,Transacciones
 plugincashregister.word.change,Change,Cambio
 plugincashregister.phrase.receiptprinterconfig,Printing settings,Ajustes de impresión
-plugincashregister.phrase.taxestypes,Taxes types,Tipos de impuestos
 plugincashregister.textblock.taxestypeisbeingused,This tax type is being used by some products. You can't delete it.,Este tipos impositivo esta actualemnte siendo usado por algún producto y no puede ser eliminado.
 plugincashregister.ticket.footerbye,Thank you for visiting,Gracias por su visita 
 plugincashregister.phrase.lastcollected,Last collected:,Último cobrado:
@@ -42,3 +41,4 @@ plugincashregister.phrase.rectificationreceipt,Rectification receipt,Factura rec
 plugincashregister.word.splitted,Splitted,Separado
 plugincashregister.phrase.cashregisterisclosed,The Cash register is close. Try opening it first.,La Caja está cerrada. Pruebe a abrirla primero.
 plugincashregister.phrase.simplifiedreceipt,Simplified Receipt,Factura simplificada
+plugincashregister.reqconfig.notaxtypes,Create a tax type,Crea un impuesto
