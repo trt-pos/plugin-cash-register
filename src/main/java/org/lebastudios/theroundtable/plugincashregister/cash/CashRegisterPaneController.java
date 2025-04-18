@@ -263,12 +263,13 @@ public class CashRegisterPaneController extends PaneController<CashRegisterPaneC
     {
         submitEditting(null);
 
-        new ConfirmationTextDialogController(LangFileLoader.getTranslation("plugincashregister.textblock.resetorder"), r ->
-        {
-            if (!r) return;
+        new ConfirmationTextDialogController(LangFileLoader.getTranslation("plugincashregister.textblock.resetorder"),
+                r ->
+                {
+                    if (!r) return;
 
-            CashRegister.getInstance().resetActualOrder();
-        }).instantiate();
+                    CashRegister.getInstance().resetActualOrder();
+                }).instantiate();
     }
 
     @FXML
@@ -276,11 +277,13 @@ public class CashRegisterPaneController extends PaneController<CashRegisterPaneC
     {
         submitEditting(null);
 
-        new CollectOrderStageController(CashRegister.getInstance().getActualOrder(), receipt ->
+        final CashRegister cashRegister = CashRegister.getInstance();
+        new CollectOrderStageController(cashRegister.getActualOrder(), receipt ->
         {
             updateLastCollectedReceipt(receipt);
 
-            CashRegister.getInstance().resetActualOrder();
+            cashRegister.resetActualOrder();
+            cashRegister.swapOrder(cashRegister.getCashRegisterOrder());
         }).instantiate();
     }
 
@@ -295,11 +298,18 @@ public class CashRegisterPaneController extends PaneController<CashRegisterPaneC
                 {
                     updateLastCollectedReceipt(receipt);
 
-                    for (OrderItem orderItem : generated.getOrderItems())
+                    for (var item : generated.getOrderItems())
                     {
-                        original.removeOrderItem(orderItem);
+                        original.removeOrderItem(item);
                     }
-                }).instantiate()).instantiate();
+                    
+                    if (original.getOrderItems().isEmpty()) 
+                    {
+                        CashRegister.getInstance().swapOrder(CashRegister.getInstance().getCashRegisterOrder());
+                    }
+                    
+                }).instantiate()
+        ).instantiate();
     }
 
     private void updateLastCollectedReceipt(Receipt receipt)
