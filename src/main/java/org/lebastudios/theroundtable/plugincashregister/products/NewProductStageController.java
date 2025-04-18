@@ -12,7 +12,7 @@ public class NewProductStageController extends ProductStageController
     @Override
     public String getTitle()
     {
-        return LangFileLoader.getTranslation("title.createnewproduct");
+        return LangFileLoader.getTranslation("plugincashregister.title.createnewproduct");
     }
 
     @Override

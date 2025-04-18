@@ -21,7 +21,7 @@ public class ModifyProductStageController extends ProductStageController
     @Override
     public String getTitle()
     {
-        return LangFileLoader.getTranslation("title.modifyproduct");
+        return LangFileLoader.getTranslation("plugincashregister.title.modifyproduct");
     }
 
     @Override

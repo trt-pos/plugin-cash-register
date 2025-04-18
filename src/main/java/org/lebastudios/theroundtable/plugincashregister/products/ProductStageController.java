@@ -48,6 +48,11 @@ public abstract class ProductStageController extends StageController<ProductStag
             // Loading TaxesTypes from the database
             taxes.getItems().clear();
             taxes.getItems().addAll(session.createQuery("FROM TaxType", TaxType.class).list());
+            if (!taxes.getItems().isEmpty())
+            {
+                taxes.selectionModelProperty().get().select(0);
+            }
+            
             taxes.setConverter(new StringConverter<>()
             {
                 @Override
@@ -179,4 +184,11 @@ public abstract class ProductStageController extends StageController<ProductStag
     
     @FXML
     public abstract void mainButtonAction(ActionEvent actionEvent);
+
+    @Override
+    protected void loadFXML()
+    {
+        root = new org.lebastudios.theroundtable.plugincashregister.products.ProductStage$View(this);
+        this.initialize();
+    }
 }
