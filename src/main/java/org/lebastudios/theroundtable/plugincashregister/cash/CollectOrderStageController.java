@@ -14,6 +14,8 @@ import org.lebastudios.theroundtable.apparience.UIEffects;
 import org.lebastudios.theroundtable.controllers.StageController;
 import org.lebastudios.theroundtable.database.Database;
 import org.lebastudios.theroundtable.dialogs.ExceptionDialogController;
+import org.lebastudios.theroundtable.dialogs.InformationTextDialogController;
+import org.lebastudios.theroundtable.locale.LangFileLoader;
 import org.lebastudios.theroundtable.maths.BigDecimalOperations;
 import org.lebastudios.theroundtable.plugincashregister.PluginCashRegisterEvents;
 import org.lebastudios.theroundtable.plugincashregister.entities.Receipt;
@@ -241,11 +243,6 @@ public class CollectOrderStageController extends StageController<CollectOrderSta
             StringBuffer billNumber = new StringBuffer();
             PluginCashRegisterEvents.onRequestNewReceiptBillNumber.invoke(receipt.getId(), billNumber);
 
-            if (!billNumber.isEmpty())
-            {
-                PluginCashRegisterEvents.onReceiptBilled.invoke(receipt, billNumber.toString());
-            }
-
             updateMessage("Calling the printer");
             updateProgress(0.50, 1);
             PrintTask printTask = printerAction.apply(receipt);
@@ -259,8 +256,21 @@ public class CollectOrderStageController extends StageController<CollectOrderSta
                     session.persist(receipt);
                 });
 
-                if (!success) return;
+                if (!success)
+                {
+                    new InformationTextDialogController(
+                            LangFileLoader.getTranslation("plugincashregister.textblock.errorsavingreceipt")
+                    ).instantiate(true);
+                    return;
+                }
 
+                updateMessage("Billing the receipt");
+                updateProgress(0.85, 1);
+                if (!billNumber.isEmpty())
+                {
+                    PluginCashRegisterEvents.onReceiptBilled.invoke(receipt, billNumber.toString());
+                }
+                
                 updateMessage("Finishing the process");
                 updateProgress(0.95, 1);
                 PluginCashRegisterEvents.onReceiptEmitted.invoke(receipt);
