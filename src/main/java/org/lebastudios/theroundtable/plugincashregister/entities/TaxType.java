@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
+import lombok.Setter;
 import org.lebastudios.theroundtable.database.Database;
 
 import java.math.BigDecimal;
@@ -11,6 +12,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Getter
+@Setter
 @NoArgsConstructor
 @Entity
 @Table(name = "pr_tax_type")
@@ -27,7 +29,7 @@ public class TaxType
     /**
      * The tax value. It is a number between 0 and 1.
      */
-    @Column(name = "value") 
+    @Column(name = "value", nullable = false) 
     private BigDecimal value = new BigDecimal("0.10");
 
     @Column(name = "description") 
@@ -38,19 +40,19 @@ public class TaxType
 
     public TaxType(@NonNull String name, @NonNull BigDecimal value, String description)
     {
-        setProperties(name, value, description);
+        setName(name);
+        setValue(value);
+        setDescription(description);
     }
 
-    public void setProperties(@NonNull String name, @NonNull BigDecimal value, String description)
+    public void setValue(BigDecimal value)
     {
         if (value.compareTo(BigDecimal.ZERO) < 0 || value.compareTo(BigDecimal.ONE) > 0)
         {
             throw new IllegalArgumentException("The value must be between 0 and 1 (Both included).");
         }
-
-        this.name = name;
+        
         this.value = value;
-        this.description = description;
     }
     
     public static boolean isNameAvailable(String name)

@@ -3,6 +3,7 @@ package org.lebastudios.theroundtable.plugincashregister.config;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
@@ -12,13 +13,14 @@ import org.lebastudios.theroundtable.apparience.UIEffects;
 import org.lebastudios.theroundtable.config.ConfigPaneController;
 import org.lebastudios.theroundtable.config.NoConfigFile;
 import org.lebastudios.theroundtable.database.Database;
-import org.lebastudios.theroundtable.dialogs.InformationTextDialogController;
+import org.lebastudios.theroundtable.dialogs.EntityFormDialogController;
 import org.lebastudios.theroundtable.locale.LangFileLoader;
+import org.lebastudios.theroundtable.maths.BigDecimalOperations;
 import org.lebastudios.theroundtable.plugincashregister.entities.TaxType;
-import org.lebastudios.theroundtable.plugincashregister.products.ModifyTaxTypeStageController;
-import org.lebastudios.theroundtable.plugincashregister.products.NewTaxTypeStageController;
+import org.lebastudios.theroundtable.plugincashregister.forms.TaxTypeFormPaneController;
 import org.lebastudios.theroundtable.ui.IconButton;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 public class TaxesTypesConfigPaneController extends ConfigPaneController<NoConfigFile>
@@ -48,7 +50,7 @@ public class TaxesTypesConfigPaneController extends ConfigPaneController<NoConfi
             UIEffects.shakeNode(plusButton);
             return false;
         }
-        
+
         return true;
     }
 
@@ -70,72 +72,55 @@ public class TaxesTypesConfigPaneController extends ConfigPaneController<NoConfi
     @FXML
     public void plusButtonAction(ActionEvent actionEvent)
     {
-        new NewTaxTypeStageController()
+        new EntityFormDialogController<>(new TaxTypeFormPaneController(), new TaxType())
                 .setOwner(this.getStage())
                 .instantiate(true);
+
         updateTaxesTypesContainer();
     }
 
     private Node createTaxesTypeNode(TaxType taxType)
     {
         HBox root = new HBox();
-        root.spacingProperty().setValue(10);
+        root.setSpacing(25);
         root.getStyleClass().add("button");
-
-        VBox left = new VBox();
-        left.setSpacing(5);
+        root.setAlignment(Pos.CENTER_LEFT);
+        
+        Label value = new Label(
+                taxType.getValue().multiply(BigDecimal.valueOf(100)) + " %"
+        );
+        value.setStyle("-fx-font-weight: bold; -fx-font-size: 20px;");
+        
+        VBox namesAndDescription = new VBox();
+        namesAndDescription.setSpacing(5);
         Label name = new Label(taxType.getName());
         name.setStyle("-fx-font-weight: bold; -fx-font-size: 16px;");
-        left.getChildren().add(name);
+        namesAndDescription.getChildren().add(name);
         Label description = new Label(taxType.getDescription());
         description.setWrapText(true);
-        left.getChildren().add(description);
+        namesAndDescription.getChildren().add(description);
 
-        HBox.setHgrow(left, Priority.ALWAYS);
+        HBox.setHgrow(namesAndDescription, Priority.ALWAYS);
 
-        IconButton edit = new IconButton("edit.png");
-        edit.setOnAction(_ ->
+        root.setOnMouseClicked(_ ->
         {
-            new ModifyTaxTypeStageController(taxType)
-                    .setOwner(this.getStage())
-                    .instantiate(true);
-            updateTaxesTypesContainer();
-        });
+            var formController = new EntityFormDialogController<>(new TaxTypeFormPaneController(), taxType)
+                    .setOwner(this.getStage());
+            formController.getRoot();
 
-        final var delete = getDeleteButton(taxType);
-
-        root.getChildren().addAll(left, edit, delete);
-
-        return root;
-    }
-
-    private IconButton getDeleteButton(TaxType taxType)
-    {
-        IconButton delete = new IconButton("delete.png");
-        delete.setOnAction(_ ->
-        {
-            Database.getInstance().connectTransaction(session ->
+            boolean isBeingUse = Database.getInstance().connectQuery(session ->
             {
-                TaxType instance = session.get(TaxType.class, taxType.getId());
-                if (instance == null)
-                {
-                    new InformationTextDialogController("Something went wrong. Please try again.").instantiate();
-                    return;
-                }
-
-                if (!instance.getProducts().isEmpty())
-                {
-                    new InformationTextDialogController(
-                            LangFileLoader.getTranslation("plugincashregister.textblock.taxestypeisbeingused")
-                    ).instantiate();
-                    return;
-                }
-
-                session.remove(instance);
+                return !session.get(TaxType.class, taxType.getId()).getProducts().isEmpty();
             });
+            
+            formController.deleteButton.setDisable(isBeingUse);
+            formController.instantiate(true);
 
             updateTaxesTypesContainer();
         });
-        return delete;
+
+        root.getChildren().addAll(value, namesAndDescription);
+        
+        return root;
     }
 }

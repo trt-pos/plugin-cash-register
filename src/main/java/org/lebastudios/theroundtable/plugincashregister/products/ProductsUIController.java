@@ -19,13 +19,11 @@ import org.lebastudios.theroundtable.events.IEventMethod1;
 import org.lebastudios.theroundtable.plugincashregister.PluginCashRegisterEvents;
 import org.lebastudios.theroundtable.plugincashregister.entities.Product;
 import org.lebastudios.theroundtable.locale.LangFileLoader;
-import org.lebastudios.theroundtable.plugincashregister.PluginCashRegister;
+import org.lebastudios.theroundtable.plugincashregister.forms.ProductFormPaneController;
 import org.lebastudios.theroundtable.ui.LoadingPaneController;
 import org.lebastudios.theroundtable.ui.SearchBox;
 
-import java.net.URL;
 import java.util.*;
-import java.util.function.Consumer;
 
 public class ProductsUIController extends PaneController<ProductsUIController>
 {

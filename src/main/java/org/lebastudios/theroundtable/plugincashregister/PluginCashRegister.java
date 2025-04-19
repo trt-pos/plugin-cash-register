@@ -19,7 +19,7 @@ import org.lebastudios.theroundtable.plugincashregister.config.CashRegisterState
 import org.lebastudios.theroundtable.plugincashregister.config.ReceiptPrintingConfigPaneController;
 import org.lebastudios.theroundtable.plugincashregister.config.TaxesTypesConfigPaneController;
 import org.lebastudios.theroundtable.plugincashregister.entities.*;
-import org.lebastudios.theroundtable.plugincashregister.products.ProductFormPaneController;
+import org.lebastudios.theroundtable.plugincashregister.forms.ProductFormPaneController;
 import org.lebastudios.theroundtable.plugincashregister.products.ProductPaneController;
 import org.lebastudios.theroundtable.plugincashregister.products.ProductsUIController;
 import org.lebastudios.theroundtable.plugins.IPlugin;
@@ -32,6 +32,7 @@ import java.util.List;
         directories = {
                 "org/lebastudios/theroundtable/plugincashregister/cash",
                 "org/lebastudios/theroundtable/plugincashregister/config",
+                "org/lebastudios/theroundtable/plugincashregister/forms",
                 "org/lebastudios/theroundtable/plugincashregister/products",
         }
 )

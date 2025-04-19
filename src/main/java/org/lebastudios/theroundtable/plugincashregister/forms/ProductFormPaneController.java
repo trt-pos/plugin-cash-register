@@ -1,4 +1,4 @@
-package org.lebastudios.theroundtable.plugincashregister.products;
+package org.lebastudios.theroundtable.plugincashregister.forms;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;

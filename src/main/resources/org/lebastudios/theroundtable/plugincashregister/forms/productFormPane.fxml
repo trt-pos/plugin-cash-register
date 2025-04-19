@@ -8,7 +8,7 @@
 <?import org.lebastudios.theroundtable.ui.IconButton?>
 <?import org.lebastudios.theroundtable.ui.IconView?>
 <GridPane xmlns:fx="http://javafx.com/fxml/1" maxWidth="Infinity" maxHeight="Infinity"
-          fx:controller="org.lebastudios.theroundtable.plugincashregister.products.ProductFormPaneController"
+          fx:controller="org.lebastudios.theroundtable.plugincashregister.forms.ProductFormPaneController"
           hgap="15" vgap="15" xmlns="http://javafx.com/javafx/17.0.2-ea">
     <padding>
         <Insets bottom="15.0" left="15.0" right="15.0" top="15.0"/>
