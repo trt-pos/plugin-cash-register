@@ -40,7 +40,7 @@ public class Product implements Cloneable
     @Column(name = "enabled", nullable = false)
     private boolean enabled = true;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     @JoinColumn(name = "category_name", referencedColumnName = "category_name")
     @JoinColumn(name = "sub_category_name", referencedColumnName = "name")
     private SubCategory subCategory;

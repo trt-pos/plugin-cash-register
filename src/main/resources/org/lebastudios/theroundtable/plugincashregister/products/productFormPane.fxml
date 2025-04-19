@@ -8,7 +8,7 @@
 <?import org.lebastudios.theroundtable.ui.IconButton?>
 <?import org.lebastudios.theroundtable.ui.IconView?>
 <GridPane xmlns:fx="http://javafx.com/fxml/1" maxWidth="Infinity" maxHeight="Infinity"
-          fx:controller="org.lebastudios.theroundtable.plugincashregister.products.ProductStageController"
+          fx:controller="org.lebastudios.theroundtable.plugincashregister.products.ProductFormPaneController"
           hgap="15" vgap="15" xmlns="http://javafx.com/javafx/17.0.2-ea">
     <padding>
         <Insets bottom="15.0" left="15.0" right="15.0" top="15.0"/>
@@ -73,12 +73,4 @@
     <CheckBox fx:id="taxesIncluded" graphicTextGap="16.0" mnemonicParsing="false" selected="true"
               text="%plugincashregister.word.taxesincluded" maxHeight="Infinity" maxWidth="Infinity"
               GridPane.columnIndex="3" GridPane.columnSpan="2" GridPane.rowIndex="4"/>
-
-    <HBox alignment="CENTER_RIGHT" spacing="15" maxHeight="Infinity" maxWidth="Infinity"
-          GridPane.columnIndex="2" GridPane.columnSpan="3" GridPane.rowIndex="5">
-        <IconButton visible="false" maxHeight="Infinity" maxWidth="Infinity" fx:id="deleteButton"
-                    iconName="delete.png"/>
-        <Button prefWidth="125" fx:id="mainButton" mnemonicParsing="false" onAction="#mainButtonAction"
-                maxHeight="Infinity" maxWidth="Infinity" defaultButton="true" text="%plugincashregister.word.create"/>
-    </HBox>
 </GridPane>

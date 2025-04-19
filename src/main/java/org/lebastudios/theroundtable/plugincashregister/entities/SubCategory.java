@@ -19,7 +19,7 @@ public class SubCategory
     private SubCategoryId id;
 
     @MapsId("categoryName")
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     @JoinColumn(name = "category_name", referencedColumnName = "name")
     private Category category;
 

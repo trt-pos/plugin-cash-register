@@ -6,8 +6,8 @@ import javafx.scene.control.TreeItem;
 import lombok.SneakyThrows;
 import org.lebastudios.theroundtable.MainStageController;
 import org.lebastudios.theroundtable.config.SettingsItem;
+import org.lebastudios.theroundtable.dialogs.EntityFormDialogController;
 import org.lebastudios.theroundtable.dialogs.InformationTextDialogController;
-import org.lebastudios.theroundtable.events.AppLifeCicleEvents;
 import org.lebastudios.theroundtable.events.Event1;
 import org.lebastudios.theroundtable.events.Event2;
 import org.lebastudios.theroundtable.events.PluginEvents;
@@ -19,7 +19,7 @@ import org.lebastudios.theroundtable.plugincashregister.config.CashRegisterState
 import org.lebastudios.theroundtable.plugincashregister.config.ReceiptPrintingConfigPaneController;
 import org.lebastudios.theroundtable.plugincashregister.config.TaxesTypesConfigPaneController;
 import org.lebastudios.theroundtable.plugincashregister.entities.*;
-import org.lebastudios.theroundtable.plugincashregister.products.ModifyProductStageController;
+import org.lebastudios.theroundtable.plugincashregister.products.ProductFormPaneController;
 import org.lebastudios.theroundtable.plugincashregister.products.ProductPaneController;
 import org.lebastudios.theroundtable.plugincashregister.products.ProductsUIController;
 import org.lebastudios.theroundtable.plugins.IPlugin;
@@ -160,7 +160,11 @@ public class PluginCashRegister implements IPlugin
 
         newButton.setOnMouseClicked(_ ->
         {
-            ProductPaneController.onAction = product -> new ModifyProductStageController(product).instantiate();
+            ProductPaneController.onAction = product -> new EntityFormDialogController<>(
+                    new ProductFormPaneController(), 
+                    product
+            ).setOwner(MainStageController.getInstance().getStage()).instantiate();
+            
             MainStageController.getInstance().setCentralNode(new ProductsUIController(true));
         });
 

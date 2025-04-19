@@ -14,6 +14,7 @@ import javafx.scene.layout.VBox;
 import org.hibernate.query.Query;
 import org.lebastudios.theroundtable.controllers.PaneController;
 import org.lebastudios.theroundtable.database.Database;
+import org.lebastudios.theroundtable.dialogs.EntityFormDialogController;
 import org.lebastudios.theroundtable.events.IEventMethod1;
 import org.lebastudios.theroundtable.plugincashregister.PluginCashRegisterEvents;
 import org.lebastudios.theroundtable.plugincashregister.entities.Product;
@@ -139,7 +140,7 @@ public class ProductsUIController extends PaneController<ProductsUIController>
 
         Database.getInstance().connectQuery(session ->
         {
-            String hql = "FROM Product p WHERE 1=1";
+            String hql = "FROM Product p WHERE 1 = 1";
 
             if (!showDiabledProducts)
             {
@@ -184,6 +185,8 @@ public class ProductsUIController extends PaneController<ProductsUIController>
     @FXML
     public void createNewProductWindow(ActionEvent actionEvent)
     {
-        new NewProductStageController().instantiate();
+        new EntityFormDialogController<>(new ProductFormPaneController(), new Product())
+                .setOwner(this.getStage())
+                .instantiate();
     }
 }

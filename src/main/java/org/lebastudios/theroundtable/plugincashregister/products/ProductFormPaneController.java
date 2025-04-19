@@ -1,36 +1,34 @@
 package org.lebastudios.theroundtable.plugincashregister.products;
 
-import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
-import javafx.stage.Modality;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.TextField;
 import javafx.util.StringConverter;
 import lombok.SneakyThrows;
 import org.controlsfx.control.textfield.TextFields;
-import org.hibernate.Session;
 import org.lebastudios.theroundtable.TheRoundTableApplication;
 import org.lebastudios.theroundtable.apparience.ImageLoader;
 import org.lebastudios.theroundtable.apparience.UIEffects;
 import org.lebastudios.theroundtable.config.RequestConfigStageController;
-import org.lebastudios.theroundtable.controllers.StageController;
+import org.lebastudios.theroundtable.controllers.FormPaneController;
 import org.lebastudios.theroundtable.database.Database;
 import org.lebastudios.theroundtable.locale.LangFileLoader;
+import org.lebastudios.theroundtable.plugincashregister.PluginCashRegisterEvents;
 import org.lebastudios.theroundtable.plugincashregister.config.TaxesTypesConfigPaneController;
 import org.lebastudios.theroundtable.plugincashregister.entities.Category;
 import org.lebastudios.theroundtable.plugincashregister.entities.Product;
 import org.lebastudios.theroundtable.plugincashregister.entities.SubCategory;
 import org.lebastudios.theroundtable.plugincashregister.entities.TaxType;
 import org.lebastudios.theroundtable.ui.BigDecimalField;
-import org.lebastudios.theroundtable.ui.IconButton;
 import org.lebastudios.theroundtable.ui.IconView;
-import org.lebastudios.theroundtable.ui.StageBuilder;
 
 import java.io.File;
 import java.util.HashSet;
 import java.util.List;
 
-public abstract class ProductStageController extends StageController<ProductStageController>
+public class ProductFormPaneController extends FormPaneController<Product>
 {
     @FXML public CheckBox enabledProduct;
     @FXML public CheckBox taxesIncluded;
@@ -40,8 +38,6 @@ public abstract class ProductStageController extends StageController<ProductStag
     @FXML public BigDecimalField price;
     @FXML public ChoiceBox<TaxType> taxes;
     @FXML public IconView productIcon;
-    @FXML public Button mainButton;
-    @FXML public IconButton deleteButton;
 
     protected String imgPath = "";
 
@@ -49,7 +45,7 @@ public abstract class ProductStageController extends StageController<ProductStag
     @Override
     protected void initialize()
     {
-        new Thread(() -> Database.getInstance().connectQuery(session ->
+        Database.getInstance().connectQuery(session ->
         {
             taxes.getItems().clear();
             taxes.setConverter(new StringConverter<>()
@@ -60,9 +56,9 @@ public abstract class ProductStageController extends StageController<ProductStag
                 @Override
                 public TaxType fromString(String string) {return null;}
             });
-            
+
             List<TaxType> taxesList = session.createQuery("FROM TaxType", TaxType.class).list();
-            
+
             if (taxesList.isEmpty())
             {
                 TheRoundTableApplication.executeInFxThreadAndWait(() ->
@@ -76,37 +72,58 @@ public abstract class ProductStageController extends StageController<ProductStag
                 taxesList = session.createQuery("FROM TaxType", TaxType.class).list();
             }
             taxes.getItems().addAll(taxesList);
-            Platform.runLater(() -> taxes.selectionModelProperty().get().select(0));
+            taxes.selectionModelProperty().get().select(0);
+        });
 
-            // Loading Categories and SubCategories from the database
+        new Thread(() -> Database.getInstance().connectQuery(session ->
+        {
             var categories = session.createQuery("SELECT name FROM Category", String.class).list();
             var subCategories = session.createQuery("SELECT id.name FROM SubCategory", String.class).list();
 
             TextFields.bindAutoCompletion(mainCategory, new HashSet<>(categories));
             TextFields.bindAutoCompletion(subCategory, new HashSet<>(subCategories));
         })).start();
-    }
 
-    @SneakyThrows
-    @FXML
-    public void openImageSelector(ActionEvent actionEvent)
-    {
-        var result = ImageLoader.showImageChooser(this.getStage());
-        
-        if (result == null) return;
-        
-        imgPath = result.imageFile().getAbsolutePath();
-        productIcon.setImage(result.image());
+        super.initialize();
     }
 
     @Override
-    protected void customizeStageBuilder(StageBuilder stageBuilder)
+    protected void updateUI(Product product)
     {
-        stageBuilder.setModality(Modality.APPLICATION_MODAL)
-                .setResizeable(false);
+        productName.setText(product.getName());
+        enabledProduct.setSelected(product.isEnabled());
+        taxesIncluded.setSelected(product.getTaxesIncluded());
+        price.setValue(product.getTaxesIncluded()
+                ? product.getPrice()
+                : product.getNotTaxedPrice()
+        );
+        
+        if (product.getTaxType() != null) 
+        {
+            taxes.getSelectionModel().select(product.getTaxType());
+        }
+
+        SubCategory productSubCategory = product.getSubCategory();
+        if (productSubCategory != null)
+        {
+            mainCategory.setText(productSubCategory.getId().categoryName());
+            subCategory.setText(productSubCategory.getId().name());
+        }
+
+        try
+        {
+            imgPath = product.getImgPath();
+            productIcon.setImage(ImageLoader.getSavedImage(product.getImgPath()));
+        }
+        catch (Exception exception)
+        {
+            System.err.println("Error loading image");
+            productIcon.setIconName("no-product-img.png");
+        }
     }
 
-    protected final boolean validate()
+    @Override
+    public final boolean validate()
     {
         productName.setText(productName.getText().trim());
         mainCategory.setText(mainCategory.getText().trim());
@@ -130,45 +147,17 @@ public abstract class ProductStageController extends StageController<ProductStag
             return false;
         }
 
-        if (price.getValue() == null) 
+        if (price.getValue() == null)
         {
             UIEffects.shakeNode(price);
             return false;
         }
-        
+
         return true;
     }
 
-    protected void saveProductInfo(Session session, Product product)
-    {
-        insertDataIntoProduct(product);
-
-        var category = session.byId(Category.class).load(mainCategory.getText());
-
-        if (category == null)
-        {
-            category = new Category();
-            category.setName(mainCategory.getText());
-            session.persist(category);
-        }
-
-        var subCategoryId = new SubCategory.SubCategoryId(category.getName(), this.subCategory.getText());
-        var subCategory = session.byId(SubCategory.class).load(subCategoryId);
-
-        if (subCategory == null)
-        {
-            subCategory = new SubCategory();
-            subCategory.setCategory(category);
-            subCategory.setId(subCategoryId);
-            session.persist(subCategory);
-        }
-
-        product.setSubCategory(subCategory);
-
-        session.persist(product);
-    }
-
-    private void insertDataIntoProduct(Product product)
+    @Override
+    public Product buildObject(Product product)
     {
         if (imgPath.startsWith(ImageLoader.SavedImagesDirectory()))
         {
@@ -196,15 +185,43 @@ public abstract class ProductStageController extends StageController<ProductStag
         product.setEnabled(enabledProduct.isSelected());
         product.setTaxesIncluded(taxesIncluded.isSelected());
         product.setTaxType(taxes.getSelectionModel().getSelectedItem());
+
+        Category category = new Category();
+        category.setName(mainCategory.getText());
+
+        SubCategory.SubCategoryId subCategoryId = new SubCategory.SubCategoryId(category.getName(), this.subCategory.getText());
+        SubCategory subCategory = new SubCategory();
+        subCategory.setCategory(category);
+        subCategory.setId(subCategoryId);
+
+        product.setSubCategory(subCategory);
+
+        return product;
     }
-    
-    @FXML
-    public abstract void mainButtonAction(ActionEvent actionEvent);
 
     @Override
-    protected void loadFXML()
+    public boolean onDeleteAction(Product product)
     {
-        root = new org.lebastudios.theroundtable.plugincashregister.products.ProductStage$View(this);
-        this.initialize();
+        PluginCashRegisterEvents.onProductModify.invoke(product);
+        return true;
+    }
+
+    @Override
+    public boolean onSaveAction(Product product)
+    {
+        PluginCashRegisterEvents.onProductModify.invoke(product);
+        return true;
+    }
+
+    @SneakyThrows
+    @FXML
+    public void openImageSelector(ActionEvent actionEvent)
+    {
+        var result = ImageLoader.showImageChooser(this.getStage());
+
+        if (result == null) return;
+
+        imgPath = result.imageFile().getAbsolutePath();
+        productIcon.setImage(result.image());
     }
 }
