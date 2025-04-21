@@ -43,15 +43,15 @@ public class TaxesTypesConfigPaneController extends ConfigPaneController<NoConfi
     }
 
     @Override
-    public boolean validate()
+    public ValidationResult validate()
     {
         if (taxesTypesContainer.getChildren().isEmpty())
         {
             UIEffects.shakeNode(plusButton);
-            return false;
+            return ValidationResult.invalid("You must have at least one tax type");
         }
 
-        return true;
+        return ValidationResult.valid();
     }
 
     private void updateTaxesTypesContainer()

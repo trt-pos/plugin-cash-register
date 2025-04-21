@@ -90,9 +90,9 @@ public class ReceiptPrintingConfigPaneController extends ConfigPaneController<Re
     }
 
     @Override
-    public boolean validate()
+    public ValidationResult validate()
     {
-        return true;
+        return ValidationResult.valid();
     }
 
     @FXML
