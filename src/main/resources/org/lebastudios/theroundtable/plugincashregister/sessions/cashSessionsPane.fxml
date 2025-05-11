@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.AnchorPane?>
+<?import org.lebastudios.theroundtable.ui.MultipleItemsListView?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.geometry.Insets?>
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml" spacing="5"
+      fx:controller="org.lebastudios.theroundtable.plugincashregister.sessions.CashSessionsPaneController">
+    <padding>
+        <Insets right="25" bottom="25" left="25"/>
+    </padding>
+    
+    <HBox spacing="10" alignment="CENTER">
+        <Label text="%word.from" />
+        <DatePicker fx:id="fromDatePicker" prefWidth="150"/>
+        <Label text="%word.to" />
+        <DatePicker fx:id="toDatePicker" prefWidth="150"/>
+        <Region HBox.hgrow="ALWAYS" />
+        <Label text="%word.name" />
+        <ChoiceBox fx:id="installationNameChoiceBox" prefWidth="150"/>
+    </HBox>
+    <MultipleItemsListView fx:id="sessionsListView" VBox.vgrow="ALWAYS"/>
+</VBox>

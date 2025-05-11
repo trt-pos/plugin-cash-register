@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.HBox?>
+<?import org.lebastudios.theroundtable.ui.IconView?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.Region?>
+<?import org.lebastudios.theroundtable.ui.IconButton?>
+<HBox xmlns="http://javafx.com/javafx" alignment="CENTER"
+      xmlns:fx="http://javafx.com/fxml" spacing="5"
+      fx:controller="org.lebastudios.theroundtable.plugincashregister.sessions.SessionLabelController">
+    <IconView iconName="default.png"/>
+    <Label text="I dont know what im doing" />
+    <Region HBox.hgrow="ALWAYS" />
+    <IconButton iconName="print.png" onAction="#printSession" />
+</HBox>

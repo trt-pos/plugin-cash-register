@@ -5,6 +5,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TreeItem;
 import lombok.SneakyThrows;
 import org.lebastudios.theroundtable.MainStageController;
+import org.lebastudios.theroundtable.accounts.AccountManager;
 import org.lebastudios.theroundtable.config.SettingsItem;
 import org.lebastudios.theroundtable.dialogs.EntityFormDialogController;
 import org.lebastudios.theroundtable.dialogs.InformationTextDialogController;
@@ -21,8 +22,11 @@ import org.lebastudios.theroundtable.plugincashregister.entities.*;
 import org.lebastudios.theroundtable.plugincashregister.forms.ProductFormPaneController;
 import org.lebastudios.theroundtable.plugincashregister.products.ProductPaneController;
 import org.lebastudios.theroundtable.plugincashregister.products.ProductsUIController;
+import org.lebastudios.theroundtable.plugincashregister.sessions.CashSessionsPaneController;
 import org.lebastudios.theroundtable.plugins.IPlugin;
 import org.lebastudios.theroundtable.ui.IconButton;
+import org.lebastudios.theroundtable.ui.IconView;
+import org.lebastudios.theroundtable.ui.LabeledIconButton;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,6 +37,7 @@ import java.util.List;
                 "org/lebastudios/theroundtable/plugincashregister/config",
                 "org/lebastudios/theroundtable/plugincashregister/forms",
                 "org/lebastudios/theroundtable/plugincashregister/products",
+                "org/lebastudios/theroundtable/plugincashregister/sessions",
         }
 )
 public class PluginCashRegister implements IPlugin
@@ -181,6 +186,23 @@ public class PluginCashRegister implements IPlugin
         );
 
         return cashRegisterConfigSection;
+    }
+
+    @Override
+    public List<LabeledIconButton> getHomeButtons()
+    {
+        ArrayList<LabeledIconButton> buttons = new ArrayList<>();
+        
+        if (AccountManager.getInstance().isAccountAdmin())
+        {
+            buttons.add(new LabeledIconButton(
+                    LangFileLoader.getTranslation("plugincashregister.word.sessions"),
+                    new IconView("cash-sessions.png"),
+                    _ -> MainStageController.getInstance().setCentralNode(new CashSessionsPaneController())
+            ));
+        }
+        
+        return buttons;
     }
 
     @Override

@@ -51,3 +51,5 @@ plugincashregister.printer.cashsession.cardpayments,payments with card,pagos con
 plugincashregister.printer.cashsession.cashin,incomes,ingresos
 plugincashregister.printer.cashsession.cashout,withdrawals,retiros
 plugincashregister.word.othertransactions,Other transactions,Otras transacciones
+plugincashregister.word.sessions,Sessions,Sesiones
+plugincashregister.sessionspane.all,All,Todas
