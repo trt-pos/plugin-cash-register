@@ -78,14 +78,6 @@ public class PluginCashRegister implements IPlugin
 
         PluginEvents.registerPluginEvent(
                 "plugin-cash-register",
-                "onProductModify",
-                Event1.class.getMethod("invoke", Object.class),
-                Event1.class.getMethod("addListener", Object.class),
-                PluginCashRegisterEvents.onProductModify
-        );
-
-        PluginEvents.registerPluginEvent(
-                "plugin-cash-register",
                 "onReceiptEmitted",
                 Event1.class.getMethod("invoke", Object.class),
                 Event1.class.getMethod("addListener", Object.class),

@@ -97,8 +97,8 @@ public class ProductFormPaneController extends FormPaneController<Product>
                 ? product.getPrice()
                 : product.getNotTaxedPrice()
         );
-        
-        if (product.getTaxType() != null) 
+
+        if (product.getTaxType() != null)
         {
             taxes.getSelectionModel().select(product.getTaxType());
         }
@@ -189,7 +189,8 @@ public class ProductFormPaneController extends FormPaneController<Product>
         Category category = new Category();
         category.setName(mainCategory.getText());
 
-        SubCategory.SubCategoryId subCategoryId = new SubCategory.SubCategoryId(category.getName(), this.subCategory.getText());
+        SubCategory.SubCategoryId subCategoryId =
+                new SubCategory.SubCategoryId(category.getName(), this.subCategory.getText());
         SubCategory subCategory = new SubCategory();
         subCategory.setCategory(category);
         subCategory.setId(subCategoryId);
@@ -203,6 +204,13 @@ public class ProductFormPaneController extends FormPaneController<Product>
     public boolean onDeleteAction(Product product)
     {
         PluginCashRegisterEvents.onProductModify.invoke(product);
+
+        Database.getInstance().connectTransaction(session ->
+        {
+            session.createMutationQuery("delete from SubCategory c where size(c.products) = 0").executeUpdate();
+            session.createMutationQuery("delete from Category c where size(c.subCategories) = 0").executeUpdate();
+        });
+
         return true;
     }
 

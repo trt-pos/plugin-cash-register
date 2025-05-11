@@ -8,8 +8,12 @@ import org.lebastudios.theroundtable.plugincashregister.entities.Transaction;
 
 public class PluginCashRegisterEvents
 {
+    public static final CamelotEvent<Product> onProductModify = new CamelotEvent<>(
+            "plugin-cash-register:product-modify",
+            new Product()
+    );
+    
     public static final Event1<Order> showOrder = new Event1<>() {};
-    public static final Event1<Product> onProductModify = new Event1<>() {};
     public static final Event1<Receipt> onReceiptEmitted = new Event1<>() {};
     public static final Event1<Transaction> onTransactionRealized = new Event1<>();
     

@@ -2,9 +2,14 @@ package org.lebastudios.theroundtable.plugincashregister.entities;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.lebastudios.theroundtable.camelot.FromBytes;
+import org.lebastudios.theroundtable.camelot.IntoBytes;
+import org.lebastudios.theroundtable.database.Database;
 import org.lebastudios.theroundtable.maths.BigDecimalOperations;
 
 import java.math.BigDecimal;
+import java.nio.ByteBuffer;
+import java.text.ParseException;
 import java.util.Objects;
 
 @Getter
@@ -12,7 +17,7 @@ import java.util.Objects;
 @NoArgsConstructor
 @Entity
 @Table(name = "pr_product")
-public class Product implements Cloneable
+public class Product implements Cloneable, FromBytes<Product>, IntoBytes
 {
     @Id
     @Column(name = "id")
@@ -118,5 +123,20 @@ public class Product implements Cloneable
         {
             throw new AssertionError();
         }
+    }
+
+    @Override
+    public Product fromBytes(byte[] bytes) throws ParseException
+    {
+        return Database.getInstance().connectQuery(session ->
+        {
+            return session.get(Product.class, ByteBuffer.wrap(bytes).getInt());
+        });
+    }
+
+    @Override
+    public byte[] intoBytes()
+    {
+        return ByteBuffer.allocate(4).putInt(this.id).array();
     }
 }

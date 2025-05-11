@@ -12,6 +12,7 @@ import javafx.scene.control.TabPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.VBox;
 import org.hibernate.query.Query;
+import org.lebastudios.theroundtable.camelot.CamelotEventListener;
 import org.lebastudios.theroundtable.controllers.PaneController;
 import org.lebastudios.theroundtable.database.Database;
 import org.lebastudios.theroundtable.dialogs.EntityFormDialogController;
@@ -24,6 +25,7 @@ import org.lebastudios.theroundtable.ui.LoadingPaneController;
 import org.lebastudios.theroundtable.ui.SearchBox;
 
 import java.util.*;
+import java.util.function.Consumer;
 
 public class ProductsUIController extends PaneController<ProductsUIController>
 {
@@ -31,7 +33,8 @@ public class ProductsUIController extends PaneController<ProductsUIController>
     @FXML public TabPane mainTabPane;
     private final boolean showDiabledProducts;
 
-    private final IEventMethod1<Product> onProductModifyListener = _ -> loadProducts(searchBox.getText());
+    private final Consumer<Product> onProductModifyListener =
+            _ -> Platform.runLater(() -> loadProducts(searchBox.getText()));
     
     private static final Map<String, Map<String, List<Product>>> products = new LinkedHashMap<>();
 

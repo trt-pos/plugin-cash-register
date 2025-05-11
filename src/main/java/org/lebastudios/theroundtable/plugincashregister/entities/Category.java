@@ -18,38 +18,6 @@ import java.util.Set;
 @Table(name = "pr_category")
 public class Category
 {
-    static
-    {
-        PluginCashRegisterEvents.onProductModify.addListener(_ ->
-        {
-            // Delete categories and subcategories that have no products.
-            Database.getInstance().connectTransaction(session ->
-            {
-                var categories = session.createQuery("from Category", Category.class)
-                        .getResultList();
-
-                categories.forEach(category ->
-                {
-                    boolean conservesSomeSubcategory = false;
-                    var list = new ArrayList<>(category.getSubCategories());
-                    for (var subcategories : list)
-                    {
-                        if (subcategories.getProducts().isEmpty())
-                        {
-                            session.remove(subcategories);
-                        }
-                        else
-                        {
-                            conservesSomeSubcategory = true;
-                        }
-                    }
-
-                    if (!conservesSomeSubcategory) session.remove(category);
-                });
-            });
-        });
-    }
-
     @Id
     @Column(name = "name")
     private String name;
