@@ -1,4 +1,4 @@
-package org.lebastudios.theroundtable.plugincashregister.cash;
+package org.lebastudios.theroundtable.plugincashregister.forms;
 
 import javafx.fxml.FXML;
 import lombok.Setter;
@@ -28,7 +28,8 @@ public class OpenCashSessionFormPaneController extends FormPaneController<CashSe
     @Override
     public boolean validate()
     {
-        if (cashInDrawerBigDecimalField.getValue().compareTo(BigDecimal.ZERO) < 0) 
+        if (cashInDrawerBigDecimalField.getValue() == null 
+                || cashInDrawerBigDecimalField.getValue().compareTo(BigDecimal.ZERO) < 0) 
         {
             UIEffects.shakeNode(cashInDrawerBigDecimalField);
             return false;

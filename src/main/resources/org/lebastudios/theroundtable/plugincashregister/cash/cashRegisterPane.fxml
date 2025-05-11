@@ -111,7 +111,7 @@
             </rowConstraints>
 
             <IconTextButton iconName="close.png" maxHeight="Infinity" maxWidth="Infinity" onAction="#closeCashRegister"
-                            text="%plugincashregister.phrase.closecash"
+                            text="%plugincashregister.phrase.closecashsession"
                             GridPane.columnIndex="0" GridPane.columnSpan="6" GridPane.rowIndex="0"/>
 
             <IconTextButton iconName="money-in.png" maxHeight="Infinity" maxWidth="Infinity" onAction="#moneyIn"

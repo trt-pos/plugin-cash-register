@@ -2,7 +2,9 @@ package org.lebastudios.theroundtable.plugincashregister.printers;
 
 import com.github.anastaciocintra.escpos.EscPos;
 import com.github.anastaciocintra.escpos.Style;
+import org.lebastudios.theroundtable.config.GlobalPreferencesConfigData;
 import org.lebastudios.theroundtable.database.Database;
+import org.lebastudios.theroundtable.locale.Currency;
 import org.lebastudios.theroundtable.locale.LangFileLoader;
 import org.lebastudios.theroundtable.maths.BigDecimalOperations;
 import org.lebastudios.theroundtable.plugincashregister.entities.CashSession;
@@ -15,7 +17,7 @@ import org.lebastudios.theroundtable.printers.Styles;
 
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.time.temporal.ChronoUnit;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
 
@@ -78,13 +80,17 @@ public class BasicSessionOverviewPrinter extends SessionPrinter
                             : BigDecimalOperations.round(transaction.getReceipt().getNotTaxedTotal()));
                 }
 
+                Currency currency = new GlobalPreferencesConfigData().load().currency;
+                
                 new InLinePrinter(Style.FontSize._2).concatLeft("TOTAL BRUTO")
                         .concatRight(BigDecimalOperations.toString(totalBruto))
-                        .concatRight("EUR").print(escpos);
+                        .concatRight(" ")
+                        .concatRight(currency.abbreviation()).print(escpos);
 
                 new InLinePrinter(Style.FontSize._2).concatLeft("TOTAL NETO")
                         .concatRight(BigDecimalOperations.toString(totalNet))
-                        .concatRight("EUR").print(escpos);
+                        .concatRight(" ")
+                        .concatRight(currency.abbreviation()).print(escpos);
             } 
             catch (IOException e)
             {
@@ -107,17 +113,17 @@ public class BasicSessionOverviewPrinter extends SessionPrinter
         escPos.feed(1);
 
         escPos.writeLF(Styles.TITLE, LangFileLoader.getTranslation("plugincashregister.printer.cashsession.overviewheader"));
-        escPos.writeLF(Styles.CENTERED,
-                "    " + LangFileLoader.getTranslation("plugincashregister.word.from")
-                        + " " + cashSession.getOpeningDate().toLocalDate().toString()
-                        + " " + LangFileLoader.getTranslation("plugincashregister.word.at")
-                        + " " + cashSession.getOpeningDate().toLocalTime().truncatedTo(ChronoUnit.SECONDS).toString());
+        
+        escPos.feed(2);
 
-        escPos.writeLF(Styles.CENTERED,
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(new GlobalPreferencesConfigData().load().dateTimeFormatter);
+        
+        escPos.writeLF(Styles.CENTERED, 
+                "    " + LangFileLoader.getTranslation("plugincashregister.word.from")
+                + " " + formatter.format(cashSession.getOpeningDate()));
+        escPos.writeLF(Styles.CENTERED, 
                 "    " + LangFileLoader.getTranslation("plugincashregister.word.to")
-                        + " " + cashSession.getClosingDate().toLocalDate().toString()
-                        + " " + LangFileLoader.getTranslation("plugincashregister.word.at")
-                        + " " + cashSession.getClosingDate().toLocalTime().truncatedTo(ChronoUnit.SECONDS).toString());
+                + " " + formatter.format(cashSession.getClosingDate()));
 
         new InLinePrinter()
                 .concatLeft(LangFileLoader.getTranslation("plugincashregister.printer.cashsession.installationname"))
@@ -140,11 +146,14 @@ public class BasicSessionOverviewPrinter extends SessionPrinter
                 .concatRight("Total: " + transactions.size()).print(escPos);
         new LineFiller("-").print(escPos);
 
+        Currency currency = new GlobalPreferencesConfigData().load().currency;
+        
         for (var transaction : transactions)
         {
             new InLinePrinter().concatLeft(transaction.getDescription(), 30)
                     .concatRight(BigDecimalOperations.toString(transaction.getAmount()))
-                    .concatRight(" EUR").print(escPos);
+                    .concatRight(" ")
+                    .concatRight(currency.abbreviation()).print(escPos);
         }
 
         new LineFiller("-").print(escPos);

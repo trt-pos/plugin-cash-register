@@ -8,6 +8,7 @@ import org.lebastudios.theroundtable.controllers.PaneController;
 import org.lebastudios.theroundtable.dialogs.EntityFormDialogController;
 import org.lebastudios.theroundtable.dialogs.ExceptionDialogController;
 import org.lebastudios.theroundtable.plugincashregister.entities.CashSession;
+import org.lebastudios.theroundtable.plugincashregister.forms.OpenCashSessionFormPaneController;
 import org.lebastudios.theroundtable.printers.OpenCashDrawer;
 import org.lebastudios.theroundtable.printers.PrinterManager;
 
