@@ -3,7 +3,8 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<VBox xmlns:fx="http://javafx.com/fxml"
+<VBox xmlns:fx="http://javafx.com/fxml" 
+      fx:controller="org.lebastudios.theroundtable.plugincashregister.cash.TransactionCreatorStageController"
       xmlns="http://javafx.com/javafx" spacing="10">
     <padding>
         <Insets top="15" bottom="15" right="15" left="15"/>
@@ -23,6 +24,6 @@
 
     <HBox spacing="5" alignment="CENTER_RIGHT">
         <Button onAction="#cancel" text="%plugincashregister.word.cancel"/>
-        <Button onAction="#mainAction" text="%plugincashregister.word.accept"/>
+        <Button onAction="#mainAction" defaultButton="true" text="%plugincashregister.word.accept"/>
     </HBox>
 </VBox>

@@ -3,6 +3,7 @@ package org.lebastudios.theroundtable.plugincashregister.printers;
 import com.github.anastaciocintra.escpos.EscPos;
 import com.github.anastaciocintra.escpos.EscPosConst;
 import com.github.anastaciocintra.escpos.Style;
+import org.lebastudios.theroundtable.config.GlobalPreferencesConfigData;
 import org.lebastudios.theroundtable.locale.LangFileLoader;
 import org.lebastudios.theroundtable.plugincashregister.entities.Transaction;
 import org.lebastudios.theroundtable.printers.InLinePrinter;
@@ -11,6 +12,7 @@ import org.lebastudios.theroundtable.printers.OpenCashDrawer;
 import org.lebastudios.theroundtable.printers.Styles;
 
 import java.io.IOException;
+import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 
 public class BasicTransactionPrinter extends TransactionPrinter
@@ -23,24 +25,16 @@ public class BasicTransactionPrinter extends TransactionPrinter
     @Override
     public EscPos print(EscPos escpos) throws IOException
     {
-        Style style = new Style();
-        style.setFontSize(Style.FontSize._2, Style.FontSize._2)
-                .setJustification(EscPosConst.Justification.Center);
+        final var preferences = new GlobalPreferencesConfigData().load();
 
-        escpos.writeLF(style, "Transaction #" + transaction.getId());
-
+        escpos.writeLF(Styles.TITLE, "Transaction #" + transaction.getId());
+        
         escpos.feed(1);
 
         new LineFiller("-").print(escpos);
 
-        escpos.writeLF(Styles.CENTERED,
-                LangFileLoader.getTranslation("plugincashregister.word.date") + " " + transaction.getDate().toLocalDate().toString()
-        );
-
-        escpos.writeLF(Styles.CENTERED,
-                LangFileLoader.getTranslation("plugincashregister.word.time") + " "
-                        + transaction.getDate().toLocalTime().truncatedTo(ChronoUnit.SECONDS).toString()
-        );
+        final var dateTimeFormatter = DateTimeFormatter.ofPattern(preferences.dateTimeFormatter);
+        escpos.writeLF(Styles.CENTERED, dateTimeFormatter.format(transaction.getDate()));
 
         escpos.feed(1);
 
@@ -50,7 +44,9 @@ public class BasicTransactionPrinter extends TransactionPrinter
 
         new InLinePrinter(Style.FontSize._2)
                 .concatLeft("TOTAL:")
-                .concatRight(transaction.getAmount().toString() + "EUR")
+                .concatRight(transaction.getAmount().toString())
+                .concatRight(" ")
+                .concatRight(preferences.currency.abbreviation())
                 .print(escpos);
 
         new OpenCashDrawer().print(escpos);

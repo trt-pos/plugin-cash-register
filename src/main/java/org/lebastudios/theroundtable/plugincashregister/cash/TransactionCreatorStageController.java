@@ -7,11 +7,15 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import org.lebastudios.theroundtable.accounts.AccountManager;
 import org.lebastudios.theroundtable.apparience.UIEffects;
 import org.lebastudios.theroundtable.controllers.StageController;
 import org.lebastudios.theroundtable.database.Database;
+import org.lebastudios.theroundtable.database.entities.AppInstallation;
 import org.lebastudios.theroundtable.dialogs.ConfirmationTextDialogController;
 import org.lebastudios.theroundtable.locale.LangFileLoader;
+import org.lebastudios.theroundtable.plugincashregister.PluginCashRegisterEvents;
+import org.lebastudios.theroundtable.plugincashregister.entities.CashSession;
 import org.lebastudios.theroundtable.plugincashregister.entities.Transaction;
 import org.lebastudios.theroundtable.plugincashregister.printers.CashRegisterPrinters;
 import org.lebastudios.theroundtable.printers.PrinterManager;
@@ -19,17 +23,16 @@ import org.lebastudios.theroundtable.ui.StageBuilder;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class TransactionCreatorStageController extends StageController<TransactionCreatorStageController>
 {
-    private final LocalDateTime localDateTime;
     private final TransactionType transactionType;
     @FXML public TextField amountTextField;
     @FXML public TextArea descriptionTextArea;
 
     public TransactionCreatorStageController(TransactionType transactionType)
     {
-        this.localDateTime = LocalDateTime.now();
         this.transactionType = transactionType;
     }
 
@@ -79,34 +82,45 @@ public class TransactionCreatorStageController extends StageController<Transacti
         }
 
         transaction.setAmount(amount);
-        transaction.setDate(localDateTime);
+        transaction.setDate(LocalDateTime.now());
         transaction.setDescription(descriptionTextArea.getText().trim());
+        transaction.setAccount(AccountManager.getInstance().getCurrentLogged());
+        transaction.setMethod(Transaction.PaymentMethod.CASH);
 
         Database.getInstance().connectTransaction(session ->
         {
+            transaction.setTotalCash(CashSession.getActualSession(session).getAmountInDrawer());
+            transaction.setAppInstallation(AppInstallation.thisInstalation(session));
+
             session.persist(transaction);
-            session.flush();
+
+            AtomicBoolean isTransactionCreated = new AtomicBoolean(false);
 
             try (EscPos escPos = CashRegisterPrinters.getInstance()
                     .printTransaction(transaction, PrinterManager.getInstance().getDefaultPrintService())
             )
             {
-                escPos.feed(5).cut(EscPos.CutMode.PART).close();
+                escPos.feed(5).cut(EscPos.CutMode.PART);
                 cancel(null);
+                isTransactionCreated.set(true);
             }
             catch (Exception e)
             {
-                new ConfirmationTextDialogController(LangFileLoader.getTranslation("plugincashregister.textblock.printingerror"),
-                        response ->
-                        {
-                            if (!response)
-                            {
-                                session.getTransaction().rollback();
-                                return;
-                            }
-
-                            cancel(null);
-                        }).instantiate();
+                new ConfirmationTextDialogController(
+                        LangFileLoader.getTranslation("plugincashregister.textblock.printingerror"),
+                        isTransactionCreated::set
+                ).instantiate(true);
+            }
+            
+            if (isTransactionCreated.get())
+            {
+                session.getTransaction().commit();
+                PluginCashRegisterEvents.onTransactionRealized.invoke(transaction);
+                cancel(null);
+            }
+            else
+            {
+                session.getTransaction().rollback();
             }
         });
     }
