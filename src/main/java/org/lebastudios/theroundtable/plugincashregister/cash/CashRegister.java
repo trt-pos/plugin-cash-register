@@ -10,6 +10,7 @@ import org.lebastudios.theroundtable.locale.LangFileLoader;
 import org.lebastudios.theroundtable.plugincashregister.PluginCashRegisterEvents;
 import org.lebastudios.theroundtable.plugincashregister.entities.CashSession;
 import org.lebastudios.theroundtable.plugincashregister.entities.Product;
+import org.lebastudios.theroundtable.plugincashregister.entities.Transaction;
 import org.lebastudios.theroundtable.plugincashregister.printers.CashRegisterPrinters;
 import org.lebastudios.theroundtable.printers.PrinterManager;
 
@@ -23,6 +24,8 @@ public class CashRegister
     static {
         PluginCashRegisterEvents.onTransactionRealized.addListener(transaction -> 
         {
+            if (transaction.getMethod() == Transaction.PaymentMethod.CARD) return;
+            
             Database.getInstance().connectTransaction(session ->
             {
                 CashSession actualSession = CashSession.getActualSession(session);
