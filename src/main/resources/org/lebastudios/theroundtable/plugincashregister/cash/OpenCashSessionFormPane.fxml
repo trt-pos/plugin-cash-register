@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.VBox?>
+<?import org.lebastudios.theroundtable.ui.BigDecimalField?>
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml" spacing="5"
+      fx:controller="org.lebastudios.theroundtable.plugincashregister.cash.OpenCashSessionFormPaneController">
+    <Label text="%plugincashregister.form.opencashsession.cashindrawer"/>
+    <BigDecimalField fx:id="cashInDrawerBigDecimalField" />
+</VBox>

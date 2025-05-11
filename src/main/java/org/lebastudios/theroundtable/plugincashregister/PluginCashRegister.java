@@ -15,7 +15,6 @@ import org.lebastudios.theroundtable.fxml2java.CompileFxml;
 import org.lebastudios.theroundtable.locale.LangFileLoader;
 import org.lebastudios.theroundtable.plugincashregister.cash.CashRegister;
 import org.lebastudios.theroundtable.plugincashregister.cash.CashRegisterPaneController;
-import org.lebastudios.theroundtable.plugincashregister.config.CashRegisterStateData;
 import org.lebastudios.theroundtable.plugincashregister.config.ReceiptPrintingConfigPaneController;
 import org.lebastudios.theroundtable.plugincashregister.config.TaxesTypesConfigPaneController;
 import org.lebastudios.theroundtable.plugincashregister.entities.*;
@@ -57,12 +56,11 @@ public class PluginCashRegister implements IPlugin
 
         PluginCashRegisterEvents.showOrder.addListener(order ->
         {
-            var cashRegisterState = new CashRegisterStateData().load();
-
-            if (!cashRegisterState.open)
+            if (CashSession.getActualSession() == null)
             {
-                new InformationTextDialogController(LangFileLoader.getTranslation("plugincashregister.phrase.cashregisterisclosed"))
-                        .instantiate(true);
+                new InformationTextDialogController(
+                        LangFileLoader.getTranslation("plugincashregister.phrase.cashregisterisclosed")
+                ).instantiate(true);
                 return;
             }
 
@@ -208,6 +206,8 @@ public class PluginCashRegister implements IPlugin
         entities.add(Receipt.class);
         entities.add(Transaction.class);
         entities.add(ReceiptModification.class);
+        
+        entities.add(CashSession.class);
 
         return entities;
     }

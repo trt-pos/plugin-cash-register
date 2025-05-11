@@ -28,9 +28,6 @@ public class Receipt
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(name = "payment_method", nullable = false)
-    @Setter private String paymentMethod;
-
     @Column(name = "table_name", nullable = false)
     @Setter private String tableName;
 
@@ -53,60 +50,24 @@ public class Receipt
     @Setter private Set<Product_Receipt> products;
 
     @OneToOne(mappedBy = "receipt", optional = false, cascade = CascadeType.PERSIST)
-    @Setter private Transaction transaction;
+    @Setter private Transaction transaction = new Transaction();
 
     /// When the receipt has been modified, this field will be set.
     @OneToOne(mappedBy = "superReceipt")
-    ReceiptModification modifiedBy;
+    private ReceiptModification modifiedBy;
 
     /// When this receipt is a modification of another receipt, this field will be set.
     @OneToOne(mappedBy = "newReceipt")
-    ReceiptModification modifies;
+    private ReceiptModification modifies;
 
     @Column(name = "status", nullable = false)
     @Enumerated(EnumType.STRING)
     @Setter private Status status = Status.DEFAULT;
 
-    // TODO: Remove this methos
-    public void setAccount(Account account)
-    {
-        // employeeName = account.getName();
-    }
-
     public void setClient(String name, String identifier)
     {
         clientName = name;
         clientIdentifier = identifier;
-    }
-
-    public void setOrder(Order order)
-    {
-        tableName = order.getOrderName();
-        taxesAmount = order.getTotalTaxes();
-
-        products = new HashSet<>();
-
-        for (OrderItem orderItem : order.getOrderItems())
-        {
-            Product_Receipt productReceipt = new Product_Receipt(orderItem.intoProduct(), orderItem.getQuantity());
-            productReceipt.setReceipt(this);
-
-            products.add(productReceipt);
-        }
-
-        LocalDateTime now = LocalDateTime.now();
-
-        Transaction transaction = new Transaction();
-        transaction.setAmount(order.getTotal());
-        transaction.setDate(now);
-        transaction.setDescription(
-                LangFileLoader.getTranslation("plugincashregister.word.receipt")
-                + " "
-                + LocaleManager.getInstance().getActualDateTimeFormatter().format(now)
-        );
-
-        transaction.setReceipt(this);
-        this.transaction = transaction;
     }
 
     public BigDecimal getTaxedTotal()
@@ -129,15 +90,6 @@ public class Receipt
         {
             return clientName + " - " + clientIdentifier;
         }
-    }
-
-    // TODO: Remove this method
-    public String getAttendantName()
-    {
-        // return employeeName == null
-        //         ? "Unknown employee"
-        //         : employeeName;
-        return "Unknown employee";
     }
 
     public Image getStatusIcon()

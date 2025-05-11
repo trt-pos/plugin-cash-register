@@ -4,18 +4,21 @@ import org.lebastudios.theroundtable.events.*;
 import org.lebastudios.theroundtable.plugincashregister.cash.Order;
 import org.lebastudios.theroundtable.plugincashregister.entities.Product;
 import org.lebastudios.theroundtable.plugincashregister.entities.Receipt;
+import org.lebastudios.theroundtable.plugincashregister.entities.Transaction;
 
 public class PluginCashRegisterEvents
 {
     public static final Event1<Order> showOrder = new Event1<>() {};
     public static final Event1<Product> onProductModify = new Event1<>() {};
     public static final Event1<Receipt> onReceiptEmitted = new Event1<>() {};
+    public static final Event1<Transaction> onTransactionRealized = new Event1<>();
+    
     public static final Event2<Integer, StringBuffer> onRequestReceiptBillNumber = new SingleListenerEvent2<>();
     public static final Event2<Integer, StringBuffer> onRequestNewReceiptBillNumber = new SingleListenerEvent2<>();
     public static final Event2<Integer, StringBuffer> onRequestNewRectificationBillNumber = new SingleListenerEvent2<>();
     public static final Event2<Receipt, String> onReceiptBilled = new Event2<>();
     public static final Event2<Receipt, String> onModifiedReceiptBilled = new Event2<>();
-    
+
     private static class SingleListenerEvent2<T, P> extends Event2<T, P>
     {
         private boolean hasListener = false;

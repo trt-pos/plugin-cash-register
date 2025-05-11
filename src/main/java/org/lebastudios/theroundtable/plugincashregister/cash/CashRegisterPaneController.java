@@ -21,7 +21,7 @@ import org.lebastudios.theroundtable.controllers.PaneController;
 import org.lebastudios.theroundtable.dialogs.ConfirmationTextDialogController;
 import org.lebastudios.theroundtable.locale.LangFileLoader;
 import org.lebastudios.theroundtable.maths.BigDecimalOperations;
-import org.lebastudios.theroundtable.plugincashregister.config.CashRegisterStateData;
+import org.lebastudios.theroundtable.plugincashregister.entities.CashSession;
 import org.lebastudios.theroundtable.plugincashregister.entities.Receipt;
 import org.lebastudios.theroundtable.plugincashregister.products.ProductPaneController;
 import org.lebastudios.theroundtable.plugincashregister.products.ProductsUIController;
@@ -236,7 +236,7 @@ public class CashRegisterPaneController extends PaneController<CashRegisterPaneC
             instance = new CashRegisterPaneController();
         }
 
-        if (!new CashRegisterStateData().load().open)
+        if (CashSession.getActualSession() == null)
         {
             MainStageController.getInstance().setCentralNode(new CashRegisterClosePaneController());
             return;
@@ -502,6 +502,8 @@ public class CashRegisterPaneController extends PaneController<CashRegisterPaneC
     {
         submitEditting(null);
 
-        new CloseCashRegisterStageController().instantiate();
+        new CloseCashSessionStageController()
+                .setOwner(this.getStage())
+                .instantiate();
     }
 }

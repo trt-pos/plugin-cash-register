@@ -3,9 +3,12 @@ package org.lebastudios.theroundtable.plugincashregister.cash;
 import com.github.anastaciocintra.escpos.EscPos;
 import lombok.Getter;
 import lombok.SneakyThrows;
+import org.lebastudios.theroundtable.database.Database;
 import org.lebastudios.theroundtable.events.Event;
 import org.lebastudios.theroundtable.events.Event1;
 import org.lebastudios.theroundtable.locale.LangFileLoader;
+import org.lebastudios.theroundtable.plugincashregister.PluginCashRegisterEvents;
+import org.lebastudios.theroundtable.plugincashregister.entities.CashSession;
 import org.lebastudios.theroundtable.plugincashregister.entities.Product;
 import org.lebastudios.theroundtable.plugincashregister.printers.CashRegisterPrinters;
 import org.lebastudios.theroundtable.printers.PrinterManager;
@@ -17,6 +20,24 @@ import java.math.RoundingMode;
 @Getter
 public class CashRegister
 {
+    static {
+        PluginCashRegisterEvents.onTransactionRealized.addListener(transaction -> 
+        {
+            Database.getInstance().connectTransaction(session ->
+            {
+                CashSession actualSession = CashSession.getActualSession(session);
+                
+                if (actualSession == null)
+                {
+                    throw new IllegalStateException("There is no actual session");
+                }
+                
+                actualSession.setAmountInDrawer(actualSession.getAmountInDrawer().add(transaction.getAmount()));
+                session.merge(actualSession);
+            });
+        });
+    }
+    
     public static Event onActualOrderSwapped = new Event();
     /// An order item is modified when the qty or the unit price is changed. If the qty goes to 0 or less, this event is
     /// not triggered.
@@ -72,7 +93,7 @@ public class CashRegister
     {
         actualOrder.reset();
     }
-
+    
     public void printOrder()
     {
         try (EscPos escpos = CashRegisterPrinters.getInstance().printOrder(

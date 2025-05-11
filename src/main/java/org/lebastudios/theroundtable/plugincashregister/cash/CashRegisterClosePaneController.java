@@ -5,39 +5,39 @@ import com.github.anastaciocintra.output.PrinterOutputStream;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import org.lebastudios.theroundtable.controllers.PaneController;
-import org.lebastudios.theroundtable.plugincashregister.config.CashRegisterStateData;
+import org.lebastudios.theroundtable.dialogs.EntityFormDialogController;
+import org.lebastudios.theroundtable.dialogs.ExceptionDialogController;
+import org.lebastudios.theroundtable.plugincashregister.entities.CashSession;
 import org.lebastudios.theroundtable.printers.OpenCashDrawer;
 import org.lebastudios.theroundtable.printers.PrinterManager;
 
 import java.io.IOException;
-import java.time.LocalDateTime;
 
 public class CashRegisterClosePaneController extends PaneController<CashRegisterClosePaneController>
 {
     @FXML
     public void openCashRegister(ActionEvent actionEvent)
     {
-        var cashRegisterState = new CashRegisterStateData().load();
-
-        cashRegisterState.open = true;
-        cashRegisterState.openTime = LocalDateTime.now().toString();
-
-        cashRegisterState.save();
-
-        CashRegisterPaneController.showInterface();
+        OpenCashSessionFormPaneController form = new OpenCashSessionFormPaneController();
+        form.setOnSessionSaved(_ -> CashRegisterPaneController.showInterface());
+        
+        new EntityFormDialogController<>(form, new CashSession())
+                .setOwner(this.getStage())
+                .instantiate(true);
     }
-    
-    @FXML public void openCashRegisterDrawer(ActionEvent actionEvent)
+
+    @FXML
+    public void openCashRegisterDrawer(ActionEvent actionEvent)
     {
-        try
+        try (EscPos escPos = new EscPos(new PrinterOutputStream(PrinterManager.getInstance().getDefaultPrintService())))
         {
-            EscPos escPos = new EscPos(new PrinterOutputStream(PrinterManager.getInstance().getDefaultPrintService()));
             new OpenCashDrawer().print(escPos);
-            escPos.close();
         }
         catch (IOException e)
         {
-            throw new RuntimeException(e);
+            new ExceptionDialogController(e)
+                    .setOwner(this.getStage())
+                    .instantiate(true);
         }
     }
 }

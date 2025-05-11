@@ -1,12 +1,11 @@
 create table cr_cash_session
 (
-    id             integer        not null primary key autoincrement,
-    trt_uuid       varchar(45)    not null,
-    account_id     integer        null,
-    opening_amount numeric(10, 2) not null,
-    closing_amount numeric(10, 2) null,
-    opening_date   timestamp      not null,
-    closing_date   timestamp      null,
+    id               integer        not null primary key autoincrement,
+    trt_uuid         varchar(45)    not null,
+    account_id       integer        null,
+    amount_in_drawer numeric(10, 2) not null default 0,
+    opening_date     timestamp      not null,
+    closing_date     timestamp      null,
     constraint FK_CR_CASH_SESSION_CORE_APP_INSTALLATION foreign key (trt_uuid) references core_app_installation (uuid),
     constraint FK_CR_CASH_SESSION_CORE_ACCOUNT foreign key (account_id) references core_account (id)
         on delete set null
@@ -21,8 +20,11 @@ create table cr_transaction
     description text           not null,
     receipt_id  integer        null,
     -- NEW
-    account_id  integer        null,
     total_cash  numeric(10, 2) not null default 0,
+    trt_uuid    varchar(45)    null,
+    account_id  integer        null,                    -- Moved from de cr_receipt
+    method      varchar(10)    not null default 'CASH', -- Moved from de cr_receipt
+    constraint FK_CR_CASH_SESSION_CORE_APP_INSTALLATION foreign key (trt_uuid) references core_app_installation (uuid),
     constraint FK_CR_TRANSACTION_CR_RECEIPT foreign key (receipt_id) references cr_receipt (id),
     constraint UQ_CR_TRANSACTION_CR_RECEIPT unique (receipt_id),
     constraint FK_CR_TRANSACTION_CORE_ACCOUNT foreign key (account_id) references core_account (id)
@@ -37,8 +39,17 @@ set account_id = (select id
                                 where cr_receipt.id = receipt_id))
 where receipt_id is not null;
 -- DELIMITER
+update cr_transaction
+set method = (select payment_method
+              from cr_receipt
+              where cr_receipt.id = receipt_id)
+where receipt_id is not null;
+-- DELIMITER
 alter table cr_receipt
     drop column employee_name;
+-- DELIMITER
+alter table cr_receipt
+    drop column payment_method;
 -- DELIMITER
 -- MIGRATE
 create table pr_sub_category

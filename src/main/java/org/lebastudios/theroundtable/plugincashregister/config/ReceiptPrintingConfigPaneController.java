@@ -122,12 +122,12 @@ public class ReceiptPrintingConfigPaneController extends ConfigPaneController<Re
         
         Transaction transaction = new Transaction();
         transaction.setAmount(new BigDecimal("1002.90"));
-        
+        transaction.setMethod(Transaction.PaymentMethod.CASH);
+
         receipt.setTransaction(transaction);
-        
+
         receipt.setClient("Client", "ABCD123");
         receipt.setPaymentAmount(new BigDecimal("1003"));
-        receipt.setPaymentMethod("CASH");
         
         try (EscPos escPos = CashRegisterPrinters.getInstance().printReceipt(receipt, PrinterManager.getInstance().getDefaultPrintService()))
         {

@@ -4,11 +4,16 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.Session;
+import org.lebastudios.theroundtable.database.Database;
 import org.lebastudios.theroundtable.database.entities.Account;
 import org.lebastudios.theroundtable.database.entities.AppInstallation;
+import org.lebastudios.theroundtable.env.TrtUUIDReader;
+import org.lebastudios.theroundtable.logs.Logs;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Setter
 @Getter
@@ -17,9 +22,40 @@ import java.time.LocalDateTime;
 @Table(name = "cr_cash_session")
 public class CashSession
 {
+    public static CashSession getActualSession()
+    {
+        return Database.getInstance().connectQuery(session ->
+        {
+            return getActualSession(session);
+        });
+    }
+
+    public static CashSession getActualSession(Session session)
+    {
+        List<CashSession> cashSessions = session.createQuery(
+                "from CashSession as cs " +
+                        "where cs.appInstallation.trtUuid = :trtUuid " +
+                        "and cs.closingDate is null", 
+                        CashSession.class)
+                .setParameter("trtUuid", new TrtUUIDReader().getTrtUUID())
+                .list();
+
+        if(cashSessions.isEmpty()) return null;
+
+        if (cashSessions.size() > 1)
+        {
+            Logs.getInstance().log(
+                    Logs.LogType.WARNING,
+                    "There are more than one open cash sessions. This is not expected. "
+            );
+        }
+
+        return cashSessions.getFirst();
+    }
+    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private int id;
     
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "trt_uuid", referencedColumnName = "uuid", nullable = false)
@@ -29,11 +65,8 @@ public class CashSession
     @JoinColumn(name = "account_id", referencedColumnName = "id")
     private Account account;
 
-    @Column(name = "opening_amount", nullable = false)
-    private BigDecimal openingAmount;
-
-    @Column(name = "closing_amount")
-    private BigDecimal closingAmount;
+    @Column(name = "amount_in_drawer", nullable = false)
+    private BigDecimal amountInDrawer = BigDecimal.ZERO;
 
     @Column(name = "opening_date", nullable = false)
     private LocalDateTime openingDate;
@@ -43,8 +76,6 @@ public class CashSession
     
     public Status getSessionStatus()
     {
-        assert (closingDate != null) == (closingAmount != null);
-        
         return closingDate == null ? Status.OPEN : Status.CLOSED;
     }
     

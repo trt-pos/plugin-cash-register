@@ -13,12 +13,17 @@ import org.lebastudios.theroundtable.accounts.AccountManager;
 import org.lebastudios.theroundtable.apparience.UIEffects;
 import org.lebastudios.theroundtable.controllers.StageController;
 import org.lebastudios.theroundtable.database.Database;
+import org.lebastudios.theroundtable.database.entities.AppInstallation;
 import org.lebastudios.theroundtable.dialogs.ExceptionDialogController;
 import org.lebastudios.theroundtable.dialogs.InformationTextDialogController;
 import org.lebastudios.theroundtable.locale.LangFileLoader;
+import org.lebastudios.theroundtable.locale.LocaleManager;
 import org.lebastudios.theroundtable.maths.BigDecimalOperations;
 import org.lebastudios.theroundtable.plugincashregister.PluginCashRegisterEvents;
+import org.lebastudios.theroundtable.plugincashregister.entities.CashSession;
+import org.lebastudios.theroundtable.plugincashregister.entities.Product_Receipt;
 import org.lebastudios.theroundtable.plugincashregister.entities.Receipt;
+import org.lebastudios.theroundtable.plugincashregister.entities.Transaction;
 import org.lebastudios.theroundtable.plugincashregister.printers.CashRegisterPrinters;
 import org.lebastudios.theroundtable.printers.OpenCashDrawer;
 import org.lebastudios.theroundtable.printers.PrintTask;
@@ -30,6 +35,7 @@ import org.lebastudios.theroundtable.ui.StageBuilder;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.HashSet;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
@@ -162,19 +168,51 @@ public class CollectOrderStageController extends StageController<CollectOrderSta
         if (!validateInputData()) return null;
 
         var paymentMethod = paymentMethodToggleGroup.getSelectedToggle() == cashRadioButton
-                ? PaymentMethod.CASH.name()
-                : PaymentMethod.CARD.name();
+                ? Transaction.PaymentMethod.CASH
+                : Transaction.PaymentMethod.CARD;
 
+        // Receipt metadata
         Receipt receipt = new Receipt();
         receipt.setPaymentAmount(amountPaidField.getValue());
-        receipt.setPaymentMethod(paymentMethod);
+        receipt.setTableName(order.getOrderName());
+        receipt.setTaxesAmount(order.getTotalTaxes());
+
+        // Receipt products relationship
+        HashSet<Product_Receipt> products = new HashSet<>();
+
+        for (OrderItem orderItem : order.getOrderItems())
+        {
+            Product_Receipt productReceipt = new Product_Receipt(orderItem.intoProduct(), orderItem.getQuantity());
+            productReceipt.setReceipt(receipt);
+
+            products.add(productReceipt);
+        }
+        
+        receipt.setProducts(products);
+
+        LocalDateTime now = LocalDateTime.now();
+
+        // Transaction represented by the receipt
+        Transaction transaction = new Transaction();
+        transaction.setMethod(paymentMethod);
+        transaction.setAccount(AccountManager.getInstance().getCurrentLogged());
+        transaction.setAppInstallation(AppInstallation.thisInstalation());
+        transaction.setAmount(order.getTotal());
+        transaction.setTotalCash(CashSession.getActualSession().getAmountInDrawer().add(order.getTotal()));
+        transaction.setDate(now);
+        transaction.setDescription(
+                LangFileLoader.getTranslation("plugincashregister.word.receipt")
+                        + " "
+                        + LocaleManager.getInstance().getActualDateTimeFormatter().format(now)
+        );
+
+        transaction.setReceipt(receipt);
+        receipt.setTransaction(transaction);
 
         if (defineClientOption.isSelected())
         {
             receipt.setClient(clientNameField.getText(), clientIdentifierField.getText());
         }
-
-        receipt.setAccount(AccountManager.getInstance().getCurrentLogged());
         return receipt;
     }
 
@@ -235,8 +273,6 @@ public class CollectOrderStageController extends StageController<CollectOrderSta
             Receipt receipt = generateReceiptObject();
 
             if (receipt == null) return null;
-
-            receipt.setOrder(order);
             
             updateMessage("Requesting bill number");
             updateProgress(0.25, 1);
@@ -274,6 +310,7 @@ public class CollectOrderStageController extends StageController<CollectOrderSta
                 updateMessage("Finishing the process");
                 updateProgress(0.95, 1);
                 PluginCashRegisterEvents.onReceiptEmitted.invoke(receipt);
+                PluginCashRegisterEvents.onTransactionRealized.invoke(receipt.getTransaction());
 
                 CollectOrderStageController.this.close();
                 onDone.accept(receipt);

@@ -4,6 +4,7 @@ import com.sun.javafx.collections.ObservableListWrapper;
 import javafx.collections.ObservableList;
 import lombok.Getter;
 import lombok.Setter;
+import org.lebastudios.theroundtable.config.GlobalPreferencesConfigData;
 import org.lebastudios.theroundtable.database.Database;
 import org.lebastudios.theroundtable.maths.BigDecimalOperations;
 import org.lebastudios.theroundtable.plugincashregister.entities.Product;
@@ -122,12 +123,11 @@ public class Order
     }
 
     /**
-     * This Method always returns getTotal() + €. The currency should be decided at runtime.
+     * This Method always returns getTotal() + [actual currency symbol]. The currency should be decided at runtime.
      */
-    @Deprecated
     public String getTotalStringRepresentation()
     {
-        return BigDecimalOperations.toString(getTotal()) + " €";
+        return BigDecimalOperations.toString(getTotal()) + " " + new GlobalPreferencesConfigData().load().currency.symbol();
     }
     
     public BigDecimal getTotalWithoutTaxes()

@@ -5,7 +5,6 @@ import com.github.anastaciocintra.escpos.EscPosConst;
 import org.lebastudios.theroundtable.locale.LangFileLoader;
 import org.lebastudios.theroundtable.maths.BigDecimalOperations;
 import org.lebastudios.theroundtable.plugincashregister.cash.OrderItem;
-import org.lebastudios.theroundtable.plugincashregister.cash.PaymentMethod;
 import org.lebastudios.theroundtable.plugincashregister.config.ReceiptPrintingConfigData;
 import org.lebastudios.theroundtable.plugincashregister.entities.Receipt;
 import org.lebastudios.theroundtable.printers.InLinePrinter;
@@ -36,7 +35,7 @@ public class BasicReceiptBodyPrinter extends ReceiptPrinter
                     + ": " + receipt.getClientString());
 
             escpos.writeLF(LangFileLoader.getTranslation("phrase.attendedby")
-                    + receipt.getAttendantName());
+                    + receipt.getTransaction().getAccount().getName());
         }
 
         escpos.feed(1);
@@ -85,7 +84,7 @@ public class BasicReceiptBodyPrinter extends ReceiptPrinter
         if (!printerConfig.hidePaymentInfo)
         {
             escpos.writeLF(LangFileLoader.getTranslation("word.method") + ": "
-                    + PaymentMethod.valueOf(receipt.getPaymentMethod()).translate()
+                    + receipt.getTransaction().getMethod().translate()
             );
 
             escpos.writeLF(LangFileLoader.getTranslation("word.amount") + ": "

@@ -42,3 +42,6 @@ plugincashregister.word.splitted,Splitted,Separado
 plugincashregister.phrase.cashregisterisclosed,The Cash register is close. Try opening it first.,La Caja está cerrada. Pruebe a abrirla primero.
 plugincashregister.phrase.simplifiedreceipt,Simplified Receipt,Factura simplificada
 plugincashregister.reqconfig.notaxtypes,Create a tax type,Crea un impuesto
+plugincashregister.printer.cashsession.overviewheader,Session overview,Resumen de la sesion
+plugincashregister.printer.cashsession.installationname,Cash register,Caja registradora
+plugincashregister.printer.cashsession.accountname,Employee,Exmpleado
