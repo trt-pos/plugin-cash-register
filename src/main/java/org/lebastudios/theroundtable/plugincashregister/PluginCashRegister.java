@@ -39,7 +39,7 @@ import java.util.List;
 public class PluginCashRegister implements IPlugin
 {
     private static PluginCashRegister instance;
-    private static final int DATABASE_VERSION = 5;
+    private static final int DATABASE_VERSION = 6;
 
     public static PluginCashRegister getInstance()
     {

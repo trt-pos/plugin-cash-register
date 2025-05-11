@@ -49,9 +49,6 @@ public class Receipt
     @Column(name = "client_identifier")
     private String clientIdentifier;
 
-    @Column(name = "employee_name")
-    @Setter private String employeeName;
-
     @OneToMany(mappedBy = "receipt", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @Setter private Set<Product_Receipt> products;
 
@@ -70,9 +67,10 @@ public class Receipt
     @Enumerated(EnumType.STRING)
     @Setter private Status status = Status.DEFAULT;
 
+    // TODO: Remove this methos
     public void setAccount(Account account)
     {
-        employeeName = account.getName();
+        // employeeName = account.getName();
     }
 
     public void setClient(String name, String identifier)
@@ -133,16 +131,32 @@ public class Receipt
         }
     }
 
+    // TODO: Remove this method
     public String getAttendantName()
     {
-        return employeeName == null
-                ? "Unknown employee"
-                : employeeName;
+        // return employeeName == null
+        //         ? "Unknown employee"
+        //         : employeeName;
+        return "Unknown employee";
     }
 
     public Image getStatusIcon()
     {
         return ImageLoader.getIcon(status.getIconName());
+    }
+
+    @Override
+    public final boolean equals(Object o)
+    {
+        if (!(o instanceof Receipt receipt)) return false;
+
+        return id == receipt.id;
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return id;
     }
 
     public enum Status

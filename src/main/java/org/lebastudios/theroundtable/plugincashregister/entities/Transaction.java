@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.lebastudios.theroundtable.database.entities.Account;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -32,6 +33,10 @@ public class Transaction
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "receipt_id", referencedColumnName = "id")
     private Receipt receipt;
+    
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "account_id", referencedColumnName = "id")
+    private Account account;
     
     public String getDescription()
     {

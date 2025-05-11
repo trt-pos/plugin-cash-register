@@ -28,6 +28,7 @@ public class Product implements Cloneable
     @Column(name = "img_path", nullable = false, length = 999999)
     private String imgPath = "";
     
+    @Transient
     private BigDecimal taxes = new BigDecimal("0.10");
     
     @ManyToOne
