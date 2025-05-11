@@ -34,7 +34,7 @@ public class CashSession
     {
         List<CashSession> cashSessions = session.createQuery(
                 "from CashSession as cs " +
-                        "where cs.appInstallation.trtUuid = :trtUuid " +
+                        "where cs.appInstallation.uuid = :trtUuid " +
                         "and cs.closingDate is null", 
                         CashSession.class)
                 .setParameter("trtUuid", new TrtUUIDReader().getTrtUUID())

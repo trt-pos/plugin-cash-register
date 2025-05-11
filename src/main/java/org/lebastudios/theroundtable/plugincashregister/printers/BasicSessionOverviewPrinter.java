@@ -46,13 +46,13 @@ public class BasicSessionOverviewPrinter extends SessionPrinter
                                 "from Transaction t " +
                                         "where t.date >= :startDate " +
                                         "and t.date <= :endDate " +
-                                        "and t.appInstallation.trtUuid = :trtUuid " +
+                                        "and t.appInstallation.uuid = :trtUuid " +
                                         "and t.receipt not in (select rm.superReceipt from ReceiptModification rm) " +
                                         "order by t.date",
                                 Transaction.class)
                         .setParameter("startDate", loadedCashSession.getOpeningDate())
                         .setParameter("endDate", loadedCashSession.getClosingDate())
-                        .setParameter("trtUuid", loadedCashSession.getAppInstallation().getTrtUuid())
+                        .setParameter("trtUuid", loadedCashSession.getAppInstallation().getUuid())
                         .getResultList();
 
                 printHeader(escpos, loadedCashSession);
