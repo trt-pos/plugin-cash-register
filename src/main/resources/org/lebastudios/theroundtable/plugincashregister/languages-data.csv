@@ -46,3 +46,8 @@ plugincashregister.printer.cashsession.overviewheader,Session overview,Resumen d
 plugincashregister.printer.cashsession.installationname,Cash register,Caja registradora
 plugincashregister.printer.cashsession.accountname,Employee,Empleado
 plugincashregister.printer.cashsession.expectedamountindrawer,Expected cash in drawer,Dinero esperado en caja
+plugincashregister.printer.cashsession.cashpayments,payments with cash,pagos en metalico
+plugincashregister.printer.cashsession.cardpayments,payments with card,pagos con tarjeta
+plugincashregister.printer.cashsession.cashin,incomes,ingresos
+plugincashregister.printer.cashsession.cashout,withdrawals,retiros
+plugincashregister.word.othertransactions,Other transactions,Otras transacciones

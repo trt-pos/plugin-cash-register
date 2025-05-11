@@ -2,6 +2,7 @@ package org.lebastudios.theroundtable.plugincashregister.printers;
 
 import com.github.anastaciocintra.escpos.EscPos;
 import com.github.anastaciocintra.escpos.Style;
+import lombok.NoArgsConstructor;
 import org.lebastudios.theroundtable.config.GlobalPreferencesConfigData;
 import org.lebastudios.theroundtable.database.Database;
 import org.lebastudios.theroundtable.locale.Currency;
@@ -11,6 +12,7 @@ import org.lebastudios.theroundtable.plugincashregister.entities.CashSession;
 import org.lebastudios.theroundtable.plugincashregister.entities.Product;
 import org.lebastudios.theroundtable.plugincashregister.entities.Receipt;
 import org.lebastudios.theroundtable.plugincashregister.entities.Transaction;
+import org.lebastudios.theroundtable.printers.IPrinter;
 import org.lebastudios.theroundtable.printers.InLinePrinter;
 import org.lebastudios.theroundtable.printers.LineFiller;
 import org.lebastudios.theroundtable.printers.Styles;
@@ -24,7 +26,7 @@ import java.util.List;
 public class BasicSessionOverviewPrinter extends SessionPrinter
 {
     private final Settings settings;
-    
+
     public BasicSessionOverviewPrinter(CashSession session, Settings settings)
     {
         super(session);
@@ -67,44 +69,28 @@ public class BasicSessionOverviewPrinter extends SessionPrinter
                     printProducts(escpos, receipts);
                 }
 
-                if (settings.includeTransaction) printTransactions(escpos, transactions);
-
-                var totalBruto = BigDecimal.ZERO;
-                var totalNet = BigDecimal.ZERO;
-
-                for (var transaction : transactions)
+                if (settings.includeTransaction)
                 {
-                    totalBruto = totalBruto.add(transaction.getAmount());
-                    totalNet = totalNet.add(transaction.getReceipt() == null
-                            ? transaction.getAmount()
-                            : BigDecimalOperations.round(transaction.getReceipt().getNotTaxedTotal()));
+                    printTransactions(escpos, transactions);
                 }
 
-                Currency currency = new GlobalPreferencesConfigData().load().currency;
+                new ReceiptsOverviewPrinter(transactions).print(escpos);
+                new OtherTransactionsOverviewPrinter(transactions).print(escpos);
                 
-                new InLinePrinter(Style.FontSize._2).concatLeft("TOTAL BRUTO")
-                        .concatRight(BigDecimalOperations.toString(totalBruto))
-                        .concatRight(" ")
-                        .concatRight(currency.abbreviation()).print(escpos);
-
-                new InLinePrinter(Style.FontSize._2).concatLeft("TOTAL NETO")
-                        .concatRight(BigDecimalOperations.toString(totalNet))
-                        .concatRight(" ")
-                        .concatRight(currency.abbreviation()).print(escpos);
-            } 
+            }
             catch (IOException e)
             {
                 return e;
             }
-            
+
             return null;
         });
-        
+
         if (ex != null)
         {
             throw ex;
         }
-        
+
         return escpos;
     }
 
@@ -112,27 +98,30 @@ public class BasicSessionOverviewPrinter extends SessionPrinter
     {
         escPos.feed(1);
 
-        escPos.writeLF(Styles.TITLE, LangFileLoader.getTranslation("plugincashregister.printer.cashsession.overviewheader"));
-        
+        escPos.writeLF(Styles.TITLE,
+                LangFileLoader.getTranslation("plugincashregister.printer.cashsession.overviewheader"));
+
         escPos.feed(2);
 
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(new GlobalPreferencesConfigData().load().dateTimeFormatter);
-        
-        escPos.writeLF(Styles.CENTERED, 
+        DateTimeFormatter formatter =
+                DateTimeFormatter.ofPattern(new GlobalPreferencesConfigData().load().dateTimeFormatter);
+
+        escPos.writeLF(Styles.CENTERED,
                 "    " + LangFileLoader.getTranslation("plugincashregister.word.from")
-                + " " + formatter.format(cashSession.getOpeningDate()));
-        escPos.writeLF(Styles.CENTERED, 
+                        + " " + formatter.format(cashSession.getOpeningDate()));
+        escPos.writeLF(Styles.CENTERED,
                 "    " + LangFileLoader.getTranslation("plugincashregister.word.to")
-                + " " + formatter.format(cashSession.getClosingDate()));
-        
+                        + " " + formatter.format(cashSession.getClosingDate()));
+
         escPos.feed(1);
-        
+
         new InLinePrinter()
-                .concatLeft(LangFileLoader.getTranslation("plugincashregister.printer.cashsession.expectedamountindrawer"))
+                .concatLeft(
+                        LangFileLoader.getTranslation("plugincashregister.printer.cashsession.expectedamountindrawer"))
                 .concatRight(BigDecimalOperations.toString(cashSession.getAmountInDrawer()))
                 .concatRight(" ")
                 .concatRight(new GlobalPreferencesConfigData().load().currency.abbreviation()).print(escPos);
-        
+
         escPos.feed(1);
 
         new InLinePrinter()
@@ -157,7 +146,7 @@ public class BasicSessionOverviewPrinter extends SessionPrinter
         new LineFiller("-").print(escPos);
 
         Currency currency = new GlobalPreferencesConfigData().load().currency;
-        
+
         for (var transaction : transactions)
         {
             new InLinePrinter().concatLeft(transaction.getDescription(), 30)
@@ -207,9 +196,155 @@ public class BasicSessionOverviewPrinter extends SessionPrinter
         new LineFiller("-").print(escPos);
         escPos.feed(1);
     }
-    
+
     public record Settings(
             boolean includeTransaction,
             boolean includeProducts
     ) {}
+    
+    @NoArgsConstructor
+    private static class ReceiptsOverviewPrinter implements IPrinter
+    {
+        private int numberOfPaymentsWithCash;
+        private int numberOfPaymentsWithCard;
+        private BigDecimal totalWithCash;
+        private BigDecimal totalWithCard;
+        private BigDecimal totalBruto;
+        private BigDecimal totalNet;
+
+        public ReceiptsOverviewPrinter(List<Transaction> transactions)
+        {
+            numberOfPaymentsWithCash = 0;
+            numberOfPaymentsWithCard = 0;
+            totalWithCash = BigDecimal.ZERO;
+            totalWithCard = BigDecimal.ZERO;
+            totalBruto = BigDecimal.ZERO;
+            totalNet = BigDecimal.ZERO;
+            
+            for (Transaction transaction : transactions)
+            {
+                if (transaction.getReceipt() == null) continue;
+
+                totalBruto = totalBruto.add(transaction.getAmount());
+                totalNet = totalNet.add(BigDecimalOperations.round(transaction.getReceipt().getNotTaxedTotal()));
+
+                if (transaction.getMethod() == Transaction.PaymentMethod.CASH)
+                {
+                    totalWithCash = totalWithCash.add(transaction.getAmount());
+                    numberOfPaymentsWithCash++;
+                }
+                else
+                {
+                    if (transaction.getMethod() == Transaction.PaymentMethod.CARD)
+                    {
+                        totalWithCard = totalWithCard.add(transaction.getAmount());
+                        numberOfPaymentsWithCard++;
+                    }
+                }
+            }
+        }
+
+        @Override
+        public EscPos print(EscPos escpos) throws IOException
+        {
+            Currency currency = new GlobalPreferencesConfigData().load().currency;
+
+            escpos.writeLF(Styles.CENTERED, LangFileLoader.getTranslation("plugincashregister.word.receipts"));
+            new LineFiller("-").print(escpos);
+
+            new InLinePrinter()
+                    .concatLeft(String.valueOf(numberOfPaymentsWithCash))
+                    .concatLeft(" ")
+                    .concatLeft(LangFileLoader.getTranslation("plugincashregister.printer.cashsession.cashpayments"))
+                    .concatRight(BigDecimalOperations.toString(totalWithCash))
+                    .concatRight(" ")
+                    .concatRight(currency.abbreviation()).print(escpos);
+
+            new InLinePrinter()
+                    .concatLeft(String.valueOf(numberOfPaymentsWithCard))
+                    .concatLeft(" ")
+                    .concatLeft(LangFileLoader.getTranslation("plugincashregister.printer.cashsession.cardpayments"))
+                    .concatRight(BigDecimalOperations.toString(totalWithCard))
+                    .concatRight(" ")
+                    .concatRight(currency.abbreviation()).print(escpos);
+
+            escpos.feed(1);
+
+            new InLinePrinter(Style.FontSize._2).concatLeft("TOTAL BRUTO")
+                    .concatRight(BigDecimalOperations.toString(totalBruto))
+                    .concatRight(" ")
+                    .concatRight(currency.abbreviation()).print(escpos);
+
+            new InLinePrinter(Style.FontSize._2).concatLeft("TOTAL NETO")
+                    .concatRight(BigDecimalOperations.toString(totalNet))
+                    .concatRight(" ")
+                    .concatRight(currency.abbreviation()).print(escpos);
+            
+            escpos.feed(1);
+            
+            return escpos;
+        }
+    }
+    
+    private static class OtherTransactionsOverviewPrinter implements IPrinter
+    {
+        private int numberOfIn;
+        private int numberOfOut;
+        
+        private BigDecimal totalIn;
+        private BigDecimal totalOut;
+                
+        public OtherTransactionsOverviewPrinter(List<Transaction> transactions)
+        {
+            numberOfIn = 0;
+            numberOfOut = 0;
+            totalIn = BigDecimal.ZERO;
+            totalOut = BigDecimal.ZERO;
+            
+            for (var transaction : transactions)
+            {
+                if (transaction.getReceipt() != null) continue;
+                
+                if (transaction.getAmount().compareTo(BigDecimal.ZERO) < 0)
+                {
+                    totalOut = totalOut.add(transaction.getAmount());
+                    numberOfOut++;
+                }
+                else
+                {
+                    totalIn = totalIn.add(transaction.getAmount());
+                    numberOfIn++;
+                }
+            }
+        }
+
+        @Override
+        public EscPos print(EscPos escpos) throws IOException
+        {
+            Currency currency = new GlobalPreferencesConfigData().load().currency;
+            
+            escpos.writeLF(Styles.CENTERED, LangFileLoader.getTranslation("plugincashregister.word.othertransactions"));
+            new LineFiller("-").print(escpos);
+
+            new InLinePrinter()
+                    .concatLeft(String.valueOf(numberOfIn))
+                    .concatLeft(" ")
+                    .concatLeft(LangFileLoader.getTranslation("plugincashregister.printer.cashsession.cashin"))
+                    .concatRight(BigDecimalOperations.toString(totalIn))
+                    .concatRight(" ")
+                    .concatRight(currency.abbreviation()).print(escpos);
+
+            new InLinePrinter()
+                    .concatLeft(String.valueOf(numberOfOut))
+                    .concatLeft(" ")
+                    .concatLeft(LangFileLoader.getTranslation("plugincashregister.printer.cashsession.cashout"))
+                    .concatRight(BigDecimalOperations.toString(totalOut))
+                    .concatRight(" ")
+                    .concatRight(currency.abbreviation()).print(escpos);
+            
+            escpos.feed(1);
+
+            return escpos;
+        }
+    }
 }
