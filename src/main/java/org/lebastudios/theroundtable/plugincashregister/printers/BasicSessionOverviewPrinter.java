@@ -74,8 +74,8 @@ public class BasicSessionOverviewPrinter extends SessionPrinter
                     printTransactions(escpos, transactions);
                 }
 
-                new ReceiptsOverviewPrinter(transactions).print(escpos);
                 new OtherTransactionsOverviewPrinter(transactions).print(escpos);
+                new ReceiptsOverviewPrinter(transactions).print(escpos);
                 
             }
             catch (IOException e)
@@ -339,6 +339,14 @@ public class BasicSessionOverviewPrinter extends SessionPrinter
                     .concatLeft(" ")
                     .concatLeft(LangFileLoader.getTranslation("plugincashregister.printer.cashsession.cashout"))
                     .concatRight(BigDecimalOperations.toString(totalOut))
+                    .concatRight(" ")
+                    .concatRight(currency.abbreviation()).print(escpos);
+
+            escpos.feed(1);
+            
+            new InLinePrinter(Style.FontSize._2)
+                    .concatLeft("TOTAL:")
+                    .concatRight(BigDecimalOperations.toString(totalIn.add(totalOut)))
                     .concatRight(" ")
                     .concatRight(currency.abbreviation()).print(escpos);
             
