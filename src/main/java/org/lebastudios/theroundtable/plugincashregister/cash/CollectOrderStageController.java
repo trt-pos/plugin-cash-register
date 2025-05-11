@@ -145,6 +145,10 @@ public class CollectOrderStageController extends StageController<CollectOrderSta
         {
             saveReceiptInDatabase(_ -> new PrintTask(new EscPos(outputStream))
             {
+                {
+                    this.setCut(false);
+                }
+                
                 @Override
                 protected EscPos print(EscPos escpos) throws IOException
                 {
