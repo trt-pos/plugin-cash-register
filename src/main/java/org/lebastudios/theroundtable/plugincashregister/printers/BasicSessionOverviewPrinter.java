@@ -124,6 +124,16 @@ public class BasicSessionOverviewPrinter extends SessionPrinter
         escPos.writeLF(Styles.CENTERED, 
                 "    " + LangFileLoader.getTranslation("plugincashregister.word.to")
                 + " " + formatter.format(cashSession.getClosingDate()));
+        
+        escPos.feed(1);
+        
+        new InLinePrinter()
+                .concatLeft(LangFileLoader.getTranslation("plugincashregister.printer.cashsession.expectedamountindrawer"))
+                .concatRight(BigDecimalOperations.toString(cashSession.getAmountInDrawer()))
+                .concatRight(" ")
+                .concatRight(new GlobalPreferencesConfigData().load().currency.abbreviation()).print(escPos);
+        
+        escPos.feed(1);
 
         new InLinePrinter()
                 .concatLeft(LangFileLoader.getTranslation("plugincashregister.printer.cashsession.installationname"))
