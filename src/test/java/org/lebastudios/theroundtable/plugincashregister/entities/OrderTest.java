@@ -8,7 +8,7 @@ import org.lebastudios.theroundtable.plugincashregister.cash.OrderItem;
 
 import java.math.BigDecimal;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class OrderTest
 {

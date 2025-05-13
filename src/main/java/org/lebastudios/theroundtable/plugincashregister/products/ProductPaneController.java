@@ -7,11 +7,9 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import org.lebastudios.theroundtable.apparience.ImageLoader;
 import org.lebastudios.theroundtable.controllers.PaneController;
-import org.lebastudios.theroundtable.plugincashregister.entities.Product;
 import org.lebastudios.theroundtable.maths.BigDecimalOperations;
-import org.lebastudios.theroundtable.plugincashregister.PluginCashRegister;
+import org.lebastudios.theroundtable.plugincashregister.entities.Product;
 
-import java.net.URL;
 import java.util.function.Consumer;
 
 public class ProductPaneController extends PaneController<ProductPaneController>

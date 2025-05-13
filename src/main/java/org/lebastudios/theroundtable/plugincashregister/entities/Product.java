@@ -1,7 +1,9 @@
 package org.lebastudios.theroundtable.plugincashregister.entities;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.lebastudios.theroundtable.camelot.FromBytes;
 import org.lebastudios.theroundtable.camelot.IntoBytes;
 import org.lebastudios.theroundtable.database.Database;

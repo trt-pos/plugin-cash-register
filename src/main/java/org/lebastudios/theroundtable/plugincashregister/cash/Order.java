@@ -11,7 +11,9 @@ import org.lebastudios.theroundtable.plugincashregister.entities.Product;
 import org.lebastudios.theroundtable.plugincashregister.entities.Receipt;
 
 import java.math.BigDecimal;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
 
 public class Order
 {

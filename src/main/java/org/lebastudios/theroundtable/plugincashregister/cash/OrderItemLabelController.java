@@ -10,8 +10,8 @@ import org.lebastudios.theroundtable.apparience.ImageLoader;
 import org.lebastudios.theroundtable.apparience.UIEffects;
 import org.lebastudios.theroundtable.controllers.PaneController;
 import org.lebastudios.theroundtable.events.IEventMethod1;
-import org.lebastudios.theroundtable.plugincashregister.entities.Product;
 import org.lebastudios.theroundtable.maths.BigDecimalOperations;
+import org.lebastudios.theroundtable.plugincashregister.entities.Product;
 
 import java.math.BigDecimal;
 import java.util.HashMap;

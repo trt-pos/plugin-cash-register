@@ -4,10 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.lebastudios.theroundtable.database.Database;
-import org.lebastudios.theroundtable.plugincashregister.PluginCashRegisterEvents;
 
-import java.util.ArrayList;
 import java.util.Objects;
 import java.util.Set;
 

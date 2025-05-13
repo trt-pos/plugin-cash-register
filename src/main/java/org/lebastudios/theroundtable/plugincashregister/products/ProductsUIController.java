@@ -15,14 +15,17 @@ import org.hibernate.query.Query;
 import org.lebastudios.theroundtable.controllers.PaneController;
 import org.lebastudios.theroundtable.database.Database;
 import org.lebastudios.theroundtable.dialogs.EntityFormDialogController;
+import org.lebastudios.theroundtable.locale.Translator;
 import org.lebastudios.theroundtable.plugincashregister.PluginCashRegisterEvents;
 import org.lebastudios.theroundtable.plugincashregister.entities.Product;
-import org.lebastudios.theroundtable.locale.Translator;
 import org.lebastudios.theroundtable.plugincashregister.forms.ProductFormPaneController;
 import org.lebastudios.theroundtable.ui.LoadingPaneController;
 import org.lebastudios.theroundtable.ui.SearchBox;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.function.Consumer;
 
 public class ProductsUIController extends PaneController<ProductsUIController>

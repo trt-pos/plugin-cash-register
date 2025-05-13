@@ -1,6 +1,9 @@
 package org.lebastudios.theroundtable.plugincashregister;
 
-import org.lebastudios.theroundtable.events.*;
+import org.lebastudios.theroundtable.events.CamelotEvent;
+import org.lebastudios.theroundtable.events.Event1;
+import org.lebastudios.theroundtable.events.Event2;
+import org.lebastudios.theroundtable.events.IEventMethod2;
 import org.lebastudios.theroundtable.plugincashregister.cash.Order;
 import org.lebastudios.theroundtable.plugincashregister.entities.Product;
 import org.lebastudios.theroundtable.plugincashregister.entities.Receipt;
