@@ -13,7 +13,7 @@ import org.lebastudios.theroundtable.events.Event1;
 import org.lebastudios.theroundtable.events.Event2;
 import org.lebastudios.theroundtable.events.PluginEvents;
 import org.lebastudios.theroundtable.fxml2java.CompileFxml;
-import org.lebastudios.theroundtable.locale.LangFileLoader;
+import org.lebastudios.theroundtable.locale.Translator;
 import org.lebastudios.theroundtable.plugincashregister.cash.CashRegister;
 import org.lebastudios.theroundtable.plugincashregister.cash.CashRegisterPaneController;
 import org.lebastudios.theroundtable.plugincashregister.config.ReceiptPrintingConfigPaneController;
@@ -64,7 +64,7 @@ public class PluginCashRegister implements IPlugin
             if (CashSession.getActualSession() == null)
             {
                 new InformationTextDialogController(
-                        LangFileLoader.getTranslation("plugincashregister.phrase.cashregisterisclosed")
+                        Translator.getInstance().t("plugincashregister.phrase.cashregisterisclosed")
                 ).instantiate(true);
                 return;
             }
@@ -171,7 +171,7 @@ public class PluginCashRegister implements IPlugin
     public TreeItem<SettingsItem> getSettingsRootTreeItem()
     {
         var cashRegisterConfigSection = new TreeItem<>(
-                new SettingsItem(LangFileLoader.getTranslation("plugincashregister.word.cashregister"),
+                new SettingsItem(Translator.getInstance().t("plugincashregister.word.cashregister"),
                         "cash-register.png", null)
         );
         cashRegisterConfigSection.setExpanded(false);
@@ -196,7 +196,7 @@ public class PluginCashRegister implements IPlugin
         if (AccountManager.getInstance().isAccountAdmin())
         {
             buttons.add(new LabeledIconButton(
-                    LangFileLoader.getTranslation("plugincashregister.word.sessions"),
+                    Translator.getInstance().t("plugincashregister.word.sessions"),
                     new IconView("cash-sessions.png"),
                     _ -> MainStageController.getInstance().setCentralNode(new CashSessionsPaneController())
             ));

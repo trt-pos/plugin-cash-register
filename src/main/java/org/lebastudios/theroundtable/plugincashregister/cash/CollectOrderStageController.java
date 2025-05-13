@@ -13,10 +13,10 @@ import org.lebastudios.theroundtable.accounts.AccountManager;
 import org.lebastudios.theroundtable.apparience.UIEffects;
 import org.lebastudios.theroundtable.controllers.StageController;
 import org.lebastudios.theroundtable.database.Database;
-import org.lebastudios.theroundtable.database.entities.AppInstallation;
+import org.lebastudios.theroundtable.entities.AppInstallation;
 import org.lebastudios.theroundtable.dialogs.ExceptionDialogController;
 import org.lebastudios.theroundtable.dialogs.InformationTextDialogController;
-import org.lebastudios.theroundtable.locale.LangFileLoader;
+import org.lebastudios.theroundtable.locale.Translator;
 import org.lebastudios.theroundtable.locale.LocaleManager;
 import org.lebastudios.theroundtable.maths.BigDecimalOperations;
 import org.lebastudios.theroundtable.plugincashregister.PluginCashRegisterEvents;
@@ -205,7 +205,7 @@ public class CollectOrderStageController extends StageController<CollectOrderSta
         transaction.setTotalCash(CashSession.getActualSession().getAmountInDrawer().add(order.getTotal()));
         transaction.setDate(now);
         transaction.setDescription(
-                LangFileLoader.getTranslation("plugincashregister.word.receipt")
+                Translator.getInstance().t("plugincashregister.word.receipt")
                         + " "
                         + LocaleManager.getInstance().getActualDateTimeFormatter().format(now)
         );
@@ -299,7 +299,7 @@ public class CollectOrderStageController extends StageController<CollectOrderSta
                 if (!success)
                 {
                     new InformationTextDialogController(
-                            LangFileLoader.getTranslation("plugincashregister.textblock.errorsavingreceipt")
+                            Translator.getInstance().t("plugincashregister.textblock.errorsavingreceipt")
                     ).instantiate(true);
                     return;
                 }

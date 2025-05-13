@@ -14,8 +14,7 @@ import org.lebastudios.theroundtable.config.ConfigPaneController;
 import org.lebastudios.theroundtable.config.NoConfigFile;
 import org.lebastudios.theroundtable.database.Database;
 import org.lebastudios.theroundtable.dialogs.EntityFormDialogController;
-import org.lebastudios.theroundtable.locale.LangFileLoader;
-import org.lebastudios.theroundtable.maths.BigDecimalOperations;
+import org.lebastudios.theroundtable.locale.Translator;
 import org.lebastudios.theroundtable.plugincashregister.entities.TaxType;
 import org.lebastudios.theroundtable.plugincashregister.forms.TaxTypeFormPaneController;
 import org.lebastudios.theroundtable.ui.IconButton;
@@ -30,7 +29,7 @@ public class TaxesTypesConfigPaneController extends ConfigPaneController<NoConfi
 
     public TaxesTypesConfigPaneController()
     {
-        super(new NoConfigFile(), LangFileLoader.getTranslation("plugincashregister.phrase.taxestypes"), "taxes.png");
+        super(new NoConfigFile(), Translator.getInstance().t("plugincashregister.phrase.taxestypes"), "taxes.png");
     }
 
     @Override

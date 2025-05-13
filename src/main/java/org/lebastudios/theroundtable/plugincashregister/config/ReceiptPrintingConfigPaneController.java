@@ -6,7 +6,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
 import org.lebastudios.theroundtable.config.ConfigPaneController;
-import org.lebastudios.theroundtable.locale.LangFileLoader;
+import org.lebastudios.theroundtable.locale.Translator;
 import org.lebastudios.theroundtable.plugincashregister.entities.*;
 import org.lebastudios.theroundtable.plugincashregister.printers.CashRegisterPrinters;
 import org.lebastudios.theroundtable.printers.PrinterManager;
@@ -24,7 +24,7 @@ public class ReceiptPrintingConfigPaneController extends ConfigPaneController<Re
 
     public ReceiptPrintingConfigPaneController()
     {
-        super(new ReceiptPrintingConfigData(), LangFileLoader.getTranslation("plugincashregister.phrase.receiptprinterconfig"), "print.png");
+        super(new ReceiptPrintingConfigData(), Translator.getInstance().t("plugincashregister.phrase.receiptprinterconfig"), "print.png");
     }
 
     private enum LogoSize
@@ -36,10 +36,10 @@ public class ReceiptPrintingConfigPaneController extends ConfigPaneController<Re
         {
             return switch (this)
             {
-                case TINY -> LangFileLoader.getTranslation("plugincashregister.word.tiny");
-                case SMALL -> LangFileLoader.getTranslation("plugincashregister.word.small");
-                case MEDIUM -> LangFileLoader.getTranslation("plugincashregister.word.medium");
-                case LARGE -> LangFileLoader.getTranslation("plugincashregister.word.large");
+                case TINY -> Translator.getInstance().t("plugincashregister.word.tiny");
+                case SMALL -> Translator.getInstance().t("plugincashregister.word.small");
+                case MEDIUM -> Translator.getInstance().t("plugincashregister.word.medium");
+                case LARGE -> Translator.getInstance().t("plugincashregister.word.large");
             };
         }
         

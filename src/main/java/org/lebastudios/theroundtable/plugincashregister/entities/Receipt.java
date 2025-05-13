@@ -6,15 +6,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.lebastudios.theroundtable.apparience.ImageLoader;
-import org.lebastudios.theroundtable.database.entities.Account;
-import org.lebastudios.theroundtable.locale.LangFileLoader;
-import org.lebastudios.theroundtable.locale.LocaleManager;
-import org.lebastudios.theroundtable.plugincashregister.cash.Order;
-import org.lebastudios.theroundtable.plugincashregister.cash.OrderItem;
+import org.lebastudios.theroundtable.locale.Translator;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
-import java.util.HashSet;
 import java.util.Set;
 
 @Getter
@@ -84,7 +78,7 @@ public class Receipt
     {
         if (clientName == null)
         {
-            return LangFileLoader.getTranslation("phrase.generalpublicclient");
+            return Translator.getInstance().t("phrase.generalpublicclient");
         }
         else
         {

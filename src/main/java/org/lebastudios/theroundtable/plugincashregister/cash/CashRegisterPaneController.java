@@ -19,7 +19,7 @@ import javafx.util.Callback;
 import org.lebastudios.theroundtable.MainStageController;
 import org.lebastudios.theroundtable.controllers.PaneController;
 import org.lebastudios.theroundtable.dialogs.ConfirmationTextDialogController;
-import org.lebastudios.theroundtable.locale.LangFileLoader;
+import org.lebastudios.theroundtable.locale.Translator;
 import org.lebastudios.theroundtable.maths.BigDecimalOperations;
 import org.lebastudios.theroundtable.plugincashregister.entities.CashSession;
 import org.lebastudios.theroundtable.plugincashregister.entities.Receipt;
@@ -263,7 +263,7 @@ public class CashRegisterPaneController extends PaneController<CashRegisterPaneC
     {
         submitEditting(null);
 
-        new ConfirmationTextDialogController(LangFileLoader.getTranslation("plugincashregister.textblock.resetorder"),
+        new ConfirmationTextDialogController(Translator.getInstance().t("plugincashregister.textblock.resetorder"),
                 r ->
                 {
                     if (!r) return;
@@ -314,11 +314,11 @@ public class CashRegisterPaneController extends PaneController<CashRegisterPaneC
 
     private void updateLastCollectedReceipt(Receipt receipt)
     {
-        lastCollectedTotalLabel.setText(LangFileLoader.getTranslation("plugincashregister.phrase.lastcollected") + " "
+        lastCollectedTotalLabel.setText(Translator.getInstance().t("plugincashregister.phrase.lastcollected") + " "
                 + BigDecimalOperations.toString(receipt.getTaxedTotal()) + " €    "
-                + LangFileLoader.getTranslation("plugincashregister.word.payment") + " "
+                + Translator.getInstance().t("plugincashregister.word.payment") + " "
                 + BigDecimalOperations.toString(receipt.getPaymentAmount()) + " €    "
-                + LangFileLoader.getTranslation("plugincashregister.word.change") + ": "
+                + Translator.getInstance().t("plugincashregister.word.change") + ": "
                 + BigDecimalOperations.toString(receipt.getPaymentAmount().subtract(receipt.getTaxedTotal())) + " €"
         );
     }

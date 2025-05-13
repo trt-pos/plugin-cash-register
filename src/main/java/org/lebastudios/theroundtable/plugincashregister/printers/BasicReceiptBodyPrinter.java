@@ -2,7 +2,7 @@ package org.lebastudios.theroundtable.plugincashregister.printers;
 
 import com.github.anastaciocintra.escpos.EscPos;
 import com.github.anastaciocintra.escpos.EscPosConst;
-import org.lebastudios.theroundtable.locale.LangFileLoader;
+import org.lebastudios.theroundtable.locale.Translator;
 import org.lebastudios.theroundtable.maths.BigDecimalOperations;
 import org.lebastudios.theroundtable.plugincashregister.cash.OrderItem;
 import org.lebastudios.theroundtable.plugincashregister.config.ReceiptPrintingConfigData;
@@ -28,13 +28,13 @@ public class BasicReceiptBodyPrinter extends ReceiptPrinter
         
         if (!printerConfig.hideReceiptData)
         {
-            escpos.writeLF(LangFileLoader.getTranslation("phrase.tablename")
+            escpos.writeLF(Translator.getInstance().t("phrase.tablename")
                     + ": " + receipt.getTableName());
 
-            escpos.writeLF(LangFileLoader.getTranslation("word.client")
+            escpos.writeLF(Translator.getInstance().t("word.client")
                     + ": " + receipt.getClientString());
 
-            escpos.writeLF(LangFileLoader.getTranslation("phrase.attendedby")
+            escpos.writeLF(Translator.getInstance().t("phrase.attendedby")
                     + receipt.getTransaction().getAccount().getName());
         }
 
@@ -83,13 +83,13 @@ public class BasicReceiptBodyPrinter extends ReceiptPrinter
         // Payment Info
         if (!printerConfig.hidePaymentInfo)
         {
-            escpos.writeLF(LangFileLoader.getTranslation("word.method") + ": "
+            escpos.writeLF(Translator.getInstance().t("word.method") + ": "
                     + receipt.getTransaction().getMethod().translate()
             );
 
-            escpos.writeLF(LangFileLoader.getTranslation("word.amount") + ": "
+            escpos.writeLF(Translator.getInstance().t("word.amount") + ": "
                     + BigDecimalOperations.toString(receipt.getPaymentAmount()) + " "
-                    + LangFileLoader.getTranslation("plugincashregister.word.change") + ": " +
+                    + Translator.getInstance().t("plugincashregister.word.change") + ": " +
                     BigDecimalOperations.toString(receipt.getPaymentAmount().subtract(receipt.getTransaction().getAmount()))
             );
 
@@ -110,8 +110,8 @@ public class BasicReceiptBodyPrinter extends ReceiptPrinter
         var taxes = total.subtract(base);
 
         new InLinePrinter().concatLeft(BigDecimalOperations.toString(percentageOver100), 6)
-                .concatLeft(" % " + LangFileLoader.getTranslation("word.iva") + " ")
-                .concatLeft(LangFileLoader.getTranslation("word.over"))
+                .concatLeft(" % " + Translator.getInstance().t("word.iva") + " ")
+                .concatLeft(Translator.getInstance().t("word.over"))
                 .concatRight(BigDecimalOperations.toString(base), 8, EscPosConst.Justification.Right)
                 .concatRight(BigDecimalOperations.toString(taxes), 8, EscPosConst.Justification.Right).print(escpos);
     }

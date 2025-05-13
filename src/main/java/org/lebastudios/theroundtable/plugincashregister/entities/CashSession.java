@@ -6,8 +6,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.Session;
 import org.lebastudios.theroundtable.database.Database;
-import org.lebastudios.theroundtable.database.entities.Account;
-import org.lebastudios.theroundtable.database.entities.AppInstallation;
+import org.lebastudios.theroundtable.entities.Account;
+import org.lebastudios.theroundtable.entities.AppInstallation;
 import org.lebastudios.theroundtable.env.TrtUUIDReader;
 import org.lebastudios.theroundtable.logs.Logs;
 

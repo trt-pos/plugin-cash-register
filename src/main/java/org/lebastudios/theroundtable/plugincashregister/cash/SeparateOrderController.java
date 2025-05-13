@@ -13,7 +13,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.stage.Modality;
 import org.lebastudios.theroundtable.apparience.ImageLoader;
 import org.lebastudios.theroundtable.controllers.StageController;
-import org.lebastudios.theroundtable.locale.LangFileLoader;
+import org.lebastudios.theroundtable.locale.Translator;
 import org.lebastudios.theroundtable.maths.BigDecimalOperations;
 import org.lebastudios.theroundtable.plugincashregister.entities.Product;
 import org.lebastudios.theroundtable.ui.StageBuilder;
@@ -105,7 +105,7 @@ public class SeparateOrderController extends StageController<SeparateOrderContro
     {
         var generatedOrder = new Order();
         generatedOrder.setOrderName(
-                originalOrder.getOrderName() + " (" + LangFileLoader.getTranslation("plugincashregister.word.splitted") + ")"
+                originalOrder.getOrderName() + " (" + Translator.getInstance().t("plugincashregister.word.splitted") + ")"
         );
 
         for (var variable : targetList.getItems())
@@ -131,7 +131,7 @@ public class SeparateOrderController extends StageController<SeparateOrderContro
     @Override
     public String getTitle()
     {
-        return LangFileLoader.getTranslation("tiltle.separateorderdialog");
+        return Translator.getInstance().t("tiltle.separateorderdialog");
     }
 
     private static class MoveableItemListCell extends ListCell<Map.Entry<Product, BigDecimal>>

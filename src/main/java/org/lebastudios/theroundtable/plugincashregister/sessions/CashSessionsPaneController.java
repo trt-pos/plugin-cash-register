@@ -7,7 +7,7 @@ import javafx.scene.control.DatePicker;
 import lombok.NonNull;
 import org.lebastudios.theroundtable.controllers.PaneController;
 import org.lebastudios.theroundtable.database.Database;
-import org.lebastudios.theroundtable.locale.LangFileLoader;
+import org.lebastudios.theroundtable.locale.Translator;
 import org.lebastudios.theroundtable.plugincashregister.entities.CashSession;
 import org.lebastudios.theroundtable.ui.MultipleItemsListView;
 
@@ -109,7 +109,7 @@ public class CashSessionsPaneController extends PaneController<CashSessionsPaneC
         });
 
         installationNameChoiceBox.getItems().clear();
-        installationNameChoiceBox.getItems().add(LangFileLoader.getTranslation("plugincashregister.sessionspane.all"));
+        installationNameChoiceBox.getItems().add(Translator.getInstance().t("plugincashregister.sessionspane.all"));
         installationNameChoiceBox.getItems().addAll(installations);
         installationNameChoiceBox.getSelectionModel().selectFirst();
 

@@ -11,9 +11,9 @@ import org.lebastudios.theroundtable.accounts.AccountManager;
 import org.lebastudios.theroundtable.apparience.UIEffects;
 import org.lebastudios.theroundtable.controllers.StageController;
 import org.lebastudios.theroundtable.database.Database;
-import org.lebastudios.theroundtable.database.entities.AppInstallation;
+import org.lebastudios.theroundtable.entities.AppInstallation;
 import org.lebastudios.theroundtable.dialogs.ConfirmationTextDialogController;
-import org.lebastudios.theroundtable.locale.LangFileLoader;
+import org.lebastudios.theroundtable.locale.Translator;
 import org.lebastudios.theroundtable.plugincashregister.PluginCashRegisterEvents;
 import org.lebastudios.theroundtable.plugincashregister.entities.CashSession;
 import org.lebastudios.theroundtable.plugincashregister.entities.Transaction;
@@ -49,7 +49,7 @@ public class TransactionCreatorStageController extends StageController<Transacti
                 ? "plugincashregister.word.put"
                 : "plugincashregister.word.get";
 
-        return LangFileLoader.getTranslation(titleKey);
+        return Translator.getInstance().t(titleKey);
     }
 
     @FXML
@@ -107,7 +107,7 @@ public class TransactionCreatorStageController extends StageController<Transacti
             catch (Exception e)
             {
                 new ConfirmationTextDialogController(
-                        LangFileLoader.getTranslation("plugincashregister.textblock.printingerror"),
+                        Translator.getInstance().t("plugincashregister.textblock.printingerror"),
                         isTransactionCreated::set
                 ).instantiate(true);
             }

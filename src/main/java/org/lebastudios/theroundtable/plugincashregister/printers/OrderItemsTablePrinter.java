@@ -3,7 +3,7 @@ package org.lebastudios.theroundtable.plugincashregister.printers;
 import com.github.anastaciocintra.escpos.EscPos;
 import com.github.anastaciocintra.escpos.EscPosConst;
 import com.github.anastaciocintra.escpos.Style;
-import org.lebastudios.theroundtable.locale.LangFileLoader;
+import org.lebastudios.theroundtable.locale.Translator;
 import org.lebastudios.theroundtable.maths.BigDecimalOperations;
 import org.lebastudios.theroundtable.plugincashregister.cash.OrderItem;
 import org.lebastudios.theroundtable.printers.IPrinter;
@@ -28,11 +28,11 @@ public class OrderItemsTablePrinter implements IPrinter
     {
         // Top Label
         new InLinePrinter()
-                .concatLeft(LangFileLoader.getTranslation("plugincashregister.word.qty"), 6)
+                .concatLeft(Translator.getInstance().t("plugincashregister.word.qty"), 6)
                 .concatLeft(" ")
-                .concatLeft(LangFileLoader.getTranslation("word.product"), 22)
-                .concatRight(LangFileLoader.getTranslation("plugincashregister.word.price"), 8, EscPosConst.Justification.Left_Default)
-                .concatRight(LangFileLoader.getTranslation("word.import"), 10, EscPosConst.Justification.Left_Default)
+                .concatLeft(Translator.getInstance().t("word.product"), 22)
+                .concatRight(Translator.getInstance().t("plugincashregister.word.price"), 8, EscPosConst.Justification.Left_Default)
+                .concatRight(Translator.getInstance().t("word.import"), 10, EscPosConst.Justification.Left_Default)
                 .print(escpos);
 
         new LineFiller("-").print(escpos);

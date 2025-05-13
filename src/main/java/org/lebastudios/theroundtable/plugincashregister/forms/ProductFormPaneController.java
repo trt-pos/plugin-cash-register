@@ -14,7 +14,7 @@ import org.lebastudios.theroundtable.apparience.UIEffects;
 import org.lebastudios.theroundtable.config.RequestConfigStageController;
 import org.lebastudios.theroundtable.controllers.FormPaneController;
 import org.lebastudios.theroundtable.database.Database;
-import org.lebastudios.theroundtable.locale.LangFileLoader;
+import org.lebastudios.theroundtable.locale.Translator;
 import org.lebastudios.theroundtable.plugincashregister.PluginCashRegisterEvents;
 import org.lebastudios.theroundtable.plugincashregister.config.TaxesTypesConfigPaneController;
 import org.lebastudios.theroundtable.plugincashregister.entities.Category;
@@ -65,7 +65,7 @@ public class ProductFormPaneController extends FormPaneController<Product>
                 {
                     new RequestConfigStageController(new TaxesTypesConfigPaneController())
                             .setOwner(this.getStage())
-                            .setTitle(LangFileLoader.getTranslation("plugincashregister.reqconfig.notaxtypes"))
+                            .setTitle(Translator.getInstance().t("plugincashregister.reqconfig.notaxtypes"))
                             .instantiate(true);
                 });
 

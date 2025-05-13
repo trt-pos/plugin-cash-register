@@ -5,7 +5,7 @@ import lombok.Setter;
 import org.lebastudios.theroundtable.accounts.AccountManager;
 import org.lebastudios.theroundtable.apparience.UIEffects;
 import org.lebastudios.theroundtable.controllers.FormPaneController;
-import org.lebastudios.theroundtable.database.entities.AppInstallation;
+import org.lebastudios.theroundtable.entities.AppInstallation;
 import org.lebastudios.theroundtable.plugincashregister.entities.CashSession;
 import org.lebastudios.theroundtable.ui.BigDecimalField;
 

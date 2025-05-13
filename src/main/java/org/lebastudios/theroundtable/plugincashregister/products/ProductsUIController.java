@@ -12,14 +12,12 @@ import javafx.scene.control.TabPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.VBox;
 import org.hibernate.query.Query;
-import org.lebastudios.theroundtable.camelot.CamelotEventListener;
 import org.lebastudios.theroundtable.controllers.PaneController;
 import org.lebastudios.theroundtable.database.Database;
 import org.lebastudios.theroundtable.dialogs.EntityFormDialogController;
-import org.lebastudios.theroundtable.events.IEventMethod1;
 import org.lebastudios.theroundtable.plugincashregister.PluginCashRegisterEvents;
 import org.lebastudios.theroundtable.plugincashregister.entities.Product;
-import org.lebastudios.theroundtable.locale.LangFileLoader;
+import org.lebastudios.theroundtable.locale.Translator;
 import org.lebastudios.theroundtable.plugincashregister.forms.ProductFormPaneController;
 import org.lebastudios.theroundtable.ui.LoadingPaneController;
 import org.lebastudios.theroundtable.ui.SearchBox;
@@ -62,7 +60,7 @@ public class ProductsUIController extends PaneController<ProductsUIController>
         products.forEach((mainCategory, subCategories) ->
         {
             var tabName = mainCategory.isBlank()
-                    ? LangFileLoader.getTranslation("plugincashregister.word.generic")
+                    ? Translator.getInstance().t("plugincashregister.word.generic")
                     : mainCategory;
 
             Tab tab = new Tab(tabName);
@@ -114,7 +112,7 @@ public class ProductsUIController extends PaneController<ProductsUIController>
         {
             VBox subCategoryPane = new VBox(10);
             Label subCategoryLabel = new Label(subCategory.isBlank()
-                    ? LangFileLoader.getTranslation("plugincashregister.word.generic")
+                    ? Translator.getInstance().t("plugincashregister.word.generic")
                     : subCategory
             );
             subCategoryLabel.setStyle("-fx-font-size: 18px; -fx-font-weight: bold;");

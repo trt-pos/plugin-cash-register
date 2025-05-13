@@ -5,9 +5,9 @@ import javafx.util.StringConverter;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.lebastudios.theroundtable.database.entities.Account;
-import org.lebastudios.theroundtable.database.entities.AppInstallation;
-import org.lebastudios.theroundtable.locale.LangFileLoader;
+import org.lebastudios.theroundtable.entities.Account;
+import org.lebastudios.theroundtable.entities.AppInstallation;
+import org.lebastudios.theroundtable.locale.Translator;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -69,7 +69,7 @@ public class Transaction
     
         public String translate()
         {
-            return LangFileLoader.getTranslation("plugincashregister.word." +
+            return Translator.getInstance().t("plugincashregister.word." +
                     switch (this)
                     {
                         case CASH -> "cash";

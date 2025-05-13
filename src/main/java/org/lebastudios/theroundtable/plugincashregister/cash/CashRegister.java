@@ -6,7 +6,7 @@ import lombok.SneakyThrows;
 import org.lebastudios.theroundtable.database.Database;
 import org.lebastudios.theroundtable.events.Event;
 import org.lebastudios.theroundtable.events.Event1;
-import org.lebastudios.theroundtable.locale.LangFileLoader;
+import org.lebastudios.theroundtable.locale.Translator;
 import org.lebastudios.theroundtable.plugincashregister.PluginCashRegisterEvents;
 import org.lebastudios.theroundtable.plugincashregister.entities.CashSession;
 import org.lebastudios.theroundtable.plugincashregister.entities.Product;
@@ -55,7 +55,7 @@ public class CashRegister
     private CashRegister()
     {
         cashRegisterOrder = new Order();
-        cashRegisterOrder.setOrderName(LangFileLoader.getTranslation("plugincashregister.word.cashregister"));
+        cashRegisterOrder.setOrderName(Translator.getInstance().t("plugincashregister.word.cashregister"));
         actualOrder = cashRegisterOrder;
     }
 

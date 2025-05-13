@@ -1,10 +1,8 @@
 package org.lebastudios.theroundtable.plugincashregister.printers;
 
 import com.github.anastaciocintra.escpos.EscPos;
-import com.github.anastaciocintra.escpos.EscPosConst;
 import com.github.anastaciocintra.escpos.Style;
 import org.lebastudios.theroundtable.config.GlobalPreferencesConfigData;
-import org.lebastudios.theroundtable.locale.LangFileLoader;
 import org.lebastudios.theroundtable.plugincashregister.entities.Transaction;
 import org.lebastudios.theroundtable.printers.InLinePrinter;
 import org.lebastudios.theroundtable.printers.LineFiller;
@@ -13,7 +11,6 @@ import org.lebastudios.theroundtable.printers.Styles;
 
 import java.io.IOException;
 import java.time.format.DateTimeFormatter;
-import java.time.temporal.ChronoUnit;
 
 public class BasicTransactionPrinter extends TransactionPrinter
 {

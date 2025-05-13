@@ -3,7 +3,7 @@ package org.lebastudios.theroundtable.plugincashregister.printers;
 import com.github.anastaciocintra.escpos.EscPos;
 import com.github.anastaciocintra.output.PrinterOutputStream;
 import lombok.Getter;
-import org.lebastudios.theroundtable.locale.LangFileLoader;
+import org.lebastudios.theroundtable.locale.Translator;
 import org.lebastudios.theroundtable.plugincashregister.PluginCashRegisterEvents;
 import org.lebastudios.theroundtable.plugincashregister.cash.Order;
 import org.lebastudios.theroundtable.plugincashregister.entities.Receipt;
@@ -44,9 +44,9 @@ public class CashRegisterPrinters
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
  
             escpos.writeLF(Styles.CENTERED,
-                    LangFileLoader.getTranslation("word.date") + ": "
+                    Translator.getInstance().t("word.date") + ": "
                             + receipt.getTransaction().getDate().toLocalDate().format(formatter) + "  " +
-                            LangFileLoader.getTranslation("word.time") + ": " +
+                            Translator.getInstance().t("word.time") + ": " +
                             receipt.getTransaction().getDate().toLocalTime().truncatedTo(ChronoUnit.SECONDS)
                                     .toString()
             );
@@ -60,22 +60,22 @@ public class CashRegisterPrinters
                 PluginCashRegisterEvents.onRequestReceiptBillNumber.invoke(oldReceipt.getId(), billNumber);
                 String oldReceiptId = billNumber.isEmpty() ? oldReceipt.getId() + "" : billNumber.toString();
 
-                escpos.writeLF(LangFileLoader.getTranslation("plugincashregister.phrase.rectificationreceipt") +
+                escpos.writeLF(Translator.getInstance().t("plugincashregister.phrase.rectificationreceipt") +
                         ": " + receiptId
                 );
-                escpos.writeLF(LangFileLoader.getTranslation("plugincashregister.phrase.modifiedreceipt")
+                escpos.writeLF(Translator.getInstance().t("plugincashregister.phrase.modifiedreceipt")
                         + ": " + oldReceiptId
-                        + " " + LangFileLoader.getTranslation("plugincashregister.phrase.withdate") + " "
+                        + " " + Translator.getInstance().t("plugincashregister.phrase.withdate") + " "
                         + oldReceipt.getTransaction().getDate().toLocalDate().format(formatter)
                 );
                 // TODO: Make a IPrinter class that prints long texts wrapping them
                 escpos.writeLF(
-                        LangFileLoader.getTranslation("plugincashregister.phrase.reason") + ": " + receipt.getModifies().getReason()
+                        Translator.getInstance().t("plugincashregister.phrase.reason") + ": " + receipt.getModifies().getReason()
                 );
             }
             else
             {
-                escpos.writeLF(LangFileLoader.getTranslation("plugincashregister.phrase.simplifiedreceipt") +
+                escpos.writeLF(Translator.getInstance().t("plugincashregister.phrase.simplifiedreceipt") +
                         ": " + receiptId
                 );
             }
@@ -89,14 +89,14 @@ public class CashRegisterPrinters
                 String newReceiptId =
                         billNumber.isEmpty() ? newReceipt.getId() + "" : billNumber.toString();
 
-                escpos.writeLF(LangFileLoader.getTranslation("plugincashregister.phrase.modifiedbyreceipt")
+                escpos.writeLF(Translator.getInstance().t("plugincashregister.phrase.modifiedbyreceipt")
                         + ": " + newReceiptId 
-                        + " " + LangFileLoader.getTranslation("plugincashregister.phrase.withdate") + " "
+                        + " " + Translator.getInstance().t("plugincashregister.phrase.withdate") + " "
                         + newReceipt.getTransaction().getDate().toLocalDate().format(formatter)
                 );
                 
                 escpos.writeLF(
-                        LangFileLoader.getTranslation("plugincashregister.phrase.reason") + ": " + receipt.getModifiedBy().getReason()
+                        Translator.getInstance().t("plugincashregister.phrase.reason") + ": " + receipt.getModifiedBy().getReason()
                 );
             }
             
