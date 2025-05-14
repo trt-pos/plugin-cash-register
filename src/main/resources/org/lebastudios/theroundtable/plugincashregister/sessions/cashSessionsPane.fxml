@@ -3,7 +3,7 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import org.lebastudios.theroundtable.ui.MultipleItemsListView?>
+<?import org.lebastudios.theroundtable.components.PaginableListView?>
 <VBox xmlns="http://javafx.com/javafx"
       xmlns:fx="http://javafx.com/fxml" spacing="5"
       fx:controller="org.lebastudios.theroundtable.plugincashregister.sessions.CashSessionsPaneController">
@@ -20,5 +20,5 @@
         <Label text="%word.name" />
         <ChoiceBox fx:id="installationNameChoiceBox" prefWidth="150"/>
     </HBox>
-    <MultipleItemsListView fx:id="sessionsListView" VBox.vgrow="ALWAYS"/>
+    <PaginableListView fx:id="sessionsListView" VBox.vgrow="ALWAYS"/>
 </VBox>

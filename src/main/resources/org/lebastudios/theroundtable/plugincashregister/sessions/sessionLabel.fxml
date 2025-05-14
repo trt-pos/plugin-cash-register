@@ -3,8 +3,8 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Region?>
-<?import org.lebastudios.theroundtable.ui.IconButton?>
-<?import org.lebastudios.theroundtable.ui.IconView?>
+<?import org.lebastudios.theroundtable.components.IconButton?>
+<?import org.lebastudios.theroundtable.components.IconView?>
 <?import javafx.geometry.Insets?>
 <HBox xmlns="http://javafx.com/javafx" alignment="CENTER"
       xmlns:fx="http://javafx.com/fxml" spacing="5"

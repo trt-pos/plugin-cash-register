@@ -27,9 +27,9 @@ import org.lebastudios.theroundtable.plugincashregister.products.ProductPaneCont
 import org.lebastudios.theroundtable.plugincashregister.products.ProductsUIController;
 import org.lebastudios.theroundtable.printers.OpenCashDrawer;
 import org.lebastudios.theroundtable.printers.PrinterManager;
-import org.lebastudios.theroundtable.ui.IconButton;
-import org.lebastudios.theroundtable.ui.IconTextButton;
-import org.lebastudios.theroundtable.ui.LoadingPaneController;
+import org.lebastudios.theroundtable.components.IconButton;
+import org.lebastudios.theroundtable.components.IconTextButton;
+import org.lebastudios.theroundtable.components.LoadingPaneController;
 
 import java.io.IOException;
 import java.math.BigDecimal;

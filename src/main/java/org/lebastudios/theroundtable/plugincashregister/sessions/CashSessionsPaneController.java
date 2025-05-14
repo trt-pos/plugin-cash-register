@@ -8,7 +8,7 @@ import org.lebastudios.theroundtable.database.Database;
 import org.lebastudios.theroundtable.entities.AppInstallation;
 import org.lebastudios.theroundtable.locale.Translator;
 import org.lebastudios.theroundtable.plugincashregister.entities.CashSession;
-import org.lebastudios.theroundtable.ui.MultipleItemsListView;
+import org.lebastudios.theroundtable.components.PaginableListView;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -18,9 +18,9 @@ public class CashSessionsPaneController extends PaneController<CashSessionsPaneC
     @FXML public DatePicker fromDatePicker;
     @FXML public DatePicker toDatePicker;
     @FXML public ChoiceBox<String> installationNameChoiceBox;
-    @FXML public MultipleItemsListView<CashSession> sessionsListView;
+    @FXML public PaginableListView<CashSession> sessionsListView;
 
-    MultipleItemsListView.ItemsGenerator<CashSession> itemsGenerator = new MultipleItemsListView.ItemsGenerator<>()
+    PaginableListView.ItemsGenerator<CashSession> itemsGenerator = new PaginableListView.ItemsGenerator<>()
     {
         @Override
         public List<CashSession> generateItems(int from, int to)

@@ -29,8 +29,8 @@ import org.lebastudios.theroundtable.printers.OpenCashDrawer;
 import org.lebastudios.theroundtable.printers.PrintTask;
 import org.lebastudios.theroundtable.printers.PrinterManager;
 import org.lebastudios.theroundtable.tasks.Task;
-import org.lebastudios.theroundtable.ui.BigDecimalField;
-import org.lebastudios.theroundtable.ui.StageBuilder;
+import org.lebastudios.theroundtable.components.BigDecimalField;
+import org.lebastudios.theroundtable.components.StageBuilder;
 
 import java.io.IOException;
 import java.time.LocalDateTime;

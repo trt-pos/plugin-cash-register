@@ -3,7 +3,7 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import org.lebastudios.theroundtable.ui.*?>
+<?import org.lebastudios.theroundtable.components.*?>
 <HBox maxWidth="Infinity" xmlns="http://javafx.com/javafx/17.0.12"
       fx:controller="org.lebastudios.theroundtable.plugincashregister.cash.CashRegisterPaneController"
       xmlns:fx="http://javafx.com/fxml/1" fx:id="root" spacing="5">

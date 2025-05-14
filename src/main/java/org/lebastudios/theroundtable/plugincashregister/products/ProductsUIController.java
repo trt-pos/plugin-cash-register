@@ -19,8 +19,8 @@ import org.lebastudios.theroundtable.locale.Translator;
 import org.lebastudios.theroundtable.plugincashregister.PluginCashRegisterEvents;
 import org.lebastudios.theroundtable.plugincashregister.entities.Product;
 import org.lebastudios.theroundtable.plugincashregister.forms.ProductFormPaneController;
-import org.lebastudios.theroundtable.ui.LoadingPaneController;
-import org.lebastudios.theroundtable.ui.SearchBox;
+import org.lebastudios.theroundtable.components.LoadingPaneController;
+import org.lebastudios.theroundtable.components.SearchBox;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;

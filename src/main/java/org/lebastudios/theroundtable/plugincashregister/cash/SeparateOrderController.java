@@ -16,7 +16,7 @@ import org.lebastudios.theroundtable.controllers.StageController;
 import org.lebastudios.theroundtable.locale.Translator;
 import org.lebastudios.theroundtable.maths.BigDecimalOperations;
 import org.lebastudios.theroundtable.plugincashregister.entities.Product;
-import org.lebastudios.theroundtable.ui.StageBuilder;
+import org.lebastudios.theroundtable.components.StageBuilder;
 
 import java.math.BigDecimal;
 import java.util.Comparator;

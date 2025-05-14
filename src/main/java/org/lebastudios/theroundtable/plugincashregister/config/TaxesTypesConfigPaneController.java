@@ -17,7 +17,7 @@ import org.lebastudios.theroundtable.dialogs.EntityFormDialogController;
 import org.lebastudios.theroundtable.locale.Translator;
 import org.lebastudios.theroundtable.plugincashregister.entities.TaxType;
 import org.lebastudios.theroundtable.plugincashregister.forms.TaxTypeFormPaneController;
-import org.lebastudios.theroundtable.ui.IconButton;
+import org.lebastudios.theroundtable.components.IconButton;
 
 import java.math.BigDecimal;
 import java.util.List;

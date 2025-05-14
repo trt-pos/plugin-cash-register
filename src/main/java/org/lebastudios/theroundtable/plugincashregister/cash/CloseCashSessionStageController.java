@@ -14,7 +14,7 @@ import org.lebastudios.theroundtable.logs.Logs;
 import org.lebastudios.theroundtable.plugincashregister.entities.CashSession;
 import org.lebastudios.theroundtable.plugincashregister.printers.BasicSessionOverviewPrinter;
 import org.lebastudios.theroundtable.printers.PrinterManager;
-import org.lebastudios.theroundtable.ui.StageBuilder;
+import org.lebastudios.theroundtable.components.StageBuilder;
 
 import java.io.IOException;
 import java.time.LocalDateTime;

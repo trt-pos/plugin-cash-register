@@ -4,8 +4,8 @@
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
-<?import org.lebastudios.theroundtable.ui.IconButton?>
-<?import org.lebastudios.theroundtable.ui.SearchBox?>
+<?import org.lebastudios.theroundtable.components.IconButton?>
+<?import org.lebastudios.theroundtable.components.SearchBox?>
 <VBox xmlns:fx="http://javafx.com/fxml"
       fx:controller="org.lebastudios.theroundtable.plugincashregister.products.ProductsUIController"
       xmlns="http://javafx.com/javafx" spacing="10">

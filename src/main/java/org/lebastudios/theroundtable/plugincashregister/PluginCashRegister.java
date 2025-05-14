@@ -24,9 +24,9 @@ import org.lebastudios.theroundtable.plugincashregister.products.ProductPaneCont
 import org.lebastudios.theroundtable.plugincashregister.products.ProductsUIController;
 import org.lebastudios.theroundtable.plugincashregister.sessions.CashSessionsPaneController;
 import org.lebastudios.theroundtable.plugins.IPlugin;
-import org.lebastudios.theroundtable.ui.IconButton;
-import org.lebastudios.theroundtable.ui.IconView;
-import org.lebastudios.theroundtable.ui.LabeledIconButton;
+import org.lebastudios.theroundtable.components.IconButton;
+import org.lebastudios.theroundtable.components.IconView;
+import org.lebastudios.theroundtable.components.LabeledIconButton;
 
 import java.util.ArrayList;
 import java.util.List;

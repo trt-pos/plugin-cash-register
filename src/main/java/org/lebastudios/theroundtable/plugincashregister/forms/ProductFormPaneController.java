@@ -21,8 +21,8 @@ import org.lebastudios.theroundtable.plugincashregister.entities.Category;
 import org.lebastudios.theroundtable.plugincashregister.entities.Product;
 import org.lebastudios.theroundtable.plugincashregister.entities.SubCategory;
 import org.lebastudios.theroundtable.plugincashregister.entities.TaxType;
-import org.lebastudios.theroundtable.ui.BigDecimalField;
-import org.lebastudios.theroundtable.ui.IconView;
+import org.lebastudios.theroundtable.components.BigDecimalField;
+import org.lebastudios.theroundtable.components.IconView;
 
 import java.io.File;
 import java.util.HashSet;

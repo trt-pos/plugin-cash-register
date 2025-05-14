@@ -4,7 +4,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
-<?import org.lebastudios.theroundtable.ui.IconTextButton?>
+<?import org.lebastudios.theroundtable.components.IconTextButton?>
 <VBox xmlns="http://javafx.com/javafx" spacing="5" fx:id="root" maxWidth="Infinity" maxHeight="Infinity"
       xmlns:fx="http://javafx.com/fxml">
     <padding>

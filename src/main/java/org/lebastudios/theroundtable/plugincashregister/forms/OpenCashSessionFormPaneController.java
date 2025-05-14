@@ -7,7 +7,7 @@ import org.lebastudios.theroundtable.apparience.UIEffects;
 import org.lebastudios.theroundtable.controllers.FormPaneController;
 import org.lebastudios.theroundtable.entities.AppInstallation;
 import org.lebastudios.theroundtable.plugincashregister.entities.CashSession;
-import org.lebastudios.theroundtable.ui.BigDecimalField;
+import org.lebastudios.theroundtable.components.BigDecimalField;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;

@@ -2,7 +2,7 @@
 
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.VBox?>
-<?import org.lebastudios.theroundtable.ui.BigDecimalField?>
+<?import org.lebastudios.theroundtable.components.BigDecimalField?>
 <VBox xmlns="http://javafx.com/javafx"
       xmlns:fx="http://javafx.com/fxml" spacing="5"
       fx:controller="org.lebastudios.theroundtable.plugincashregister.forms.OpenCashSessionFormPaneController">

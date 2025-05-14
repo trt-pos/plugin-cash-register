@@ -4,9 +4,9 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.shape.Rectangle?>
-<?import org.lebastudios.theroundtable.ui.BigDecimalField?>
-<?import org.lebastudios.theroundtable.ui.IconButton?>
-<?import org.lebastudios.theroundtable.ui.IconView?>
+<?import org.lebastudios.theroundtable.components.BigDecimalField?>
+<?import org.lebastudios.theroundtable.components.IconButton?>
+<?import org.lebastudios.theroundtable.components.IconView?>
 <GridPane xmlns:fx="http://javafx.com/fxml/1" maxWidth="Infinity"
           fx:controller="org.lebastudios.theroundtable.plugincashregister.forms.ProductFormPaneController"
           hgap="15" vgap="15" xmlns="http://javafx.com/javafx/17.0.2-ea">
