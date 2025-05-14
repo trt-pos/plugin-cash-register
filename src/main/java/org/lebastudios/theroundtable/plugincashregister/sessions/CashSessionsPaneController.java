@@ -1,19 +1,17 @@
 package org.lebastudios.theroundtable.plugincashregister.sessions;
 
 import javafx.fxml.FXML;
-import javafx.scene.Node;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.DatePicker;
-import lombok.NonNull;
 import org.lebastudios.theroundtable.controllers.PaneController;
 import org.lebastudios.theroundtable.database.Database;
+import org.lebastudios.theroundtable.entities.AppInstallation;
 import org.lebastudios.theroundtable.locale.Translator;
 import org.lebastudios.theroundtable.plugincashregister.entities.CashSession;
 import org.lebastudios.theroundtable.ui.MultipleItemsListView;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.function.Function;
 
 public class CashSessionsPaneController extends PaneController<CashSessionsPaneController>
 {
@@ -35,7 +33,8 @@ public class CashSessionsPaneController extends PaneController<CashSessionsPaneC
                 return session.createQuery("from CashSession s " +
                                         "where s.appInstallation.name like :installationNamePattern " +
                                         "and s.openingDate >= :fromDate " +
-                                        "and s.closingDate <= :toDate",
+                                        "and s.closingDate <= :toDate " +
+                                        "order by s.openingDate desc",
                                 CashSession.class)
                         .setParameter("installationNamePattern", installationNamePattern)
                         .setParameter("fromDate", fromDatePicker.getValue().atStartOfDay())
@@ -66,35 +65,6 @@ public class CashSessionsPaneController extends PaneController<CashSessionsPaneC
             });
         }
     };
-
-    Function<MultipleItemsListView<CashSession>, MultipleItemsListView.ICellRecicler<CashSession>> cellReciclerFunction = new Function<MultipleItemsListView<CashSession>, MultipleItemsListView.ICellRecicler<CashSession>>() {
-        @Override
-        public MultipleItemsListView.ICellRecicler<CashSession> apply(MultipleItemsListView<CashSession> listView)
-        {
-            return new MultipleItemsListView.ICellRecicler<>()
-            {
-                private final SessionLabelController sessionLabelController = new SessionLabelController();
-                
-                @Override
-                public void update(@NonNull CashSession item)
-                {
-                    sessionLabelController.updateView(item);
-                }
-
-                @Override
-                public Node getGraphic()
-                {
-                    return sessionLabelController.getRoot();
-                }
-
-                @Override
-                public String getText()
-                {
-                    return null;
-                }
-            };
-        }
-    };
     
     @Override
     protected void initialize()
@@ -102,20 +72,20 @@ public class CashSessionsPaneController extends PaneController<CashSessionsPaneC
         fromDatePicker.setValue(LocalDate.now().minusMonths(1));
         toDatePicker.setValue(LocalDate.now());
 
-        List<String> installations = Database.getInstance().connectQuery(session ->
+        Database.getInstance().connectQuery(session ->
         {
-            return session.createQuery("select i.name from AppInstallation i", String.class)
+            var installations = session.createQuery("select i.name from AppInstallation i", String.class)
                     .list();
-        });
 
-        installationNameChoiceBox.getItems().clear();
-        installationNameChoiceBox.getItems().add(Translator.getInstance().t("plugincashregister.sessionspane.all"));
-        installationNameChoiceBox.getItems().addAll(installations);
-        installationNameChoiceBox.getSelectionModel().selectFirst();
+            installationNameChoiceBox.getItems().clear();
+            installationNameChoiceBox.getItems().add(Translator.getInstance().t("plugincashregister.sessionspane.all"));
+            installationNameChoiceBox.getItems().addAll(installations);
+            installationNameChoiceBox.getSelectionModel().select(AppInstallation.thisInstalation(session).getName());
+        });
 
         sessionsListView.setGroupSize(50);
         sessionsListView.setItemsGenerator(itemsGenerator);
-        sessionsListView.setCellReciclerGenerator(cellReciclerFunction);
+        sessionsListView.setReciclablePaneFactory(SessionLabelController::new);
         sessionsListView.refresh();
         
         installationNameChoiceBox.getSelectionModel().selectedItemProperty().addListener((_, _, _) ->

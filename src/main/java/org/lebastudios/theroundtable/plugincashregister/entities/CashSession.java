@@ -57,7 +57,7 @@ public class CashSession
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne()
     @JoinColumn(name = "trt_uuid", referencedColumnName = "uuid", nullable = false)
     private AppInstallation appInstallation;
 

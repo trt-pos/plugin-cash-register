@@ -8,13 +8,13 @@
       xmlns:fx="http://javafx.com/fxml" spacing="5"
       fx:controller="org.lebastudios.theroundtable.plugincashregister.sessions.CashSessionsPaneController">
     <padding>
-        <Insets right="25" bottom="25" left="25"/>
+        <Insets top="10" left="10" right="10" bottom="10" />
     </padding>
     
     <HBox spacing="10" alignment="CENTER">
-        <Label text="%word.from" />
+        <Label text="%sessionspane.from" />
         <DatePicker fx:id="fromDatePicker" prefWidth="150"/>
-        <Label text="%word.to" />
+        <Label text="%sessionspane.to" />
         <DatePicker fx:id="toDatePicker" prefWidth="150"/>
         <Region HBox.hgrow="ALWAYS" />
         <Label text="%word.name" />
