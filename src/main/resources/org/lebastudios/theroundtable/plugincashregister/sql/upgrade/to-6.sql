@@ -52,17 +52,17 @@ alter table cr_receipt
     drop column payment_method;
 -- DELIMITER
 -- MIGRATE
-create table pr_sub_category
+create table cr_sub_category
 (
     category_name varchar(255) not null,
     name          varchar(255) not null,
     -- NEW
     constraint PK_PR_SUB_CATEGORY primary key (category_name, name),
-    constraint FK_PR_SUB_CATEGORY_PR_CATEGORY foreign key (category_name) references pr_category (name)
+    constraint FK_PR_SUB_CATEGORY_PR_CATEGORY foreign key (category_name) references cr_category (name)
 );
 -- DELIMITER
 -- MIGRATE
-create table pr_product
+create table cr_product
 (
     id                integer primary key autoincrement,
     enabled           boolean        not null,
@@ -74,6 +74,6 @@ create table pr_product
     sub_category_name varchar(255),
     taxes_type        integer,
     -- NEW
-    constraint FK_PR_PRODUCT_PR_SUB_CATEGORY foreign key (category_name, sub_category_name) references pr_sub_category (category_name, name),
+    constraint FK_PR_PRODUCT_PR_SUB_CATEGORY foreign key (category_name, sub_category_name) references cr_sub_category (category_name, name),
     constraint FK_PR_PRODUCT_PR_TAX_TYPE foreign key (taxes_type) references pr_tax_type (id)
 );

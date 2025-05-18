@@ -42,7 +42,7 @@ create table cr_transaction
 
 -- DELIMITER
 
-create table pr_category
+create table cr_category
 (
     name varchar(255) not null,
     constraint pk_category primary key (name)
@@ -50,7 +50,7 @@ create table pr_category
 
 -- DELIMITER
 
-create table pr_sub_category
+create table cr_sub_category
 (
     category_name varchar(255) not null,
     name          varchar(255) not null,
@@ -59,7 +59,7 @@ create table pr_sub_category
 
 -- DELIMITER
 
-create table pr_product
+create table cr_product
 (
     id                integer primary key autoincrement,
     enabled           boolean        not null,
@@ -71,12 +71,12 @@ create table pr_product
     category_name     varchar(255),
     sub_category_name varchar(255),
     taxes_type        integer,
-    constraint fk_prduct_subcategory foreign key (category_name, sub_category_name) references pr_sub_category (category_name, name)
+    constraint fk_prduct_subcategory foreign key (category_name, sub_category_name) references cr_sub_category (category_name, name)
 );
 
 -- DELIMITER
 
-create table pr_tax_type
+create table cr_tax_type
 (
     id          integer primary key autoincrement,
     description varchar(255),

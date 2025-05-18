@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.Session;
 import org.lebastudios.theroundtable.database.Database;
+import org.lebastudios.theroundtable.database.PluginTable;
 import org.lebastudios.theroundtable.entities.Account;
 import org.lebastudios.theroundtable.entities.AppInstallation;
 import org.lebastudios.theroundtable.env.TrtUUIDReader;
@@ -19,7 +20,7 @@ import java.util.List;
 @Getter
 @NoArgsConstructor
 @Entity
-@Table(name = "cr_cash_session")
+@PluginTable(name = "cash_session")
 public class CashSession
 {
     public static CashSession getActualSession()

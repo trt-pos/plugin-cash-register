@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.Setter;
 import org.lebastudios.theroundtable.database.Database;
+import org.lebastudios.theroundtable.database.PluginTable;
 
 import java.math.BigDecimal;
 import java.util.HashSet;
@@ -15,7 +16,7 @@ import java.util.Set;
 @Setter
 @NoArgsConstructor
 @Entity
-@Table(name = "pr_tax_type")
+@PluginTable(name = "tax_type")
 public class TaxType
 {
     @Id

@@ -7,6 +7,7 @@ import lombok.Setter;
 import org.lebastudios.theroundtable.camelot.FromBytes;
 import org.lebastudios.theroundtable.camelot.IntoBytes;
 import org.lebastudios.theroundtable.database.Database;
+import org.lebastudios.theroundtable.database.PluginTable;
 import org.lebastudios.theroundtable.maths.BigDecimalOperations;
 
 import java.math.BigDecimal;
@@ -18,7 +19,7 @@ import java.util.Objects;
 @Setter
 @NoArgsConstructor
 @Entity
-@Table(name = "pr_product")
+@PluginTable(name = "product")
 public class Product implements Cloneable, FromBytes<Product>, IntoBytes
 {
     @Id

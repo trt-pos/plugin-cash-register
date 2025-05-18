@@ -7,9 +7,9 @@ drop table if exists cr_transaction;
 drop table if exists cr_receipt;
 -- DELIMITER
 
-drop table if exists pr_product;
+drop table if exists cr_product;
 -- DELIMITER
-drop table if exists pr_sub_category;
+drop table if exists cr_sub_category;
 -- DELIMITER
-drop table if exists pr_category;
+drop table if exists cr_category;
 -- DELIMITER

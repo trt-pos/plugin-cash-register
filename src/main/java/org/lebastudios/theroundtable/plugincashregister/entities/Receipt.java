@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.lebastudios.theroundtable.apparience.ImageLoader;
+import org.lebastudios.theroundtable.database.PluginTable;
 import org.lebastudios.theroundtable.locale.Translator;
 
 import java.math.BigDecimal;
@@ -14,7 +15,7 @@ import java.util.Set;
 @Getter
 @NoArgsConstructor
 @Entity
-@Table(name = "cr_receipt")
+@PluginTable(name = "receipt")
 public class Receipt
 {
     @Id

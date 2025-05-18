@@ -5,6 +5,7 @@ import javafx.util.StringConverter;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.lebastudios.theroundtable.database.PluginTable;
 import org.lebastudios.theroundtable.entities.Account;
 import org.lebastudios.theroundtable.entities.AppInstallation;
 import org.lebastudios.theroundtable.locale.Translator;
@@ -16,7 +17,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @NoArgsConstructor
-@Table(name = "cr_transaction")
+@PluginTable(name = "transaction")
 public class Transaction
 {
     @Id

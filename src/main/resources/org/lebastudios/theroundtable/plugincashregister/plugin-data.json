@@ -1,13 +1,13 @@
 {
   "pluginName": "Cash Register",
-  "pluginId": "plugin-cash-register",
+  "pluginId": "cr",
   "pluginDescription": "A simple cash register functionality for your store.",
   "pluginVersion": "3.0.0",
   "pluginVendor": "Leba Studios - Software Solutions",
   "pluginVendorUrl": "https://lebastudios.org",
   "pluginDependencies": [
     {
-      "pluginId": "desktop-app",
+      "pluginId": "core",
       "pluginVersion": "3.0.0"
     }
   ]

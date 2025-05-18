@@ -4,11 +4,12 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.lebastudios.theroundtable.database.PluginTable;
 
 import java.math.BigDecimal;
 
 @NoArgsConstructor
-@Table(name = "cr_product_receipt")
+@PluginTable(name = "product_receipt")
 @Entity
 public class Product_Receipt
 {
