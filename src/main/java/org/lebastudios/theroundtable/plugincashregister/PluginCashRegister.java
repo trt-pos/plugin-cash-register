@@ -197,7 +197,7 @@ public class PluginCashRegister implements IPlugin
         {
             buttons.add(new LabeledIconButton(
                     Translator.getInstance().t("plugincashregister.word.sessions"),
-                    new IconView("cash-sessions.png"),
+                    "cash-sessions.png",
                     _ -> MainStageController.getInstance().setCentralNode(new CashSessionsPaneController())
             ));
         }
