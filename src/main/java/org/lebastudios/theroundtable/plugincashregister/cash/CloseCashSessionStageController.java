@@ -38,7 +38,7 @@ public class CloseCashSessionStageController extends StageController<CloseCashSe
     @FXML
     public void acceptAndPrint(ActionEvent actionEvent)
     {
-        boolean result = Database.getInstance().connectTransactionWithBool(session ->
+        boolean result = Database.getInstance().connectTransaction(session ->
         {
             CashSession actualSession = CashSession.getActualSession(session);
             

@@ -291,7 +291,7 @@ public class CollectOrderStageController extends StageController<CollectOrderSta
             {
                 updateMessage("Saving the receipt");
                 updateProgress(0.75, 1);
-                boolean success = Database.getInstance().connectTransactionWithBool(session ->
+                boolean success = Database.getInstance().connectTransaction(session ->
                 {
                     session.persist(receipt);
                 });
