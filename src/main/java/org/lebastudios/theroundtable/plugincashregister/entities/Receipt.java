@@ -79,7 +79,7 @@ public class Receipt
     {
         if (clientName == null)
         {
-            return Translator.getInstance().t("phrase.generalpublicclient");
+            return Translator.getInstance().t("cr:phrase.generalpublicclient");
         }
         else
         {

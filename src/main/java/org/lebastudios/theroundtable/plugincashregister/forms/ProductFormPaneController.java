@@ -65,7 +65,7 @@ public class ProductFormPaneController extends FormPaneController<Product>
                 {
                     new RequestConfigStageController(new TaxesTypesConfigPaneController())
                             .setOwner(this.getStage())
-                            .setTitle(Translator.getInstance().t("plugincashregister.reqconfig.notaxtypes"))
+                            .setTitle(Translator.getInstance().t("cr:plugincashregister.reqconfig.notaxtypes"))
                             .instantiate(true);
                 });
 

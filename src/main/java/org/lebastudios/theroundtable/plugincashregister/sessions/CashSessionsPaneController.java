@@ -78,7 +78,7 @@ public class CashSessionsPaneController extends PaneController<CashSessionsPaneC
                     .list();
 
             installationNameChoiceBox.getItems().clear();
-            installationNameChoiceBox.getItems().add(Translator.getInstance().t("plugincashregister.sessionspane.all"));
+            installationNameChoiceBox.getItems().add(Translator.getInstance().t("cr:plugincashregister.sessionspane.all"));
             installationNameChoiceBox.getItems().addAll(installations);
             installationNameChoiceBox.getSelectionModel().select(AppInstallation.thisInstalation(session).getName());
         });

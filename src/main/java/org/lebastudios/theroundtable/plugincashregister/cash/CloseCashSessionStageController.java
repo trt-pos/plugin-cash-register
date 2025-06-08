@@ -32,7 +32,7 @@ public class CloseCashSessionStageController extends StageController<CloseCashSe
     @Override
     public String getTitle()
     {
-        return Translator.getInstance().t("plugincashregister.phrase.closeCashRegister");
+        return Translator.getInstance().t("cr:plugincashregister.phrase.closeCashRegister");
     }
 
     @FXML

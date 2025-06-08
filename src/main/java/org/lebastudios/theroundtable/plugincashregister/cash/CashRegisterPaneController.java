@@ -263,7 +263,7 @@ public class CashRegisterPaneController extends PaneController<CashRegisterPaneC
     {
         submitEditting(null);
 
-        new ConfirmationTextDialogController(Translator.getInstance().t("plugincashregister.textblock.resetorder"),
+        new ConfirmationTextDialogController(Translator.getInstance().t("cr:plugincashregister.textblock.resetorder"),
                 r ->
                 {
                     if (!r) return;
@@ -314,11 +314,11 @@ public class CashRegisterPaneController extends PaneController<CashRegisterPaneC
 
     private void updateLastCollectedReceipt(Receipt receipt)
     {
-        lastCollectedTotalLabel.setText(Translator.getInstance().t("plugincashregister.phrase.lastcollected") + " "
+        lastCollectedTotalLabel.setText(Translator.getInstance().t("cr:plugincashregister.phrase.lastcollected") + " "
                 + BigDecimalOperations.toString(receipt.getTaxedTotal()) + " €    "
-                + Translator.getInstance().t("plugincashregister.word.payment") + " "
+                + Translator.getInstance().t("cr:plugincashregister.word.payment") + " "
                 + BigDecimalOperations.toString(receipt.getPaymentAmount()) + " €    "
-                + Translator.getInstance().t("plugincashregister.word.change") + ": "
+                + Translator.getInstance().t("cr:plugincashregister.word.change") + ": "
                 + BigDecimalOperations.toString(receipt.getPaymentAmount().subtract(receipt.getTaxedTotal())) + " €"
         );
     }

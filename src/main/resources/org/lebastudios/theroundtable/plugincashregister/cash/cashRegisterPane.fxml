@@ -32,7 +32,7 @@
             <HBox alignment="CENTER_RIGHT" spacing="5" minHeight="60">
                 <IconTextButton iconName="collect.png" maxHeight="Infinity" maxWidth="Infinity"
                                 fx:id="collectOrderButton"
-                                onAction="#collectOrder" text="%plugincashregister.word.collect" prefHeight="60" prefWidth="130"
+                                onAction="#collectOrder" text="%cr:plugincashregister.word.collect" prefHeight="60" prefWidth="130"
                                 disable="true"/>
                 <Label HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
                 <Label style="-fx-font-size: 20; -fx-font-weight: bold;" text="Total: "/>
@@ -111,14 +111,14 @@
             </rowConstraints>
 
             <IconTextButton iconName="close.png" maxHeight="Infinity" maxWidth="Infinity" onAction="#closeCashRegister"
-                            text="%plugincashregister.phrase.closecashsession"
+                            text="%cr:plugincashregister.phrase.closecashsession"
                             GridPane.columnIndex="0" GridPane.columnSpan="6" GridPane.rowIndex="0"/>
 
             <IconTextButton iconName="money-in.png" maxHeight="Infinity" maxWidth="Infinity" onAction="#moneyIn"
-                            text="%plugincashregister.phrase.moneyin"
+                            text="%cr:plugincashregister.phrase.moneyin"
                             GridPane.columnIndex="0" GridPane.columnSpan="3" GridPane.rowIndex="1"/>
             <IconTextButton iconName="money-out.png" maxHeight="Infinity" maxWidth="Infinity" onAction="#moneyOut"
-                            text="%plugincashregister.phrase.moneyout"
+                            text="%cr:plugincashregister.phrase.moneyout"
                             GridPane.columnIndex="3" GridPane.columnSpan="3" GridPane.rowIndex="1"/>
         </GridPane>
     </VBox>

@@ -28,13 +28,13 @@ public class BasicReceiptBodyPrinter extends ReceiptPrinter
         
         if (!printerConfig.hideReceiptData)
         {
-            escpos.writeLF(Translator.getInstance().t("phrase.tablename")
+            escpos.writeLF(Translator.getInstance().t("cr:phrase.tablename")
                     + ": " + receipt.getTableName());
 
-            escpos.writeLF(Translator.getInstance().t("word.client")
+            escpos.writeLF(Translator.getInstance().t("cr:word.client")
                     + ": " + receipt.getClientString());
 
-            escpos.writeLF(Translator.getInstance().t("phrase.attendedby")
+            escpos.writeLF(Translator.getInstance().t("cr:phrase.attendedby")
                     + receipt.getTransaction().getAccount().getName());
         }
 
@@ -83,13 +83,13 @@ public class BasicReceiptBodyPrinter extends ReceiptPrinter
         // Payment Info
         if (!printerConfig.hidePaymentInfo)
         {
-            escpos.writeLF(Translator.getInstance().t("word.method") + ": "
+            escpos.writeLF(Translator.getInstance().t("cr:word.method") + ": "
                     + receipt.getTransaction().getMethod().translate()
             );
 
-            escpos.writeLF(Translator.getInstance().t("word.amount") + ": "
+            escpos.writeLF(Translator.getInstance().t("cr:word.amount") + ": "
                     + BigDecimalOperations.toString(receipt.getPaymentAmount()) + " "
-                    + Translator.getInstance().t("plugincashregister.word.change") + ": " +
+                    + Translator.getInstance().t("cr:plugincashregister.word.change") + ": " +
                     BigDecimalOperations.toString(receipt.getPaymentAmount().subtract(receipt.getTransaction().getAmount()))
             );
 
@@ -110,8 +110,8 @@ public class BasicReceiptBodyPrinter extends ReceiptPrinter
         var taxes = total.subtract(base);
 
         new InLinePrinter().concatLeft(BigDecimalOperations.toString(percentageOver100), 6)
-                .concatLeft(" % " + Translator.getInstance().t("word.iva") + " ")
-                .concatLeft(Translator.getInstance().t("word.over"))
+                .concatLeft(" % " + Translator.getInstance().t("cr:word.iva") + " ")
+                .concatLeft(Translator.getInstance().t("cr:word.over"))
                 .concatRight(BigDecimalOperations.toString(base), 8, EscPosConst.Justification.Right)
                 .concatRight(BigDecimalOperations.toString(taxes), 8, EscPosConst.Justification.Right).print(escpos);
     }

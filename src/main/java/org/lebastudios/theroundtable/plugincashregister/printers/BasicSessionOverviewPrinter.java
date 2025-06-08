@@ -99,7 +99,7 @@ public class BasicSessionOverviewPrinter extends SessionPrinter
         escPos.feed(1);
 
         escPos.writeLF(Styles.TITLE,
-                Translator.getInstance().t("plugincashregister.printer.cashsession.overviewheader"));
+                Translator.getInstance().t("cr:plugincashregister.printer.cashsession.overviewheader"));
 
         escPos.feed(2);
 
@@ -107,17 +107,17 @@ public class BasicSessionOverviewPrinter extends SessionPrinter
                 DateTimeFormatter.ofPattern(new GlobalPreferencesConfigData().load().dateTimeFormatter);
 
         escPos.writeLF(Styles.CENTERED,
-                "    " + Translator.getInstance().t("plugincashregister.word.from")
+                "    " + Translator.getInstance().t("cr:plugincashregister.word.from")
                         + " " + formatter.format(cashSession.getOpeningDate()));
         escPos.writeLF(Styles.CENTERED,
-                "    " + Translator.getInstance().t("plugincashregister.word.to")
+                "    " + Translator.getInstance().t("cr:plugincashregister.word.to")
                         + " " + formatter.format(cashSession.getClosingDate()));
 
         escPos.feed(1);
 
         new InLinePrinter()
                 .concatLeft(
-                        Translator.getInstance().t("plugincashregister.printer.cashsession.expectedamountindrawer"))
+                        Translator.getInstance().t("cr:plugincashregister.printer.cashsession.expectedamountindrawer"))
                 .concatRight(BigDecimalOperations.toString(cashSession.getAmountInDrawer()))
                 .concatRight(" ")
                 .concatRight(new GlobalPreferencesConfigData().load().currency.abbreviation()).print(escPos);
@@ -125,11 +125,11 @@ public class BasicSessionOverviewPrinter extends SessionPrinter
         escPos.feed(1);
 
         new InLinePrinter()
-                .concatLeft(Translator.getInstance().t("plugincashregister.printer.cashsession.installationname"))
+                .concatLeft(Translator.getInstance().t("cr:plugincashregister.printer.cashsession.installationname"))
                 .concatLeft(":")
                 .concatRight(cashSession.getAppInstallation().getName()).print(escPos);
         new InLinePrinter()
-                .concatLeft(Translator.getInstance().t("plugincashregister.printer.cashsession.accountname"))
+                .concatLeft(Translator.getInstance().t("cr:plugincashregister.printer.cashsession.accountname"))
                 .concatLeft(":")
                 .concatRight(cashSession.getAccount().getName())
                 .print(escPos);
@@ -141,7 +141,7 @@ public class BasicSessionOverviewPrinter extends SessionPrinter
         escPos.feed(1);
         new LineFiller("-").print(escPos);
 
-        new InLinePrinter().concatLeft("    " + Translator.getInstance().t("plugincashregister.word.transactions"))
+        new InLinePrinter().concatLeft("    " + Translator.getInstance().t("cr:plugincashregister.word.transactions"))
                 .concatRight("Total: " + transactions.size()).print(escPos);
         new LineFiller("-").print(escPos);
 
@@ -183,7 +183,7 @@ public class BasicSessionOverviewPrinter extends SessionPrinter
             }
         }
 
-        new InLinePrinter().concatLeft("    " + Translator.getInstance().t("plugincashregister.word.products"))
+        new InLinePrinter().concatLeft("    " + Translator.getInstance().t("cr:plugincashregister.word.products"))
                 .concatRight(" Total: " + count).print(escPos);
         new LineFiller("-").print(escPos);
 
@@ -249,13 +249,13 @@ public class BasicSessionOverviewPrinter extends SessionPrinter
         {
             Currency currency = new GlobalPreferencesConfigData().load().currency;
 
-            escpos.writeLF(Styles.CENTERED, Translator.getInstance().t("plugincashregister.word.receipts"));
+            escpos.writeLF(Styles.CENTERED, Translator.getInstance().t("cr:plugincashregister.word.receipts"));
             new LineFiller("-").print(escpos);
 
             new InLinePrinter()
                     .concatLeft(String.valueOf(numberOfPaymentsWithCash))
                     .concatLeft(" ")
-                    .concatLeft(Translator.getInstance().t("plugincashregister.printer.cashsession.cashpayments"))
+                    .concatLeft(Translator.getInstance().t("cr:plugincashregister.printer.cashsession.cashpayments"))
                     .concatRight(BigDecimalOperations.toString(totalWithCash))
                     .concatRight(" ")
                     .concatRight(currency.abbreviation()).print(escpos);
@@ -263,7 +263,7 @@ public class BasicSessionOverviewPrinter extends SessionPrinter
             new InLinePrinter()
                     .concatLeft(String.valueOf(numberOfPaymentsWithCard))
                     .concatLeft(" ")
-                    .concatLeft(Translator.getInstance().t("plugincashregister.printer.cashsession.cardpayments"))
+                    .concatLeft(Translator.getInstance().t("cr:plugincashregister.printer.cashsession.cardpayments"))
                     .concatRight(BigDecimalOperations.toString(totalWithCard))
                     .concatRight(" ")
                     .concatRight(currency.abbreviation()).print(escpos);
@@ -323,13 +323,13 @@ public class BasicSessionOverviewPrinter extends SessionPrinter
         {
             Currency currency = new GlobalPreferencesConfigData().load().currency;
             
-            escpos.writeLF(Styles.CENTERED, Translator.getInstance().t("plugincashregister.word.othertransactions"));
+            escpos.writeLF(Styles.CENTERED, Translator.getInstance().t("cr:plugincashregister.word.othertransactions"));
             new LineFiller("-").print(escpos);
 
             new InLinePrinter()
                     .concatLeft(String.valueOf(numberOfIn))
                     .concatLeft(" ")
-                    .concatLeft(Translator.getInstance().t("plugincashregister.printer.cashsession.cashin"))
+                    .concatLeft(Translator.getInstance().t("cr:plugincashregister.printer.cashsession.cashin"))
                     .concatRight(BigDecimalOperations.toString(totalIn))
                     .concatRight(" ")
                     .concatRight(currency.abbreviation()).print(escpos);
@@ -337,7 +337,7 @@ public class BasicSessionOverviewPrinter extends SessionPrinter
             new InLinePrinter()
                     .concatLeft(String.valueOf(numberOfOut))
                     .concatLeft(" ")
-                    .concatLeft(Translator.getInstance().t("plugincashregister.printer.cashsession.cashout"))
+                    .concatLeft(Translator.getInstance().t("cr:plugincashregister.printer.cashsession.cashout"))
                     .concatRight(BigDecimalOperations.toString(totalOut))
                     .concatRight(" ")
                     .concatRight(currency.abbreviation()).print(escpos);

@@ -107,7 +107,7 @@ public class TransactionCreatorStageController extends StageController<Transacti
             catch (Exception e)
             {
                 new ConfirmationTextDialogController(
-                        Translator.getInstance().t("plugincashregister.textblock.printingerror"),
+                        Translator.getInstance().t("cr:plugincashregister.textblock.printingerror"),
                         isTransactionCreated::set
                 ).instantiate(true);
             }

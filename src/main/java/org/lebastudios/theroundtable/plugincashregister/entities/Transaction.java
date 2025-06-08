@@ -70,7 +70,7 @@ public class Transaction
     
         public String translate()
         {
-            return Translator.getInstance().t("plugincashregister.word." +
+            return Translator.getInstance().t("cr:plugincashregister.word." +
                     switch (this)
                     {
                         case CASH -> "cash";

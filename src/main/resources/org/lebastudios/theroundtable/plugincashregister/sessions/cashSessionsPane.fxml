@@ -12,12 +12,12 @@
     </padding>
     
     <HBox spacing="10" alignment="CENTER">
-        <Label text="%sessionspane.from" />
+        <Label text="%cr:sessionspane.from" />
         <DatePicker fx:id="fromDatePicker" prefWidth="150"/>
-        <Label text="%sessionspane.to" />
+        <Label text="%cr:sessionspane.to" />
         <DatePicker fx:id="toDatePicker" prefWidth="150"/>
         <Region HBox.hgrow="ALWAYS" />
-        <Label text="%word.name" />
+        <Label text="%cr:word.name" />
         <ChoiceBox fx:id="installationNameChoiceBox" prefWidth="150"/>
     </HBox>
     <PaginableListView fx:id="sessionsListView" VBox.vgrow="ALWAYS"/>

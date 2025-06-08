@@ -25,10 +25,10 @@
     </rowConstraints>
 
     <Label GridPane.rowIndex="0" GridPane.columnIndex="0" style="-fx-font-weight: bold;"
-           alignment="CENTER" textAlignment="CENTER" maxWidth="Infinity" text="%plugincashregister.word.source"/>
+           alignment="CENTER" textAlignment="CENTER" maxWidth="Infinity" text="%cr:plugincashregister.word.source"/>
     <IconView GridPane.rowIndex="0" GridPane.columnIndex="1" GridPane.columnSpan="2" iconName="transfer.png" />
     <Label GridPane.rowIndex="0" GridPane.columnIndex="3" style="-fx-font-weight: bold;"
-           alignment="CENTER" textAlignment="CENTER" maxWidth="Infinity" text="%plugincashregister.word.separated"/>
+           alignment="CENTER" textAlignment="CENTER" maxWidth="Infinity" text="%cr:plugincashregister.word.separated"/>
     
     <ListView GridPane.rowIndex="1" GridPane.columnIndex="0" GridPane.columnSpan="2" fx:id="sourceList"/>
     <ListView GridPane.rowIndex="1" GridPane.columnIndex="2" GridPane.columnSpan="2" fx:id="targetList"/>
@@ -42,7 +42,7 @@
         <padding>
             <Insets top="10" />
         </padding>
-        <Button onAction="#cancel" text="%plugincashregister.word.cancel"/>
-        <Button fx:id="acceptButton" defaultButton="true" onAction="#accept" text="%plugincashregister.word.accept"/>
+        <Button onAction="#cancel" text="%cr:plugincashregister.word.cancel"/>
+        <Button fx:id="acceptButton" defaultButton="true" onAction="#accept" text="%cr:plugincashregister.word.accept"/>
     </HBox>
 </GridPane>

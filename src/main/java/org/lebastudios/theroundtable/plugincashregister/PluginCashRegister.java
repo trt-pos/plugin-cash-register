@@ -64,7 +64,7 @@ public class PluginCashRegister implements IPlugin
             if (CashSession.getActualSession() == null)
             {
                 new InformationTextDialogController(
-                        Translator.getInstance().t("plugincashregister.phrase.cashregisterisclosed")
+                        Translator.getInstance().t("cr:plugincashregister.phrase.cashregisterisclosed")
                 ).instantiate(true);
                 return;
             }
@@ -171,7 +171,7 @@ public class PluginCashRegister implements IPlugin
     public TreeItem<SettingsItem> getSettingsRootTreeItem()
     {
         var cashRegisterConfigSection = new TreeItem<>(
-                new SettingsItem(Translator.getInstance().t("plugincashregister.word.cashregister"),
+                new SettingsItem(Translator.getInstance().t("cr:plugincashregister.word.cashregister"),
                         "cash-register.png", null)
         );
         cashRegisterConfigSection.setExpanded(false);
@@ -196,7 +196,7 @@ public class PluginCashRegister implements IPlugin
         if (AccountManager.getInstance().isAccountAdmin())
         {
             buttons.add(new LabeledIconButton(
-                    Translator.getInstance().t("plugincashregister.word.sessions"),
+                    Translator.getInstance().t("cr:plugincashregister.word.sessions"),
                     "cash-sessions.png",
                     _ -> MainStageController.getInstance().setCentralNode(new CashSessionsPaneController())
             ));

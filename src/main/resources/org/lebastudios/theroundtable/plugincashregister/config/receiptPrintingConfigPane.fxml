@@ -10,19 +10,19 @@
     <padding>
         <Insets top="10" right="10" bottom="10" left="10"/>
     </padding>
-    <CheckBox maxHeight="Infinity" maxWidth="Infinity" fx:id="hideReceiptData" text="%plugincashregister.phrase.hideReceiptData"/>
+    <CheckBox maxHeight="Infinity" maxWidth="Infinity" fx:id="hideReceiptData" text="%cr:plugincashregister.phrase.hideReceiptData"/>
 
-    <CheckBox maxHeight="Infinity" maxWidth="Infinity" fx:id="hideTaxesDesglose" text="%plugincashregister.phrase.hideTaxesDesglose"/>
+    <CheckBox maxHeight="Infinity" maxWidth="Infinity" fx:id="hideTaxesDesglose" text="%cr:plugincashregister.phrase.hideTaxesDesglose"/>
 
-    <CheckBox maxHeight="Infinity" maxWidth="Infinity" fx:id="hidePaymentInfo" text="%plugincashregister.phrase.hidePaymentInfo"/>
+    <CheckBox maxHeight="Infinity" maxWidth="Infinity" fx:id="hidePaymentInfo" text="%cr:plugincashregister.phrase.hidePaymentInfo"/>
 
     <CheckBox maxHeight="Infinity" maxWidth="Infinity" fx:id="hideEstablishmentLogo"
-              text="%plugincashregister.phrase.hideEstablishmentLogo"/>
+              text="%cr:plugincashregister.phrase.hideEstablishmentLogo"/>
 
     <HBox spacing="5">
-        <Label text="%plugincashregister.phrase.logosize" maxWidth="Infinity" maxHeight="Infinity" HBox.hgrow="ALWAYS"/>
+        <Label text="%cr:plugincashregister.phrase.logosize" maxWidth="Infinity" maxHeight="Infinity" HBox.hgrow="ALWAYS"/>
         <ChoiceBox maxWidth="Infinity" fx:id="logoSize"/>
     </HBox>
 
-    <IconTextButton onAction="#printTestReceipt" text="%plugincashregister.phrase.printtest" iconName="printer.png" iconSize="24" maxWidth="Infinity"/>
+    <IconTextButton onAction="#printTestReceipt" text="%cr:plugincashregister.phrase.printtest" iconName="printer.png" iconSize="24" maxWidth="Infinity"/>
 </VBox>
