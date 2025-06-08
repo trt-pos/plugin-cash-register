@@ -22,7 +22,7 @@
                 </VBox>
             </content>
         </ScrollPane>
-        <IconButton fx:id="plusButton" iconName="plus.png" StackPane.alignment="BOTTOM_RIGHT" onAction="#plusButtonAction">
+        <IconButton fx:id="plusButton" iconName="cr:plus.png" StackPane.alignment="BOTTOM_RIGHT" onAction="#plusButtonAction">
             <StackPane.margin>
                 <Insets bottom="5" right="5"/>
             </StackPane.margin>

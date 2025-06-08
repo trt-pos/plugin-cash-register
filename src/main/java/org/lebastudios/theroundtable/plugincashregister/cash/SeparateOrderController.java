@@ -11,7 +11,7 @@ import javafx.scene.control.ListView;
 import javafx.scene.image.ImageView;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Modality;
-import org.lebastudios.theroundtable.apparience.ImageLoader;
+import org.lebastudios.theroundtable.apparience.ImageManager;
 import org.lebastudios.theroundtable.controllers.StageController;
 import org.lebastudios.theroundtable.locale.Translator;
 import org.lebastudios.theroundtable.maths.BigDecimalOperations;
@@ -235,7 +235,7 @@ public class SeparateOrderController extends StageController<SeparateOrderContro
             else
             {
                 setText(item.getValue().intValueExact() + " - " + item.getKey().getName());
-                ImageView imageView = new ImageView(ImageLoader.getSavedImage(item.getKey().getImgPath()));
+                ImageView imageView = new ImageView(ImageManager.getInstance().get(item.getKey().getImgPath(), ImageManager.ImageType.PERSISTED));
                 imageView.setFitWidth(25);
                 imageView.setFitHeight(25);
                 imageView.setPreserveRatio(true);

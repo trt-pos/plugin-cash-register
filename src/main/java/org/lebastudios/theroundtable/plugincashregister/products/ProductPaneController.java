@@ -5,7 +5,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import org.lebastudios.theroundtable.apparience.ImageLoader;
+import org.lebastudios.theroundtable.apparience.ImageManager;
 import org.lebastudios.theroundtable.controllers.PaneController;
 import org.lebastudios.theroundtable.maths.BigDecimalOperations;
 import org.lebastudios.theroundtable.plugincashregister.entities.Product;
@@ -32,13 +32,8 @@ public class ProductPaneController extends PaneController<ProductPaneController>
                 + BigDecimalOperations.toString(product.getPrice()) + " €";
         
         label.setText(stringBuilder);
-        
-        new Thread(() ->
-        {
-            Image img = ImageLoader.getSavedImage(product.getImgPath());
 
-            Platform.runLater(() -> imageView.setImage(img));
-        }).start();
+        imageView.setImage(ImageManager.getInstance().get(product.getImgPath(), ImageManager.ImageType.PERSISTED));
         
         getRoot().setOnMouseClicked(_ -> onAction.accept(product));
     }}

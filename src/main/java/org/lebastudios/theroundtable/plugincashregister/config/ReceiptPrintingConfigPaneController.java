@@ -24,7 +24,7 @@ public class ReceiptPrintingConfigPaneController extends ConfigPaneController<Re
 
     public ReceiptPrintingConfigPaneController()
     {
-        super(new ReceiptPrintingConfigData(), Translator.getInstance().t("cr:plugincashregister.phrase.receiptprinterconfig"), "print.png");
+        super(new ReceiptPrintingConfigData(), Translator.getInstance().t("cr:plugincashregister.phrase.receiptprinterconfig"), "cr:print.png");
     }
 
     private enum LogoSize

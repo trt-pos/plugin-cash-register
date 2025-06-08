@@ -17,20 +17,20 @@
         </HBox>
         <HBox spacing="15" alignment="CENTER_LEFT">
             <Label style="-fx-font-size: 20; -fx-font-weight: bold;" fx:id="orderTableNameLabel" text="Error"/>
-            <IconButton iconName="exit-outlined.png" maxHeight="Infinity" maxWidth="Infinity" visible="false"
+            <IconButton iconName="cr:exit-outlined.png" maxHeight="Infinity" maxWidth="Infinity" visible="false"
                         onAction="#exitOrder" fx:id="exitOrderButton" iconSize="24"/>
             <Label HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
-            <IconButton iconName="print-outlined.png" maxHeight="Infinity" maxWidth="Infinity"
+            <IconButton iconName="cr:print-outlined.png" maxHeight="Infinity" maxWidth="Infinity"
                         onAction="#printOrder" iconSize="24"/>
-            <IconButton iconName="hide-outlined.png" iconSize="24"
+            <IconButton iconName="cr:hide-outlined.png" iconSize="24"
                         fx:id="alterVisibilityButton" onAction="#alterNumericKeyboardVisibility"/>
-            <IconButton iconName="outline-delete.png" iconSize="24" disable="true"
+            <IconButton iconName="cr:outline-delete.png" iconSize="24" disable="true"
                         fx:id="clearActualOrderButton" onAction="#clearActualOrder"/>
         </HBox>
         <VBox spacing="5" VBox.vgrow="ALWAYS" maxHeight="Infinity">
             <ListView fx:id="orderItemsListView" VBox.vgrow="ALWAYS"/>
             <HBox alignment="CENTER_RIGHT" spacing="5" minHeight="60">
-                <IconTextButton iconName="collect.png" maxHeight="Infinity" maxWidth="Infinity"
+                <IconTextButton iconName="cr:collect.png" maxHeight="Infinity" maxWidth="Infinity"
                                 fx:id="collectOrderButton"
                                 onAction="#collectOrder" text="%cr:plugincashregister.word.collect" prefHeight="60" prefWidth="130"
                                 disable="true"/>
@@ -61,7 +61,7 @@
                         GridPane.rowIndex="0"/>
                 <Button maxHeight="Infinity" maxWidth="Infinity" onAction="#button9" text="9" GridPane.columnIndex="2"
                         GridPane.rowIndex="0"/>
-                <IconButton iconName="backspace.png" style="" maxHeight="Infinity" maxWidth="Infinity"
+                <IconButton iconName="cr:backspace.png" style="" maxHeight="Infinity" maxWidth="Infinity"
                             onAction="#buttonBackspace" GridPane.columnIndex="3" GridPane.rowIndex="0"/>
 
                 <Button maxHeight="Infinity" maxWidth="Infinity" onAction="#button4" text="4" GridPane.columnIndex="0"
@@ -70,7 +70,7 @@
                         GridPane.rowIndex="1"/>
                 <Button maxHeight="Infinity" maxWidth="Infinity" onAction="#button6" text="6" GridPane.columnIndex="2"
                         GridPane.rowIndex="1"/>
-                <IconButton iconName="split.png" style="" maxHeight="Infinity" maxWidth="Infinity"
+                <IconButton iconName="cr:split.png" style="" maxHeight="Infinity" maxWidth="Infinity"
                             fx:id="splitOrderButton" disable="true"
                             onAction="#splitOrder" GridPane.columnIndex="3" GridPane.rowIndex="1"/>
 
@@ -80,16 +80,16 @@
                         GridPane.rowIndex="2"/>
                 <Button maxHeight="Infinity" maxWidth="Infinity" onAction="#button3" text="3" GridPane.columnIndex="2"
                         GridPane.rowIndex="2"/>
-                <IconButton iconName="cash-register.png" style="" maxHeight="Infinity" maxWidth="Infinity"
+                <IconButton iconName="cr:cash-register.png" style="" maxHeight="Infinity" maxWidth="Infinity"
                             onAction="#openCashRegister" GridPane.columnIndex="3" GridPane.rowIndex="2"/>
 
-                <IconButton iconName="plus-minus.png" style="" maxHeight="Infinity" maxWidth="Infinity"
+                <IconButton iconName="cr:plus-minus.png" style="" maxHeight="Infinity" maxWidth="Infinity"
                             onAction="#invertNumber" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
                 <Button maxHeight="Infinity" maxWidth="Infinity" onAction="#button0" text="0" GridPane.columnIndex="1"
                         GridPane.rowIndex="3"/>
                 <Button maxHeight="Infinity" maxWidth="Infinity" onAction="#buttonDot" text="." GridPane.columnIndex="2"
                         GridPane.rowIndex="3"/>
-                <IconButton iconName="tick.png" style="" maxHeight="Infinity" maxWidth="Infinity"
+                <IconButton iconName="cr:tick.png" style="" maxHeight="Infinity" maxWidth="Infinity"
                             onAction="#submitEditting" GridPane.columnIndex="3" GridPane.rowIndex="3"/>
 
             </GridPane>
@@ -110,14 +110,14 @@
                 <RowConstraints minHeight="40.0" prefHeight="40.0"/>
             </rowConstraints>
 
-            <IconTextButton iconName="close.png" maxHeight="Infinity" maxWidth="Infinity" onAction="#closeCashRegister"
+            <IconTextButton iconName="cr:close.png" maxHeight="Infinity" maxWidth="Infinity" onAction="#closeCashRegister"
                             text="%cr:plugincashregister.phrase.closecashsession"
                             GridPane.columnIndex="0" GridPane.columnSpan="6" GridPane.rowIndex="0"/>
 
-            <IconTextButton iconName="money-in.png" maxHeight="Infinity" maxWidth="Infinity" onAction="#moneyIn"
+            <IconTextButton iconName="cr:money-in.png" maxHeight="Infinity" maxWidth="Infinity" onAction="#moneyIn"
                             text="%cr:plugincashregister.phrase.moneyin"
                             GridPane.columnIndex="0" GridPane.columnSpan="3" GridPane.rowIndex="1"/>
-            <IconTextButton iconName="money-out.png" maxHeight="Infinity" maxWidth="Infinity" onAction="#moneyOut"
+            <IconTextButton iconName="cr:money-out.png" maxHeight="Infinity" maxWidth="Infinity" onAction="#moneyOut"
                             text="%cr:plugincashregister.phrase.moneyout"
                             GridPane.columnIndex="3" GridPane.columnSpan="3" GridPane.rowIndex="1"/>
         </GridPane>

@@ -9,11 +9,12 @@ import javafx.util.StringConverter;
 import lombok.SneakyThrows;
 import org.controlsfx.control.textfield.TextFields;
 import org.lebastudios.theroundtable.TheRoundTableApplication;
-import org.lebastudios.theroundtable.apparience.ImageLoader;
+import org.lebastudios.theroundtable.apparience.ImageManager;
 import org.lebastudios.theroundtable.apparience.UIEffects;
 import org.lebastudios.theroundtable.config.RequestConfigStageController;
 import org.lebastudios.theroundtable.controllers.FormPaneController;
 import org.lebastudios.theroundtable.database.Database;
+import org.lebastudios.theroundtable.env.Directories;
 import org.lebastudios.theroundtable.locale.Translator;
 import org.lebastudios.theroundtable.plugincashregister.PluginCashRegisterEvents;
 import org.lebastudios.theroundtable.plugincashregister.config.TaxesTypesConfigPaneController;
@@ -113,12 +114,12 @@ public class ProductFormPaneController extends FormPaneController<Product>
         try
         {
             imgPath = product.getImgPath();
-            productIcon.setImage(ImageLoader.getSavedImage(product.getImgPath()));
+            productIcon.setImage(ImageManager.getInstance().get(product.getImgPath(), ImageManager.ImageType.PERSISTED));
         }
         catch (Exception exception)
         {
             System.err.println("Error loading image");
-            productIcon.setIconName("no-product-img.png");
+            productIcon.setIconName("cr:no-product-img.png");
         }
     }
 
@@ -159,7 +160,7 @@ public class ProductFormPaneController extends FormPaneController<Product>
     @Override
     public Product buildObject(Product product)
     {
-        if (imgPath.startsWith(ImageLoader.SavedImagesDirectory()))
+        if (imgPath.startsWith(Directories.getPersistedImagesDir()))
         {
             product.setImgPath(new File(this.imgPath).getAbsolutePath());
         }
@@ -169,7 +170,7 @@ public class ProductFormPaneController extends FormPaneController<Product>
             {
                 try
                 {
-                    product.setImgPath(ImageLoader.saveImageInSpecialFolder(
+                    product.setImgPath(ImageManager.getInstance().persistImageFile(
                             new File(this.imgPath)
                     ).getAbsolutePath());
                 }
@@ -225,7 +226,7 @@ public class ProductFormPaneController extends FormPaneController<Product>
     @FXML
     public void openImageSelector(ActionEvent actionEvent)
     {
-        var result = ImageLoader.showImageChooser(this.getStage());
+        var result = ImageManager.showImageChooser(this.getStage());
 
         if (result == null) return;
 

@@ -6,7 +6,7 @@ import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import lombok.Getter;
 import lombok.Setter;
-import org.lebastudios.theroundtable.apparience.ImageLoader;
+import org.lebastudios.theroundtable.apparience.ImageManager;
 import org.lebastudios.theroundtable.apparience.UIEffects;
 import org.lebastudios.theroundtable.controllers.PaneController;
 import org.lebastudios.theroundtable.events.IEventMethod1;
@@ -204,7 +204,7 @@ public class OrderItemLabelController extends PaneController<OrderItemLabelContr
         productNameLabel.setText(orderItem.getBaseProduct().getName());
         unitPriceLabel.setText(BigDecimalOperations.toString(orderItem.intoProduct().getPrice()));
         totalPriceLabel.setText(BigDecimalOperations.toString(orderItem.getTotalPrice()));
-        productImg.setImage(ImageLoader.getSavedImage(orderItem.getBaseProduct().getImgPath()));
+        productImg.setImage(ImageManager.getInstance().get(orderItem.getBaseProduct().getImgPath(), ImageManager.ImageType.PERSISTED));
     }
     
     @FXML

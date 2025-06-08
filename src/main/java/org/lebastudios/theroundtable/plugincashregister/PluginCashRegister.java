@@ -143,7 +143,7 @@ public class PluginCashRegister implements IPlugin
 
     public static Button loadCashRegestryButton()
     {
-        var newButton = new IconButton("cash-register.png");
+        var newButton = new IconButton("cr:cash-register.png");
 
         newButton.setOnAction(_ -> CashRegisterPaneController.showInterface());
 
@@ -152,7 +152,7 @@ public class PluginCashRegister implements IPlugin
 
     public static Button loadProductsButton()
     {
-        var newButton = new IconButton("restaurant-menu.png");
+        var newButton = new IconButton("cr:restaurant-menu.png");
 
         newButton.setOnMouseClicked(_ ->
         {
@@ -172,7 +172,7 @@ public class PluginCashRegister implements IPlugin
     {
         var cashRegisterConfigSection = new TreeItem<>(
                 new SettingsItem(Translator.getInstance().t("cr:plugincashregister.word.cashregister"),
-                        "cash-register.png", null)
+                        "cr:cash-register.png", null)
         );
         cashRegisterConfigSection.setExpanded(false);
 
@@ -197,7 +197,7 @@ public class PluginCashRegister implements IPlugin
         {
             buttons.add(new LabeledIconButton(
                     Translator.getInstance().t("cr:plugincashregister.word.sessions"),
-                    "cash-sessions.png",
+                    "cr:cash-sessions.png",
                     _ -> MainStageController.getInstance().setCentralNode(new CashSessionsPaneController())
             ));
         }

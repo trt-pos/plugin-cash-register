@@ -38,7 +38,7 @@
     <Label GridPane.columnIndex="4" GridPane.rowIndex="0" textOverrun="CLIP" fx:id="totalPriceLabel" text="0.00"/>
 
     <HBox GridPane.columnIndex="5" GridPane.rowIndex="0" spacing="5"  alignment="CENTER_RIGHT">
-        <IconButton iconSize="24" onAction="#removeOneButton" iconName="outline-less.png"/>
-        <IconButton iconSize="24" onAction="#addOneButton" iconName="outline-plus.png"/>
+        <IconButton iconSize="24" onAction="#removeOneButton" iconName="cr:outline-less.png"/>
+        <IconButton iconSize="24" onAction="#addOneButton" iconName="cr:outline-plus.png"/>
     </HBox>
 </GridPane>

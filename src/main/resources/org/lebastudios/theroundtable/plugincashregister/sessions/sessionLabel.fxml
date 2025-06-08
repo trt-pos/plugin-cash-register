@@ -9,8 +9,8 @@
 <HBox xmlns="http://javafx.com/javafx" alignment="CENTER"
       xmlns:fx="http://javafx.com/fxml" spacing="5"
       fx:controller="org.lebastudios.theroundtable.plugincashregister.sessions.SessionLabelController">
-    <IconView iconName="cash-sessions.png"/>
+    <IconView iconName="cr:cash-sessions.png"/>
     <Label fx:id="textLabel"/>
     <Region HBox.hgrow="ALWAYS" />
-    <IconButton iconName="print.png" onAction="#printSession" />
+    <IconButton iconName="cr:print.png" onAction="#printSession" />
 </HBox>

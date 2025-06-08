@@ -5,7 +5,7 @@ import javafx.scene.image.Image;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.lebastudios.theroundtable.apparience.ImageLoader;
+import org.lebastudios.theroundtable.apparience.ImageManager;
 import org.lebastudios.theroundtable.database.PluginTable;
 import org.lebastudios.theroundtable.locale.Translator;
 
@@ -89,7 +89,7 @@ public class Receipt
 
     public Image getStatusIcon()
     {
-        return ImageLoader.getIcon(status.getIconName());
+        return ImageManager.getInstance().get(status.getIconName(), ImageManager.ImageType.ICON);
     }
 
     @Override
@@ -116,9 +116,8 @@ public class Receipt
         {
             return switch (this)
             {
-                case DELETED -> "deleted-bill.png";
-                case DEFAULT -> "default-bill.png";
-                case MODIFIED -> "deleted-bill.png";
+                case DELETED, MODIFIED -> "cr:deleted-bill.png";
+                case DEFAULT -> "cr:default-bill.png";
                 default -> throw new RuntimeException("Unknown receipt status: " + this);
             };
         }

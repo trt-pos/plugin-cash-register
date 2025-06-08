@@ -26,7 +26,7 @@
 
     <Label GridPane.rowIndex="0" GridPane.columnIndex="0" style="-fx-font-weight: bold;"
            alignment="CENTER" textAlignment="CENTER" maxWidth="Infinity" text="%cr:plugincashregister.word.source"/>
-    <IconView GridPane.rowIndex="0" GridPane.columnIndex="1" GridPane.columnSpan="2" iconName="transfer.png" />
+    <IconView GridPane.rowIndex="0" GridPane.columnIndex="1" GridPane.columnSpan="2" iconName="cr:transfer.png" />
     <Label GridPane.rowIndex="0" GridPane.columnIndex="3" style="-fx-font-weight: bold;"
            alignment="CENTER" textAlignment="CENTER" maxWidth="Infinity" text="%cr:plugincashregister.word.separated"/>
     

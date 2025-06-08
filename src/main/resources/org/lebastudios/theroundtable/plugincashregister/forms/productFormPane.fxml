@@ -36,7 +36,7 @@
                 <Rectangle width="180" height="180" arcHeight="10" arcWidth="10"/>
             </clip>
         </IconView>
-        <IconButton onAction="#openImageSelector" iconName="edit.png" StackPane.alignment="BOTTOM_RIGHT">
+        <IconButton onAction="#openImageSelector" iconName="cr:edit.png" StackPane.alignment="BOTTOM_RIGHT">
             <StackPane.margin>
                 <Insets bottom="5.0" right="5.0"/>
             </StackPane.margin>
