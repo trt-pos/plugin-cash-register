@@ -29,7 +29,7 @@ public class TaxesTypesConfigPaneController extends ConfigPaneController<NoConfi
 
     public TaxesTypesConfigPaneController()
     {
-        super(new NoConfigFile(), Translator.getInstance().t("cr:plugincashregister.phrase.taxestypes"), "cr:taxes.png");
+        super(new NoConfigFile(), Translator.getInstance().t("cr:phrase.taxestypes"), "cr:taxes.png");
     }
 
     @Override

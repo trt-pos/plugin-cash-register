@@ -36,40 +36,40 @@
                 <Rectangle width="180" height="180" arcHeight="10" arcWidth="10"/>
             </clip>
         </IconView>
-        <IconButton onAction="#openImageSelector" iconName="cr:edit.png" StackPane.alignment="BOTTOM_RIGHT">
+        <IconButton onAction="#openImageSelector" iconName="core:edit.png" StackPane.alignment="BOTTOM_RIGHT">
             <StackPane.margin>
                 <Insets bottom="5.0" right="5.0"/>
             </StackPane.margin>
         </IconButton>
     </StackPane>
-    <Label text="%cr:plugincashregister.phrase.productname" maxHeight="Infinity" maxWidth="Infinity"
+    <Label text="%cr:phrase.productname" maxHeight="Infinity" maxWidth="Infinity"
            GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="0"/>
     <TextField fx:id="productName" maxHeight="Infinity" maxWidth="Infinity"
                GridPane.columnIndex="3" GridPane.columnSpan="2" GridPane.rowIndex="0"/>
 
-    <Label text="%cr:plugincashregister.phrase.maincategory" maxHeight="Infinity" maxWidth="Infinity"
+    <Label text="%cr:phrase.maincategory" maxHeight="Infinity" maxWidth="Infinity"
            GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="1"/>
     <TextField fx:id="mainCategory" maxHeight="Infinity" maxWidth="Infinity"
                GridPane.columnIndex="3" GridPane.columnSpan="2" GridPane.rowIndex="1"/>
 
-    <Label text="%cr:plugincashregister.phrase.subcategory" maxHeight="Infinity" maxWidth="Infinity"
+    <Label text="%cr:phrase.subcategory" maxHeight="Infinity" maxWidth="Infinity"
            GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="2"/>
     <TextField fx:id="subCategory" maxHeight="Infinity" maxWidth="Infinity"
                GridPane.columnIndex="3" GridPane.columnSpan="2" GridPane.rowIndex="2"/>
 
-    <Label text="%cr:plugincashregister.word.price" maxHeight="Infinity" maxWidth="Infinity"
+    <Label text="%cr:word.price" maxHeight="Infinity" maxWidth="Infinity"
            GridPane.columnIndex="1" GridPane.rowIndex="3"/>
     <BigDecimalField maxHeight="Infinity" maxWidth="Infinity" fx:id="price" labelValue="€"
                      GridPane.columnIndex="2" GridPane.columnSpan="2" GridPane.rowIndex="3"/>
     <CheckBox fx:id="enabledProduct" graphicTextGap="16.0" mnemonicParsing="false" selected="true"
-              text="%cr:plugincashregister.word.enabled" maxHeight="Infinity" maxWidth="Infinity"
+              text="%cr:word.enabled" maxHeight="Infinity" maxWidth="Infinity"
               GridPane.columnIndex="4" GridPane.rowIndex="3"/>
 
-    <Label text="%cr:plugincashregister.word.taxes" maxHeight="Infinity" maxWidth="Infinity"
+    <Label text="%cr:word.taxes" maxHeight="Infinity" maxWidth="Infinity"
            GridPane.columnIndex="1" GridPane.rowIndex="4"/>
     <ChoiceBox maxHeight="Infinity" maxWidth="Infinity" fx:id="taxes"
                GridPane.columnIndex="2" GridPane.columnSpan="2" GridPane.rowIndex="4"/>
     <CheckBox fx:id="taxesIncluded" graphicTextGap="16.0" mnemonicParsing="false" selected="true"
-              text="%cr:plugincashregister.word.taxesincluded" maxHeight="Infinity" maxWidth="Infinity"
+              text="%cr:word.taxesincluded" maxHeight="Infinity" maxWidth="Infinity"
               GridPane.columnIndex="4" GridPane.rowIndex="4"/>
 </GridPane>

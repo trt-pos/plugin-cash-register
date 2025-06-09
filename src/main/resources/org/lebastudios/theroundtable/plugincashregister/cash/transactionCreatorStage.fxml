@@ -11,19 +11,19 @@
     </padding>
 
     <HBox alignment="CENTER_LEFT">
-        <Label text="%cr:plugincashregister.word.qty" prefWidth="250"/>
+        <Label text="%cr:word.qty" prefWidth="250"/>
         <HBox HBox.hgrow="ALWAYS" alignment="CENTER_RIGHT">
             <TextField fx:id="amountTextField" promptText="0.00"/>
         </HBox>
     </HBox>
 
     <VBox spacing="5" alignment="CENTER_LEFT">
-        <Label text="%cr:plugincashregister.word.description"/>
+        <Label text="%cr:word.description"/>
         <TextArea prefRowCount="2" prefColumnCount="30" fx:id="descriptionTextArea"/>
     </VBox>
 
     <HBox spacing="5" alignment="CENTER_RIGHT">
-        <Button onAction="#cancel" text="%cr:plugincashregister.word.cancel"/>
-        <Button onAction="#mainAction" defaultButton="true" text="%cr:plugincashregister.word.accept"/>
+        <Button onAction="#cancel" text="%cr:word.cancel"/>
+        <Button onAction="#mainAction" defaultButton="true" text="%cr:word.accept"/>
     </HBox>
 </VBox>

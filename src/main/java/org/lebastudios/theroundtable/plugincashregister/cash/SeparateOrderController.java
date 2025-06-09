@@ -105,7 +105,7 @@ public class SeparateOrderController extends StageController<SeparateOrderContro
     {
         var generatedOrder = new Order();
         generatedOrder.setOrderName(
-                originalOrder.getOrderName() + " (" + Translator.getInstance().t("cr:plugincashregister.word.splitted") + ")"
+                originalOrder.getOrderName() + " (" + Translator.getInstance().t("cr:word.splitted") + ")"
         );
 
         for (var variable : targetList.getItems())
@@ -131,7 +131,7 @@ public class SeparateOrderController extends StageController<SeparateOrderContro
     @Override
     public String getTitle()
     {
-        return Translator.getInstance().t("cr:tiltle.separateorderdialog");
+        return Translator.getInstance().t("cr:title.split");
     }
 
     private static class MoveableItemListCell extends ListCell<Map.Entry<Product, BigDecimal>>

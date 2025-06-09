@@ -28,10 +28,10 @@ public class OrderItemsTablePrinter implements IPrinter
     {
         // Top Label
         new InLinePrinter()
-                .concatLeft(Translator.getInstance().t("cr:plugincashregister.word.qty"), 6)
+                .concatLeft(Translator.getInstance().t("cr:word.qty"), 6)
                 .concatLeft(" ")
                 .concatLeft(Translator.getInstance().t("cr:word.product"), 22)
-                .concatRight(Translator.getInstance().t("cr:plugincashregister.word.price"), 8, EscPosConst.Justification.Left_Default)
+                .concatRight(Translator.getInstance().t("cr:word.price"), 8, EscPosConst.Justification.Left_Default)
                 .concatRight(Translator.getInstance().t("cr:word.import"), 10, EscPosConst.Justification.Left_Default)
                 .print(escpos);
 

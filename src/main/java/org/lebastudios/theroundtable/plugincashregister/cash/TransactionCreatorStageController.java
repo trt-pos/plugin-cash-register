@@ -46,8 +46,8 @@ public class TransactionCreatorStageController extends StageController<Transacti
     public String getTitle()
     {
         var titleKey = transactionType == TransactionType.ADD
-                ? "plugincashregister.word.put"
-                : "plugincashregister.word.get";
+                ? "cr:word.put"
+                : "cr:word.get";
 
         return Translator.getInstance().t(titleKey);
     }
@@ -107,7 +107,7 @@ public class TransactionCreatorStageController extends StageController<Transacti
             catch (Exception e)
             {
                 new ConfirmationTextDialogController(
-                        Translator.getInstance().t("cr:plugincashregister.textblock.printingerror"),
+                        Translator.getInstance().t("cr:textblock.printingerror"),
                         isTransactionCreated::set
                 ).instantiate(true);
             }

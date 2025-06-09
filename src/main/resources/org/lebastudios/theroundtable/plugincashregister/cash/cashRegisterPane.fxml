@@ -17,14 +17,14 @@
         </HBox>
         <HBox spacing="15" alignment="CENTER_LEFT">
             <Label style="-fx-font-size: 20; -fx-font-weight: bold;" fx:id="orderTableNameLabel" text="Error"/>
-            <IconButton iconName="cr:exit-outlined.png" maxHeight="Infinity" maxWidth="Infinity" visible="false"
+            <IconButton iconName="core:exit-outlined.png" maxHeight="Infinity" maxWidth="Infinity" visible="false"
                         onAction="#exitOrder" fx:id="exitOrderButton" iconSize="24"/>
             <Label HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
             <IconButton iconName="cr:print-outlined.png" maxHeight="Infinity" maxWidth="Infinity"
                         onAction="#printOrder" iconSize="24"/>
             <IconButton iconName="cr:hide-outlined.png" iconSize="24"
                         fx:id="alterVisibilityButton" onAction="#alterNumericKeyboardVisibility"/>
-            <IconButton iconName="cr:outline-delete.png" iconSize="24" disable="true"
+            <IconButton iconName="core:outline-delete.png" iconSize="24" disable="true"
                         fx:id="clearActualOrderButton" onAction="#clearActualOrder"/>
         </HBox>
         <VBox spacing="5" VBox.vgrow="ALWAYS" maxHeight="Infinity">
@@ -32,7 +32,7 @@
             <HBox alignment="CENTER_RIGHT" spacing="5" minHeight="60">
                 <IconTextButton iconName="cr:collect.png" maxHeight="Infinity" maxWidth="Infinity"
                                 fx:id="collectOrderButton"
-                                onAction="#collectOrder" text="%cr:plugincashregister.word.collect" prefHeight="60" prefWidth="130"
+                                onAction="#collectOrder" text="%cr:word.collect" prefHeight="60" prefWidth="130"
                                 disable="true"/>
                 <Label HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
                 <Label style="-fx-font-size: 20; -fx-font-weight: bold;" text="Total: "/>
@@ -111,14 +111,14 @@
             </rowConstraints>
 
             <IconTextButton iconName="cr:close.png" maxHeight="Infinity" maxWidth="Infinity" onAction="#closeCashRegister"
-                            text="%cr:plugincashregister.phrase.closecashsession"
+                            text="%cr:phrase.closecashsession"
                             GridPane.columnIndex="0" GridPane.columnSpan="6" GridPane.rowIndex="0"/>
 
             <IconTextButton iconName="cr:money-in.png" maxHeight="Infinity" maxWidth="Infinity" onAction="#moneyIn"
-                            text="%cr:plugincashregister.phrase.moneyin"
+                            text="%cr:phrase.moneyin"
                             GridPane.columnIndex="0" GridPane.columnSpan="3" GridPane.rowIndex="1"/>
             <IconTextButton iconName="cr:money-out.png" maxHeight="Infinity" maxWidth="Infinity" onAction="#moneyOut"
-                            text="%cr:plugincashregister.phrase.moneyout"
+                            text="%cr:phrase.moneyout"
                             GridPane.columnIndex="3" GridPane.columnSpan="3" GridPane.rowIndex="1"/>
         </GridPane>
     </VBox>

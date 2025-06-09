@@ -205,7 +205,7 @@ public class CollectOrderStageController extends StageController<CollectOrderSta
         transaction.setTotalCash(CashSession.getActualSession().getAmountInDrawer().add(order.getTotal()));
         transaction.setDate(now);
         transaction.setDescription(
-                Translator.getInstance().t("cr:plugincashregister.word.receipt")
+                Translator.getInstance().t("cr:word.receipt")
                         + " "
                         + LocaleManager.getInstance().getActualDateTimeFormatter().format(now)
         );
@@ -299,7 +299,7 @@ public class CollectOrderStageController extends StageController<CollectOrderSta
                 if (!success)
                 {
                     new InformationTextDialogController(
-                            Translator.getInstance().t("cr:plugincashregister.textblock.errorsavingreceipt")
+                            Translator.getInstance().t("cr:textblock.errorsavingreceipt")
                     ).instantiate(true);
                     return;
                 }

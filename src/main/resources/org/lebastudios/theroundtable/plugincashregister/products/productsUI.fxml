@@ -19,6 +19,6 @@
     <TabPane maxWidth="Infinity" VBox.vgrow="ALWAYS" tabClosingPolicy="UNAVAILABLE" fx:id="mainTabPane"/>
 
     <HBox alignment="CENTER_RIGHT">
-        <IconButton onAction="#createNewProductWindow" iconSize="32" iconName="cr:plus.png"/>
+        <IconButton onAction="#createNewProductWindow" iconSize="32" iconName="core:plus.png"/>
     </HBox>
 </VBox>

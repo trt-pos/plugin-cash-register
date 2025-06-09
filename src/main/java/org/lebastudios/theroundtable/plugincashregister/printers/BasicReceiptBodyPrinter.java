@@ -89,7 +89,7 @@ public class BasicReceiptBodyPrinter extends ReceiptPrinter
 
             escpos.writeLF(Translator.getInstance().t("cr:word.amount") + ": "
                     + BigDecimalOperations.toString(receipt.getPaymentAmount()) + " "
-                    + Translator.getInstance().t("cr:plugincashregister.word.change") + ": " +
+                    + Translator.getInstance().t("cr:word.change") + ": " +
                     BigDecimalOperations.toString(receipt.getPaymentAmount().subtract(receipt.getTransaction().getAmount()))
             );
 

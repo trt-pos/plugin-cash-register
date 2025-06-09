@@ -6,6 +6,6 @@
 <VBox xmlns="http://javafx.com/javafx"
       xmlns:fx="http://javafx.com/fxml" spacing="5"
       fx:controller="org.lebastudios.theroundtable.plugincashregister.forms.OpenCashSessionFormPaneController">
-    <Label text="%cr:plugincashregister.form.opencashsession.cashindrawer"/>
+    <Label text="%cr:form.opencashsession.cashindrawer"/>
     <BigDecimalField fx:id="cashInDrawerBigDecimalField" />
 </VBox>

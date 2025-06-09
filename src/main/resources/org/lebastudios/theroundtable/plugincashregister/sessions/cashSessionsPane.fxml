@@ -4,6 +4,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import org.lebastudios.theroundtable.components.PaginableListView?>
+<?import org.lebastudios.theroundtable.components.DateRangePicker?>
 <VBox xmlns="http://javafx.com/javafx"
       xmlns:fx="http://javafx.com/fxml" spacing="5"
       fx:controller="org.lebastudios.theroundtable.plugincashregister.sessions.CashSessionsPaneController">
@@ -12,10 +13,7 @@
     </padding>
     
     <HBox spacing="10" alignment="CENTER">
-        <Label text="%cr:sessionspane.from" />
-        <DatePicker fx:id="fromDatePicker" prefWidth="150"/>
-        <Label text="%cr:sessionspane.to" />
-        <DatePicker fx:id="toDatePicker" prefWidth="150"/>
+        <DateRangePicker fx:id="dateRangePicker" />
         <Region HBox.hgrow="ALWAYS" />
         <Label text="%cr:word.name" />
         <ChoiceBox fx:id="installationNameChoiceBox" prefWidth="150"/>
