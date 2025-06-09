@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<VBox xmlns:fx="http://javafx.com/fxml"
+      xmlns="http://javafx.com/javafx" prefWidth="400"
+      spacing="5" fx:controller="org.lebastudios.theroundtableplugins.cr.cash.CloseCashSessionStageController">
+    <padding>
+        <Insets left="15" right="15" bottom="15" top="15"/>
+    </padding>
+
+    <HBox>
+        <Label text="%cr:phrase.includeothertransactions"/>
+        <Region HBox.hgrow="ALWAYS"/>
+        <CheckBox fx:id="includeTransaction"/>
+    </HBox>
+    <HBox>
+        <Label text="%cr:phrase.includeproductssold" />
+        <Region HBox.hgrow="ALWAYS"/>
+        <CheckBox fx:id="includeProducts" maxWidth="Infinity"/>
+    </HBox>
+
+    <HBox alignment="CENTER_RIGHT" spacing="5">
+        <padding>
+            <Insets top="15"/>
+        </padding>
+        <Button text="%cr:word.cancel" onAction="#cancel"/>
+        <Button text="%cr:phrase.acceptandprint" defaultButton="true" onAction="#acceptAndPrint"/>
+    </HBox>
+</VBox>

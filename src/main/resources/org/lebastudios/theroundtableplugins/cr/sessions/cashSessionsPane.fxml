@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import org.lebastudios.theroundtable.components.PaginableListView?>
+<?import org.lebastudios.theroundtable.components.DateRangePicker?>
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml" spacing="5"
+      fx:controller="org.lebastudios.theroundtableplugins.cr.sessions.CashSessionsPaneController">
+    <padding>
+        <Insets top="10" left="10" right="10" bottom="10" />
+    </padding>
+    
+    <HBox spacing="10" alignment="CENTER">
+        <DateRangePicker fx:id="dateRangePicker" />
+        <Region HBox.hgrow="ALWAYS" />
+        <Label text="%cr:word.name" />
+        <ChoiceBox fx:id="installationNameChoiceBox" prefWidth="150"/>
+    </HBox>
+    <PaginableListView fx:id="sessionsListView" VBox.vgrow="ALWAYS"/>
+</VBox>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import org.lebastudios.theroundtable.components.IconTextButton?>
+<VBox xmlns="http://javafx.com/javafx" spacing="5" fx:id="root" maxWidth="Infinity" maxHeight="Infinity"
+      xmlns:fx="http://javafx.com/fxml" 
+      fx:controller="org.lebastudios.theroundtableplugins.cr.config.ReceiptPrintingConfigPaneController">
+    <padding>
+        <Insets top="10" right="10" bottom="10" left="10"/>
+    </padding>
+    <CheckBox maxHeight="Infinity" maxWidth="Infinity" fx:id="hideReceiptData" text="%cr:phrase.hideReceiptData"/>
+
+    <CheckBox maxHeight="Infinity" maxWidth="Infinity" fx:id="hideTaxesDesglose" text="%cr:phrase.hideTaxesDesglose"/>
+
+    <CheckBox maxHeight="Infinity" maxWidth="Infinity" fx:id="hidePaymentInfo" text="%cr:phrase.hidePaymentInfo"/>
+
+    <CheckBox maxHeight="Infinity" maxWidth="Infinity" fx:id="hideEstablishmentLogo"
+              text="%cr:phrase.hideEstablishmentLogo"/>
+
+    <HBox spacing="5">
+        <Label text="%cr:phrase.logosize" maxWidth="Infinity" maxHeight="Infinity" HBox.hgrow="ALWAYS"/>
+        <ChoiceBox maxWidth="Infinity" fx:id="logoSize"/>
+    </HBox>
+
+    <IconTextButton onAction="#printTestReceipt" text="%cr:phrase.printtest" iconName="core:printer.png" iconSize="24" maxWidth="Infinity"/>
+</VBox>

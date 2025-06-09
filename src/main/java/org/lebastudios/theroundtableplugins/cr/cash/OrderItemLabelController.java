@@ -1,0 +1,235 @@
+package org.lebastudios.theroundtableplugins.cr.cash;
+
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.scene.control.Label;
+import javafx.scene.image.ImageView;
+import lombok.Getter;
+import lombok.Setter;
+import org.lebastudios.theroundtable.apparience.ImageManager;
+import org.lebastudios.theroundtable.apparience.UIEffects;
+import org.lebastudios.theroundtable.controllers.PaneController;
+import org.lebastudios.theroundtable.events.IEventMethod1;
+import org.lebastudios.theroundtable.maths.BigDecimalOperations;
+import org.lebastudios.theroundtableplugins.cr.entities.Product;
+
+import java.math.BigDecimal;
+import java.util.HashMap;
+import java.util.Map;
+
+public class OrderItemLabelController extends PaneController<OrderItemLabelController>
+{
+    @Setter private OrderItem orderItem;
+    private final Map<Label, Boolean> hasDefaultText = new HashMap<>();
+    
+    @FXML @Getter public Label unitPriceLabel;
+    @FXML @Getter public Label quantityLabel;
+    @FXML @Getter public Label productNameLabel;
+    @FXML @Getter public Label totalPriceLabel;
+    @FXML public ImageView productImg;
+    @Getter private Label actualEditting;
+
+    private final IEventMethod1<OrderItem> updateView = oiMod ->
+    {
+        if (orderItem == null) return;
+        if (orderItem != oiMod) return;
+        
+        updateView();
+    };
+
+    public OrderItemLabelController(OrderItem orderItem)
+    {
+        this.orderItem = orderItem;
+    }
+    
+    @FXML @Override protected void initialize()
+    {
+        hasDefaultText.put(quantityLabel, true);
+        hasDefaultText.put(unitPriceLabel, true);
+
+        updateView();
+
+        quantityLabel.setOnMouseClicked(_ ->
+        {
+            if (actualEditting == quantityLabel) return;
+            
+            if (actualEditting != null) submitEditting();
+            setActualEditting(quantityLabel);
+        });
+        unitPriceLabel.setOnMouseClicked(_ ->
+        {
+            if (unitPriceLabel == actualEditting) return;
+
+            if (actualEditting != null) submitEditting();
+            setActualEditting(unitPriceLabel);
+        });
+        
+        CashRegister.onOrderItemModified.addWeakListener(updateView);
+    }
+
+    public void removeListeners()
+    {
+        CashRegister.onOrderItemModified.removeWeakListener(updateView);
+    }
+    
+    public Product getRepresentingProduct()
+    {
+        return orderItem.intoProduct();
+    }
+    
+    public BigDecimal getQuantity()
+    {
+        return orderItem.getQuantity();
+    }
+    
+    public void edit(String textToConcat)
+    {
+        if (actualEditting == null) return;
+
+        if (hasDefaultText.get(actualEditting))
+        {
+            actualEditting.setText("");
+        }
+
+        var text = actualEditting.getText() + textToConcat;
+
+        try
+        {
+            if (text.equals(".")) text = "0.";
+            
+            new BigDecimal(text);
+            actualEditting.setText(text);
+        }
+        catch (NumberFormatException exception)
+        {
+            UIEffects.shakeNode(actualEditting);
+            return;
+        }
+
+        if (actualEditting.getText().matches("0\\d+.*")) 
+        {
+            actualEditting.setText(actualEditting.getText().substring(1));
+        }
+        
+        hasDefaultText.put(actualEditting, false);
+    }
+
+    public void setActualEditting(Label newActualEditting)
+    {
+        if (actualEditting != null) actualEditting.setStyle("-fx-underline: false;");
+        this.actualEditting = newActualEditting;
+        if (newActualEditting != null) actualEditting.setStyle("-fx-underline: true;");
+    }
+
+    public void removeLast()
+    {
+        String text;
+
+        if (actualEditting == null) return;
+        
+        if (actualEditting.getText().length() > 1)
+        {
+            text = actualEditting.getText().substring(0, actualEditting.getText().length() - 1);
+        }
+        else
+        {
+            text = actualEditting.equals(quantityLabel)
+                    ? "1"
+                    : "0.00";
+            hasDefaultText.put(actualEditting, true);
+        }
+
+        actualEditting.setText(text);
+    }
+
+    public void invertNumber() 
+    {
+        if (actualEditting == null) return;
+
+        var text = actualEditting.getText();
+
+        if (text.startsWith("-"))
+        {
+            text = text.substring(1);
+        }
+        else
+        {
+            text = "-" + text;
+        }
+
+        actualEditting.setText(text);
+        
+        hasDefaultText.put(actualEditting, false);
+    }
+
+    public void submitEditting()
+    {
+        try
+        {
+            new BigDecimal(quantityLabel.getText());
+        }
+        catch (NumberFormatException exception)
+        {
+            UIEffects.shakeNode(quantityLabel);
+            return;
+        }
+
+        try
+        {
+            new BigDecimal(unitPriceLabel.getText());
+        }
+        catch (NumberFormatException exception)
+        {
+            UIEffects.shakeNode(unitPriceLabel);
+            return;
+        }
+        
+        this.orderItem.setQuantity(new BigDecimal(quantityLabel.getText()));
+        this.orderItem.getBaseProduct().setTaxedPrice(new BigDecimal(unitPriceLabel.getText()));
+        
+        // This method could be used but is actually to expensive for the current use case
+        // CashRegister.getInstance().getActualOrder().collapseEqualItems();
+        
+        checkRemoveOrderItemCondition();
+
+        setActualEditting(null);
+        hasDefaultText.entrySet().forEach(entry -> entry.setValue(true));
+        
+        CashRegister.onOrderItemModified.invoke(orderItem);
+    }
+    
+    public void updateView()
+    {
+        quantityLabel.setText(orderItem.getQuantity().toString());
+        productNameLabel.setText(orderItem.getBaseProduct().getName());
+        unitPriceLabel.setText(BigDecimalOperations.toString(orderItem.intoProduct().getPrice()));
+        totalPriceLabel.setText(BigDecimalOperations.toString(orderItem.getTotalPrice()));
+        productImg.setImage(ImageManager.getInstance().get(orderItem.getBaseProduct().getImgPath(), ImageManager.ImageType.PERSISTED));
+    }
+    
+    @FXML
+    public void removeOneButton(ActionEvent actionEvent)
+    {
+        orderItem.setQuantity(orderItem.getQuantity().subtract(BigDecimal.ONE));
+        
+        checkRemoveOrderItemCondition();
+        
+        CashRegister.onOrderItemModified.invoke(orderItem);
+    }
+
+    @FXML
+    public void addOneButton(ActionEvent actionEvent)
+    {
+        orderItem.setQuantity(orderItem.getQuantity().add(BigDecimal.ONE));
+
+        CashRegister.onOrderItemModified.invoke(orderItem);
+    }
+
+    private void checkRemoveOrderItemCondition()
+    {
+        if (orderItem.getQuantity().compareTo(BigDecimal.ZERO) <= 0)
+        {
+            CashRegister.getInstance().getActualOrder().getOrderItems().remove(orderItem);
+        }
+    }
+}
