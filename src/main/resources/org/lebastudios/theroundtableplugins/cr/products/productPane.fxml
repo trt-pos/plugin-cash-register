@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Rectangle?>
 <VBox xmlns:fx="http://javafx.com/fxml/1" alignment="TOP_CENTER" styleClass="button" maxWidth="110" minWidth="110"
-      spacing="5" xmlns="http://javafx.com/javafx/17.0.2-ea" fx:id="root">
+      spacing="5" xmlns="http://javafx.com/javafx/17.0.2-ea">
     <padding>
         <Insets top="5" right="5" bottom="5" left="5"/>
     </padding>

@@ -5,7 +5,7 @@
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.layout.*?>
 <?import org.lebastudios.theroundtable.components.IconButton?>
-<VBox fx:id="root" spacing="15" xmlns="http://javafx.com/javafx/17.0.12"
+<VBox spacing="15" xmlns="http://javafx.com/javafx/17.0.12"
       fx:controller="org.lebastudios.theroundtableplugins.cr.config.TaxesTypesConfigPaneController"
       xmlns:fx="http://javafx.com/fxml/1">
     <padding>

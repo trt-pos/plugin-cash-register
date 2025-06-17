@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.shape.Rectangle?>
 <?import org.lebastudios.theroundtable.components.IconButton?>
-<GridPane xmlns:fx="http://javafx.com/fxml" fx:id="root"
+<GridPane xmlns:fx="http://javafx.com/fxml"
           xmlns="http://javafx.com/javafx" hgap="10"
           prefHeight="24.0" alignment="CENTER_LEFT" >
     <padding>
