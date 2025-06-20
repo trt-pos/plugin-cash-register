@@ -1,9 +1,8 @@
 package org.lebastudios.theroundtableplugins.cr;
 
 import org.lebastudios.theroundtable.camelot.CamelotEvent;
-import org.lebastudios.theroundtable.events.Event1;
-import org.lebastudios.theroundtable.events.Event2;
-import org.lebastudios.theroundtable.events.SingleListenerEvent2;
+import org.lebastudios.theroundtable.events.LocalEvent;
+import org.lebastudios.theroundtable.events.SingleListenerLocalEvent;
 import org.lebastudios.theroundtableplugins.cr.cash.Order;
 import org.lebastudios.theroundtableplugins.cr.entities.Product;
 import org.lebastudios.theroundtableplugins.cr.entities.Receipt;
@@ -17,13 +16,18 @@ public class PluginCashRegisterEvents
             new Product()
     );
     
-    public static final Event1<Order> showOrder = new Event1<>() {};
-    public static final Event1<Receipt> onReceiptEmitted = new Event1<>() {};
-    public static final Event1<Transaction> onTransactionRealized = new Event1<>();
+    public static final LocalEvent<Order> showOrder = new LocalEvent<>() {};
+    public static final LocalEvent<Receipt> onReceiptEmitted = new LocalEvent<>() {};
+    public static final LocalEvent<Transaction> onTransactionRealized = new LocalEvent<>();
     
-    public static final Event2<Integer, StringBuffer> onRequestReceiptBillNumber = new SingleListenerEvent2<>();
-    public static final Event2<Integer, StringBuffer> onRequestNewReceiptBillNumber = new SingleListenerEvent2<>();
-    public static final Event2<Integer, StringBuffer> onRequestNewRectificationBillNumber = new SingleListenerEvent2<>();
-    public static final Event2<Receipt, String> onReceiptBilled = new Event2<>();
-    public static final Event2<Receipt, String> onModifiedReceiptBilled = new Event2<>();
+    public static final SingleListenerLocalEvent<BillNumberRequestData> onRequestReceiptBillNumber = new SingleListenerLocalEvent<>();
+    public static final SingleListenerLocalEvent<BillNumberRequestData> onRequestNewReceiptBillNumber = new SingleListenerLocalEvent<>();
+    public static final SingleListenerLocalEvent<BillNumberRequestData> onRequestNewRectificationBillNumber = new SingleListenerLocalEvent<>();
+    
+    public record BillNumberRequestData(int receiptId, StringBuffer billNumberOutput) {}
+    
+    public static final SingleListenerLocalEvent<ReceiptBilledData> onReceiptBilled = new SingleListenerLocalEvent<>();
+    public static final SingleListenerLocalEvent<ReceiptBilledData> onModifiedReceiptBilled = new SingleListenerLocalEvent<>();
+    
+    public record ReceiptBilledData(Receipt receipt, String billNumber) {}
 }

@@ -69,7 +69,7 @@ public class CashRegisterPaneController extends PaneController<CashRegisterPaneC
     protected void initialize()
     {
         this.bindActualOrderToUi();
-        CashRegister.onActualOrderSwapped.addListener(this::bindActualOrderToUi);
+        CashRegister.onActualOrderSwapped.addListener((_) -> this.bindActualOrderToUi());
 
         CashRegister.onOrderItemModified.addListener(_ ->
         {

@@ -4,8 +4,8 @@ import com.github.anastaciocintra.escpos.EscPos;
 import lombok.Getter;
 import lombok.SneakyThrows;
 import org.lebastudios.theroundtable.database.Database;
-import org.lebastudios.theroundtable.events.Event;
-import org.lebastudios.theroundtable.events.Event1;
+import org.lebastudios.theroundtable.events.LocalEvent;
+import org.lebastudios.theroundtable.events.LocalEvent;
 import org.lebastudios.theroundtable.locale.Translator;
 import org.lebastudios.theroundtableplugins.cr.PluginCashRegisterEvents;
 import org.lebastudios.theroundtableplugins.cr.entities.CashSession;
@@ -41,10 +41,10 @@ public class CashRegister
         });
     }
     
-    public static Event onActualOrderSwapped = new Event();
+    public static LocalEvent<Void> onActualOrderSwapped = new LocalEvent<>();
     /// An order item is modified when the qty or the unit price is changed. If the qty goes to 0 or less, this event is
     /// not triggered.
-    public static Event1<OrderItem> onOrderItemModified = new Event1<>();
+    public static LocalEvent<OrderItem> onOrderItemModified = new LocalEvent<>();
 
     private static CashRegister instance;
 
@@ -117,7 +117,7 @@ public class CashRegister
         if (actualOrder == order) return;
 
         actualOrder = order;
-        CashRegister.onActualOrderSwapped.invoke();
+        CashRegister.onActualOrderSwapped.invoke(null);
     }
 
     @SneakyThrows

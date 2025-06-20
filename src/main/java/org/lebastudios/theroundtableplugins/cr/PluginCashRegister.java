@@ -9,9 +9,6 @@ import org.lebastudios.theroundtable.accounts.AccountManager;
 import org.lebastudios.theroundtable.config.SettingsItem;
 import org.lebastudios.theroundtable.dialogs.EntityFormDialogController;
 import org.lebastudios.theroundtable.dialogs.InformationTextDialogController;
-import org.lebastudios.theroundtable.events.Event1;
-import org.lebastudios.theroundtable.events.Event2;
-import org.lebastudios.theroundtable.events.PluginEvents;
 import org.lebastudios.theroundtable.fxml2java.CompileFxml;
 import org.lebastudios.theroundtable.locale.Translator;
 import org.lebastudios.theroundtableplugins.cr.cash.CashRegister;
@@ -71,62 +68,6 @@ public class PluginCashRegister implements IPlugin
             CashRegister.getInstance().swapOrder(order);
             CashRegister.getInstance().showInterface();
         });
-
-        PluginEvents.registerPluginEvent(
-                "plugin-cash-register",
-                "showOrder",
-                Event1.class.getMethod("invoke", Object.class),
-                Event1.class.getMethod("addListener", Object.class),
-                PluginCashRegisterEvents.showOrder
-        );
-
-        PluginEvents.registerPluginEvent(
-                "plugin-cash-register",
-                "onReceiptEmitted",
-                Event1.class.getMethod("invoke", Object.class),
-                Event1.class.getMethod("addListener", Object.class),
-                PluginCashRegisterEvents.onReceiptEmitted
-        );
-
-        PluginEvents.registerPluginEvent(
-                "plugin-cash-register",
-                "onRequestReceiptBillNumber",
-                Event2.class.getMethod("invoke", Object.class, Object.class),
-                Event2.class.getMethod("addListener", Object.class),
-                PluginCashRegisterEvents.onRequestReceiptBillNumber
-        );
-
-        PluginEvents.registerPluginEvent(
-                "plugin-cash-register",
-                "onRequestNewReceiptBillNumber",
-                Event2.class.getMethod("invoke", Object.class, Object.class),
-                Event2.class.getMethod("addListener", Object.class),
-                PluginCashRegisterEvents.onRequestNewReceiptBillNumber
-        );
-
-        PluginEvents.registerPluginEvent(
-                "plugin-cash-register",
-                "onRequestNewRectificationBillNumber",
-                Event2.class.getMethod("invoke", Object.class, Object.class),
-                Event2.class.getMethod("addListener", Object.class),
-                PluginCashRegisterEvents.onRequestNewRectificationBillNumber
-        );
-
-        PluginEvents.registerPluginEvent(
-                "plugin-cash-register",
-                "onReceiptBilled",
-                Event2.class.getMethod("invoke", Object.class, Object.class),
-                Event2.class.getMethod("addListener", Object.class),
-                PluginCashRegisterEvents.onReceiptBilled
-        );
-
-        PluginEvents.registerPluginEvent(
-                "plugin-cash-register",
-                "onModifiedReceiptBilled",
-                Event2.class.getMethod("invoke", Object.class, Object.class),
-                Event2.class.getMethod("addListener", Object.class),
-                PluginCashRegisterEvents.onModifiedReceiptBilled
-        );
     }
 
     @Override

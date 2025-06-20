@@ -281,7 +281,9 @@ public class CollectOrderStageController extends StageController<CollectOrderSta
             updateMessage("Requesting bill number");
             updateProgress(0.25, 1);
             StringBuffer billNumber = new StringBuffer();
-            PluginCashRegisterEvents.onRequestNewReceiptBillNumber.invoke(receipt.getId(), billNumber);
+            PluginCashRegisterEvents.onRequestNewReceiptBillNumber.invoke(
+                    new PluginCashRegisterEvents.BillNumberRequestData(receipt.getId(), billNumber)
+            );
 
             updateMessage("Calling the printer");
             updateProgress(0.50, 1);
@@ -308,7 +310,9 @@ public class CollectOrderStageController extends StageController<CollectOrderSta
                 updateProgress(0.85, 1);
                 if (!billNumber.isEmpty())
                 {
-                    PluginCashRegisterEvents.onReceiptBilled.invoke(receipt, billNumber.toString());
+                    PluginCashRegisterEvents.onReceiptBilled.invoke(
+                            new PluginCashRegisterEvents.ReceiptBilledData(receipt, billNumber.toString())
+                    );
                 }
                 
                 updateMessage("Finishing the process");

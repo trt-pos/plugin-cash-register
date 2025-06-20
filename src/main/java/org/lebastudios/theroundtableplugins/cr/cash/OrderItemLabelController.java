@@ -9,13 +9,13 @@ import lombok.Setter;
 import org.lebastudios.theroundtable.apparience.ImageManager;
 import org.lebastudios.theroundtable.apparience.UIEffects;
 import org.lebastudios.theroundtable.controllers.PaneController;
-import org.lebastudios.theroundtable.events.IEventListener1;
 import org.lebastudios.theroundtable.maths.BigDecimalOperations;
 import org.lebastudios.theroundtableplugins.cr.entities.Product;
 
 import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Consumer;
 
 public class OrderItemLabelController extends PaneController<OrderItemLabelController>
 {
@@ -29,7 +29,7 @@ public class OrderItemLabelController extends PaneController<OrderItemLabelContr
     @FXML public ImageView productImg;
     @Getter private Label actualEditting;
 
-    private final IEventListener1<OrderItem> updateView = oiMod ->
+    private final Consumer<OrderItem> updateView = oiMod ->
     {
         if (orderItem == null) return;
         if (orderItem != oiMod) return;

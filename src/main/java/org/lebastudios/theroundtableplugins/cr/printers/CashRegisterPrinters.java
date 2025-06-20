@@ -38,7 +38,9 @@ public class CashRegisterPrinters
         basicReceiptPrinter.setAfterHeader(escpos ->
         {
             StringBuffer billNumber = new StringBuffer();
-            PluginCashRegisterEvents.onRequestReceiptBillNumber.invoke(receipt.getId(), billNumber);
+            PluginCashRegisterEvents.onRequestReceiptBillNumber.invoke(
+                    new PluginCashRegisterEvents.BillNumberRequestData(receipt.getId(), billNumber)
+            );
             String receiptId = billNumber.isEmpty() ? receipt.getId() + "" : billNumber.toString();
             
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
@@ -57,7 +59,9 @@ public class CashRegisterPrinters
                 final var oldReceipt = receipt.getModifies().getSuperReceipt();
 
                 billNumber = new StringBuffer();
-                PluginCashRegisterEvents.onRequestReceiptBillNumber.invoke(oldReceipt.getId(), billNumber);
+                PluginCashRegisterEvents.onRequestReceiptBillNumber.invoke(
+                        new PluginCashRegisterEvents.BillNumberRequestData(oldReceipt.getId(), billNumber)
+                );
                 String oldReceiptId = billNumber.isEmpty() ? oldReceipt.getId() + "" : billNumber.toString();
 
                 escpos.writeLF(Translator.getInstance().t("cr:phrase.rectificationreceipt") +
@@ -85,7 +89,9 @@ public class CashRegisterPrinters
                 final var newReceipt = receipt.getModifiedBy().getNewReceipt();
 
                 billNumber = new StringBuffer();
-                PluginCashRegisterEvents.onRequestReceiptBillNumber.invoke(newReceipt.getId(), billNumber);
+                PluginCashRegisterEvents.onRequestReceiptBillNumber.invoke(
+                        new PluginCashRegisterEvents.BillNumberRequestData(newReceipt.getId(), billNumber)
+                );
                 String newReceiptId =
                         billNumber.isEmpty() ? newReceipt.getId() + "" : billNumber.toString();
 
