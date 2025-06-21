@@ -86,7 +86,7 @@ public class Receipt
             return clientName + " - " + clientIdentifier;
         }
     }
-
+    
     public Image getStatusIcon()
     {
         return ImageManager.getInstance().get(status.getIconName(), ImageManager.ImageType.ICON);

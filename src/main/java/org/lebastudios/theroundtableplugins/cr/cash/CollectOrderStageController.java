@@ -7,10 +7,13 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import lombok.AllArgsConstructor;
 import org.lebastudios.theroundtable.accounts.AccountManager;
 import org.lebastudios.theroundtable.apparience.UIEffects;
+import org.lebastudios.theroundtable.config.GlobalPreferencesConfigData;
 import org.lebastudios.theroundtable.controllers.StageController;
 import org.lebastudios.theroundtable.database.Database;
 import org.lebastudios.theroundtable.dialogs.ExceptionDialogController;
@@ -19,6 +22,7 @@ import org.lebastudios.theroundtable.entities.AppInstallation;
 import org.lebastudios.theroundtable.locale.LocaleManager;
 import org.lebastudios.theroundtable.locale.Translator;
 import org.lebastudios.theroundtable.maths.BigDecimalOperations;
+import org.lebastudios.theroundtable.reports.ReportPaneController;
 import org.lebastudios.theroundtableplugins.cr.PluginCashRegisterEvents;
 import org.lebastudios.theroundtableplugins.cr.entities.CashSession;
 import org.lebastudios.theroundtableplugins.cr.entities.Product_Receipt;
@@ -31,9 +35,11 @@ import org.lebastudios.theroundtable.printers.PrinterManager;
 import org.lebastudios.theroundtable.tasks.Task;
 import org.lebastudios.theroundtable.components.BigDecimalField;
 import org.lebastudios.theroundtable.components.StageBuilder;
+import org.lebastudios.theroundtableplugins.cr.reports.ReceiptReportGenerator;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.HashSet;
 import java.util.function.Consumer;
@@ -50,11 +56,12 @@ public class CollectOrderStageController extends StageController<CollectOrderSta
     @FXML public RadioButton cardRadioButton;
     @FXML public CheckBox defineClientOption;
     @FXML public GridPane clientDataContainer;
-    private ToggleGroup paymentMethodToggleGroup;
-    @FXML public Label orderTimeLabel;
-    @FXML public Label orderDateLabel;
+    @FXML public StackPane receiptReportContainer;
+    @FXML public Label orderDateTimeLabel;
     @FXML public Label orderTotalLabel;
     @FXML public HBox amountPaidBox;
+    
+    private ToggleGroup paymentMethodToggleGroup;
 
     public CollectOrderStageController(Order order, Consumer<Receipt> onDone)
     {
@@ -66,16 +73,20 @@ public class CollectOrderStageController extends StageController<CollectOrderSta
     @Override
     protected void initialize()
     {
+        GlobalPreferencesConfigData preferencesConfigData = new GlobalPreferencesConfigData().load();
         LocalDateTime date = LocalDateTime.now();
-        orderTimeLabel.setText(date.toLocalTime().truncatedTo(ChronoUnit.SECONDS).toString());
-        orderDateLabel.setText(date.toLocalDate().toString());
-        orderTotalLabel.setText("Total: " + BigDecimalOperations.toString(order.getTotal()) + " €");
+        orderDateTimeLabel.setText(DateTimeFormatter.ofPattern(preferencesConfigData.dateTimeFormatter).format(date));
+        orderTotalLabel.setText(
+                "Total: " + BigDecimalOperations.toString(order.getTotal()) 
+                + " " + preferencesConfigData.currency.symbol()
+        );
 
         paymentMethodToggleGroup = new ToggleGroup();
         cashRadioButton.setToggleGroup(paymentMethodToggleGroup);
         cardRadioButton.setToggleGroup(paymentMethodToggleGroup);
 
         amountPaidField.setValue(BigDecimalOperations.round(order.getTotal()));
+        amountPaidField.setLabelValue(String.valueOf(preferencesConfigData.currency.symbol()));
 
         paymentMethodToggleGroup.selectedToggleProperty().addListener((_, _, newValue) ->
         {
@@ -98,6 +109,10 @@ public class CollectOrderStageController extends StageController<CollectOrderSta
 
             clientDataContainer.setDisable(!newValue);
         });
+        
+        receiptReportContainer.getChildren().add(
+                new ReportPaneController(new ReceiptReportGenerator().generate(generateReceiptObject())).getRoot()
+        );
     }
 
     @Override

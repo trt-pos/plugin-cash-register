@@ -8,6 +8,7 @@ import org.lebastudios.theroundtable.database.PluginTable;
 
 import java.math.BigDecimal;
 
+@Getter
 @NoArgsConstructor
 @PluginTable(name = "product_receipt")
 @Entity
@@ -16,10 +17,10 @@ public class Product_Receipt
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Getter @Setter private int id;
+    @Setter private int id;
 
     @Column(name = "quantity", nullable = false)
-    @Getter @Setter private BigDecimal quantity;
+    @Setter private BigDecimal quantity;
 
     /**
      * The total amount paid for the product. Taxes included. 
@@ -27,11 +28,11 @@ public class Product_Receipt
      * quantity. The value variable is the price of the product with taxes.
      */
     @Column(name = "total_value", nullable = false)
-    @Getter @Setter private BigDecimal totalValue;
+    @Setter private BigDecimal totalValue;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "receipt_id", referencedColumnName = "ID")
-    @Getter @Setter private Receipt receipt;
+    @Setter private Receipt receipt;
 
     @Column(name = "product_value", nullable = false)
     private BigDecimal productValue;
