@@ -6,7 +6,7 @@
 <?import org.lebastudios.theroundtable.components.BigDecimalField?>
 <HBox xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="org.lebastudios.theroundtableplugins.cr.cash.CollectOrderStageController"
-      spacing="10">
+      spacing="10" >
     <VBox HBox.hgrow="ALWAYS" spacing="10" alignment="CENTER">
         <padding>
             <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
@@ -47,7 +47,5 @@
             <Button defaultButton="true" textAlignment="CENTER" onAction="#submit" text="%cr:word.submit"/>
         </HBox>
     </VBox>
-    <StackPane HBox.hgrow="ALWAYS" fx:id="receiptReportContainer">
-        
-    </StackPane>
+    <StackPane HBox.hgrow="ALWAYS" fx:id="receiptReportContainer" prefWidth="380"/>
 </HBox>

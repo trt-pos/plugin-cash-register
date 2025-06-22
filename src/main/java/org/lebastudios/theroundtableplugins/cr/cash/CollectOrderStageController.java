@@ -2,8 +2,10 @@ package org.lebastudios.theroundtableplugins.cr.cash;
 
 import com.github.anastaciocintra.escpos.EscPos;
 import com.github.anastaciocintra.output.PrinterOutputStream;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -13,6 +15,7 @@ import javafx.stage.Modality;
 import lombok.AllArgsConstructor;
 import org.lebastudios.theroundtable.accounts.AccountManager;
 import org.lebastudios.theroundtable.apparience.UIEffects;
+import org.lebastudios.theroundtable.components.LoadingPaneController;
 import org.lebastudios.theroundtable.config.GlobalPreferencesConfigData;
 import org.lebastudios.theroundtable.controllers.StageController;
 import org.lebastudios.theroundtable.database.Database;
@@ -38,6 +41,7 @@ import org.lebastudios.theroundtable.components.StageBuilder;
 import org.lebastudios.theroundtableplugins.cr.reports.ReceiptReportGenerator;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
@@ -62,7 +66,7 @@ public class CollectOrderStageController extends StageController<CollectOrderSta
     @FXML public HBox amountPaidBox;
     
     private ToggleGroup paymentMethodToggleGroup;
-
+    
     public CollectOrderStageController(Order order, Consumer<Receipt> onDone)
     {
         this.order = order;
@@ -87,11 +91,14 @@ public class CollectOrderStageController extends StageController<CollectOrderSta
 
         amountPaidField.setValue(BigDecimalOperations.round(order.getTotal()));
         amountPaidField.setLabelValue(String.valueOf(preferencesConfigData.currency.symbol()));
+        amountPaidField.getOnValueChangeEvent().addListener(_ -> showReceiptPreviewAsync());
 
         paymentMethodToggleGroup.selectedToggleProperty().addListener((_, _, newValue) ->
         {
             if (newValue == null) return;
 
+            showReceiptPreviewAsync();
+            
             if (newValue == cashRadioButton)
             {
                 amountPaidBox.setDisable(false);
@@ -110,9 +117,21 @@ public class CollectOrderStageController extends StageController<CollectOrderSta
             clientDataContainer.setDisable(!newValue);
         });
         
-        receiptReportContainer.getChildren().add(
-                new ReportPaneController(new ReceiptReportGenerator().generate(generateReceiptObject())).getRoot()
-        );
+        clientNameField.focusedProperty().addListener((_, _, newValue) ->
+        {
+            if (newValue || clientNameField.getText().isBlank() || clientIdentifierField.getText().isBlank()) return;
+            
+            showReceiptPreviewAsync();
+        });
+        
+        clientIdentifierField.focusedProperty().addListener((_, _, newValue) ->
+        {
+            if (newValue || clientNameField.getText().isBlank() || clientNameField.getText().isBlank()) return;
+            
+            showReceiptPreviewAsync();
+        });
+        
+        showReceiptPreviewAsync();
     }
 
     @Override
@@ -125,6 +144,8 @@ public class CollectOrderStageController extends StageController<CollectOrderSta
     @FXML
     public void submitAndPrint(ActionEvent actionEvent)
     {
+        if (!validateInputData()) return;
+        
         saveReceiptInDatabase(receipt ->
         {
             try
@@ -154,6 +175,8 @@ public class CollectOrderStageController extends StageController<CollectOrderSta
     @FXML
     public void submit(ActionEvent actionEvent)
     {
+        if (!validateInputData()) return;
+        
         try (PrinterOutputStream outputStream = new PrinterOutputStream(
                 PrinterManager.getInstance().getDefaultPrintService()
         ))
@@ -182,6 +205,29 @@ public class CollectOrderStageController extends StageController<CollectOrderSta
         new SaveReceiptAndPrintTask(printerAction).execute(true);
     }
 
+    private void showReceiptPreviewAsync()
+    {
+        final var receipt = generateReceiptObject();
+        
+        if (receipt == null) return;
+        
+        receiptReportContainer.getChildren().add(
+                new LoadingPaneController().getRoot()
+        );
+        
+        new Thread(() ->
+        {
+            final var node = new ReportPaneController(
+                    new ReceiptReportGenerator().generate(receipt)
+            ).getRoot();
+            Platform.runLater(() ->
+            {
+                receiptReportContainer.getChildren().clear();
+                receiptReportContainer.getChildren().add(node);
+            });
+        }).start();
+    }
+    
     private Receipt generateReceiptObject()
     {
         if (!validateInputData()) return null;
