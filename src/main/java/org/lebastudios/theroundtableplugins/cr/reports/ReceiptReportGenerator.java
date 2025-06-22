@@ -2,8 +2,10 @@ package org.lebastudios.theroundtableplugins.cr.reports;
 
 import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+import org.hibernate.Session;
 import org.lebastudios.theroundtable.config.EstablishmentConfigData;
 import org.lebastudios.theroundtable.config.GlobalPreferencesConfigData;
+import org.lebastudios.theroundtable.database.Database;
 import org.lebastudios.theroundtable.locale.Translator;
 import org.lebastudios.theroundtable.plugins.PluginLoader;
 import org.lebastudios.theroundtableplugins.cr.PluginCashRegisterEvents;
@@ -16,6 +18,21 @@ import java.util.HashMap;
 
 public class ReceiptReportGenerator
 {
+    public JasperPrint generate(int receiptId)
+    {
+        return Database.getInstance().connectQuery(session ->
+        {
+            return generate(receiptId, session);
+        });
+    }
+
+    public JasperPrint generate(int receiptId, Session session)
+    {
+        return generate(
+            session.get(Receipt.class, receiptId)
+        );
+    }
+    
     public JasperPrint generate(Receipt receipt)
     {
         try (InputStream inputStream = ReceiptReportGenerator.class.getResourceAsStream("receipt.jasper"))
