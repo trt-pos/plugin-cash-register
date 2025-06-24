@@ -14,10 +14,9 @@
     </properties>
 
     <parent>
-        <groupId>org.lebastudios.theroundtableplugins</groupId>
-        <artifactId>plugins</artifactId>
-        <version>3.0.0</version>
-        <relativePath>../pom.xml</relativePath>
+        <groupId>com.github.trt-pos</groupId>
+        <artifactId>the-round-table</artifactId>
+        <version>dev-v3.0.0-SNAPSHOT</version>
     </parent>
 
     <repositories>
@@ -29,9 +28,9 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.lebastudios.theroundtable</groupId>
+            <groupId>com.github.trt-pos</groupId>
             <artifactId>core</artifactId>
-            <version>3.0.0</version>
+            <version>dev-v3.0.0-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>
@@ -65,7 +64,7 @@
                 </configuration>
             </plugin>
             <plugin>
-                <groupId>org.lebastudios.theroundtable</groupId>
+                <groupId>com.github.trt-pos</groupId>
                 <artifactId>t-cleaner</artifactId>
             </plugin>
         </plugins>
