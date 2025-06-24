@@ -19,7 +19,7 @@
         <version>3.0.0</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
-    
+
     <repositories>
         <repository>
             <id>jaspersoft-third-party</id>
@@ -35,7 +35,7 @@
             <scope>provided</scope>
         </dependency>
     </dependencies>
-    
+
     <build>
         <plugins>
             <plugin>
@@ -63,6 +63,10 @@
                         <element>org.lebastudios.theroundtableplugins.cr.entities.*</element>
                     </classpathElements>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.lebastudios.theroundtable</groupId>
+                <artifactId>t-cleaner</artifactId>
             </plugin>
         </plugins>
     </build>
