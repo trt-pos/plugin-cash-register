@@ -1,9 +1,12 @@
 package org.lebastudios.theroundtableplugins.cr;
 
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.TreeItem;
 import lombok.SneakyThrows;
+import net.sf.jasperreports.engine.JasperPrint;
+
 import org.lebastudios.theroundtable.MainStageController;
 import org.lebastudios.theroundtable.accounts.AccountManager;
 import org.lebastudios.theroundtable.config.SettingsItem;
@@ -19,8 +22,10 @@ import org.lebastudios.theroundtableplugins.cr.entities.*;
 import org.lebastudios.theroundtableplugins.cr.forms.ProductFormPaneController;
 import org.lebastudios.theroundtableplugins.cr.products.ProductPaneController;
 import org.lebastudios.theroundtableplugins.cr.products.ProductsUIController;
+import org.lebastudios.theroundtableplugins.cr.reports.ReceiptReportGenerator;
 import org.lebastudios.theroundtableplugins.cr.sessions.CashSessionsPaneController;
 import org.lebastudios.theroundtable.plugins.IPlugin;
+import org.lebastudios.theroundtable.reports.ReportPaneController;
 import org.lebastudios.theroundtable.components.IconButton;
 import org.lebastudios.theroundtable.components.LabeledIconButton;
 
@@ -55,6 +60,9 @@ public class PluginCashRegister implements IPlugin
     {
         instance = this;
 
+        JasperPrint print = new ReceiptReportGenerator().generate(new Receipt());
+        Node _ = new ReportPaneController(print).getRoot();
+        
         PluginCashRegisterEvents.showOrder.addListener(order ->
         {
             if (CashSession.getActualSession() == null)
