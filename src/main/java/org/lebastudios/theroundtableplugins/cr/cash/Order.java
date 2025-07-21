@@ -1,6 +1,6 @@
 package org.lebastudios.theroundtableplugins.cr.cash;
 
-import com.sun.javafx.collections.ObservableListWrapper;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import lombok.Getter;
 import lombok.Setter;
@@ -18,7 +18,7 @@ import java.util.List;
 public class Order
 {
     @Getter @Setter private String orderName;
-    private ObservableList<OrderItem> orderItems = new ObservableListWrapper<>(new ArrayList<>());
+    private ObservableList<OrderItem> orderItems = FXCollections.observableArrayList();
 
     /// Legacy method. orderItems is no longer a simple List<>, but an ObservableList<>. Use getObservableOrderItems() instead.
     public List<OrderItem> getOrderItems()
@@ -52,7 +52,7 @@ public class Order
             orderItems.add(new OrderItem(receiptItem.getProduct(), receiptItem.getQuantity()));
         }
 
-        order.orderItems = new ObservableListWrapper<>(orderItems);
+        order.orderItems = FXCollections.observableArrayList(orderItems);
 
         return order;
     }
